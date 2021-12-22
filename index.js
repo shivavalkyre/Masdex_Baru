@@ -8,6 +8,7 @@ const fileUpload = require("express-fileupload");
 
 require('dotenv').config();
 const PORT = process.env.PORT || 3012;
+const base_url = process.env.base_url;
 
 const app = express();
 app.use(fileUpload());
@@ -45,17 +46,37 @@ app.use(express.urlencoded({
 }));
 
 // modul routing here
-
+const kapal = require('./kapal');
 const pkk = require('./pkk');
-
-
+const voyage = require('./voyage');
+const master_cable = require('./master_cable');
+const clearance_in = require('./clearance_in');
+const entering_to_port = require('./entering_to_port');
+const manouvre = require('./manouvre');
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
 // routing here
 
-// ============================== PKK =======================================
+// ============================== Kapal =======================================
+
+app.post('/api/V1/masdex/kapal', kapal.create);
+app.get('/api/V1/masdex/kapal', kapal.read);
+app.get('/api/V1/masdex/kapal/:id', kapal.read_by_id);
+app.get('/api/V1/masdex/kapal/mmsi/:mmsi', kapal.read_by_mmsi);
+app.put('/api/V1/masdex/kapal/:id', kapal.update);
+app.delete('/api/V1/masdex/kapal/:id', kapal.delete_);
+// ==========================================================================
+
+// ============================== Voyage ==============================
+app.post('/api/V1/insaf/voyage', voyage.create);
+app.get('/api/V1/insaf/voyage', voyage.read);
+app.get('/api/V1/insaf/voyage/:id',voyage.read_by_id);
+app.put('/api/V1/insaf/voyage/:id', voyage.update);
+app.delete('/api/V1/insaf/voyage/:id', voyage.delete_);
+// ==========================================================================
+// ============================== 1.PKK =======================================
 
 app.post('/api/V1/masdex/pkk', pkk.create);
 app.get('/api/V1/masdex/pkk', pkk.read);
@@ -63,7 +84,52 @@ app.get('/api/V1/masdex/pkk/:id', pkk.read_by_id);
 app.put('/api/V1/masdex/pkk/:id', pkk.update);
 app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
 // ==========================================================================
+// ============================== 2.Master Cable ==============================
+app.post('/api/V1/masdex/master_cable', master_cable.create);
+app.get('/api/V1/masdex/master_cable', master_cable.read);
+app.get('/api/V1/masdex/master_cable/:id', master_cable.read_by_id);
+app.put('/api/V1/masdex/master_cable/:id', master_cable.update);
+app.delete('/api/V1/masdex/master_cable/:id', master_cable.delete_);
 
+// =============================== Kurs Tengah ==============================
+app.get('/api/V1/kurs',master_cable.kurs_tengah_data);
+app.get('/api/V1/kurs_tengah', master_cable.kurs_tengah);
+// ==========================================================================
+
+// ================================ Total Tagihan ===========================
+app.post('/api/V1/total_tagihan/:location', master_cable.cek_total_tagihan);
+// ==========================================================================
+
+// ============================== 3.Clearance In ==============================
+app.post('/api/V1/insaf/clearance_in', clearance_in.create);
+app.get('/api/V1/insaf/clearance_in', clearance_in.read);
+app.get('/api/V1/insaf/clearance_in/:id', clearance_in.read_by_id);
+app.put('/api/V1/insaf/clearance_in/:id', clearance_in.update);
+app.put('/api/V1/masdex/clearance_in/:id', clearance_in.update_ksu);
+app.delete('/api/V1/insaf/clearance_in/:id', clearance_in.delete_);
+
+// ==========================================================================
+
+
+// ============================== 4.Entering To Port ==========================
+app.post('/api/V1/insaf/entering_to_port', entering_to_port.create);
+app.get('/api/V1/insaf/entering_to_port', entering_to_port.read);
+app.get('/api/V1/insaf/entering_to_port/:id', entering_to_port.read_by_id);
+app.put('/api/V1/insaf/entering_to_port/:id', entering_to_port.update);
+app.put('/api/V1/insaf/entering_to_port/update_by_otority/:id', entering_to_port.update_by_otoritas);
+app.delete('/api/V1/insaf/entering_to_port/:id', entering_to_port.delete_);
+
+// ==========================================================================
+
+// ============================== 5.Manouvre ==========================
+app.post('/api/V1/masdex/manouvre', manouvre.create);
+app.get('/api/V1/masdex/manouvre', manouvre.read);
+app.get('/api/V1/masdex/manouvre/:id', manouvre.read_by_id);
+app.put('/api/V1/masdex/manouvre/:id', manouvre.update);
+app.put('/api/V1/insaf/manouvre/:id', manouvre.update_operator);
+app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
+
+// ==========================================================================
 
 app.get("/", (req, res) => {
     res.send({
@@ -72,5 +138,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
+    console.log(`API listening on port ${PORT}`);
 });
