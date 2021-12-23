@@ -53,6 +53,9 @@ const master_cable = require('./master_cable');
 const clearance_in = require('./clearance_in');
 const entering_to_port = require('./entering_to_port');
 const manouvre = require('./manouvre');
+const clearance_out = require('./clearance_out');
+const pre_departure = require('./pre_departure');
+const departing = require('./departing');
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
@@ -129,6 +132,29 @@ app.put('/api/V1/masdex/manouvre/:id', manouvre.update);
 app.put('/api/V1/insaf/manouvre/:id', manouvre.update_operator);
 app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 
+// ==========================================================================
+
+// ============================== 6.Clearance Out ==========================
+app.post('/api/V1/masdex/clearance_out/store', clearance_out.create);
+app.get('/api/V1/masdex/clearance_out/', clearance_out.index);
+app.get('/api/V1/masdex/clearance_out/:id', clearance_out.show);
+app.put('/api/V1/masdex/clearance_out/update/:id', clearance_out.update);
+app.patch('/api/V1/masdex/clearance_out/delete/:id', clearance_out.destroy);
+// ==========================================================================
+
+// ============================== 7.Pre Departure ==========================
+app.post('/api/V1/masdex/pre_departure/store/:id', pre_departure.create);
+app.get('/api/V1/masdex/pre_departure/', pre_departure.index);
+app.get('/api/V1/masdex/pre_departure/:id', pre_departure.show);
+app.patch('/api/V1/masdex/pre_departure/delete/:id', pre_departure.destroy);
+// ==========================================================================
+
+// ============================== 8.Departure ==========================
+app.get('/api/V1/masdex/departing/', departing.index);
+app.post('/api/V1/masdex/departing/store', departing.create);
+app.get('/api/V1/masdex/departing/:id', departing.show);
+app.put('/api/V1/masdex/departing/update/:id', departing.update);
+app.patch('/api/V1/masdex/departing/delete/:id', departing.destroy);
 // ==========================================================================
 
 app.get("/", (req, res) => {
