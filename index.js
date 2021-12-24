@@ -155,6 +155,9 @@ app.post('/api/V1/masdex/departing/store', departing.create);
 app.get('/api/V1/masdex/departing/:id', departing.show);
 app.put('/api/V1/masdex/departing/update/:id', departing.update);
 app.patch('/api/V1/masdex/departing/delete/:id', departing.destroy);
+app.put('/api/V1/masdex/departing/update/:id', departing.update);
+app.patch('/api/V1/masdex/departing/is_departing/:id/:statusdeparting', departing.setStatusdeparting);
+app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingStatus);
 // ==========================================================================
 
 app.get("/", (req, res) => {

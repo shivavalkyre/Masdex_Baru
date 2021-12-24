@@ -139,10 +139,49 @@ const destroy = (request, response) => {
 	})
 }
 
+const setStatusdeparting = (request, response) => {
+	const iddata = request.params.id;
+	const statusdata = request.params.statusdeparting;
+	
+	if(statusdata == 'yes'){
+		var setstatus = true;
+	}
+	else{
+		var setstatus = false;
+	}
+	
+	pool.query(`UPDATE tbl_insaf_departing
+				SET is_departing = $1
+				WHERE id = $2
+				AND is_delete = FALSE`, [setstatus, iddata], (error, results) => {
+		if(error){
+			response.status(400).send({success:false,data:error})
+		}
+		response.status(200).send({success:true, data:'Departing status data successfully updated'}) 
+	})
+}
+
+const setDepartingStatus = (request, response) => {
+	const iddata = request.params.id;
+	const {departing_status} = request.body;
+	
+	pool.query(`UPDATE tbl_insaf_departing
+				SET departing_status = $1
+				WHERE id = $2
+				AND is_delete = FALSE`, [departing_status, iddata], (error, results) => {
+		if(error){
+			response.status(400).send({success:false,data:error})
+		}
+		response.status(200).send({success:true, data:'Departing status data successfully updated'}) 
+	})
+}
+
 module.exports = {
 	index, 
 	create,
 	show,
 	update,
 	destroy,
+	setStatusdeparting,
+	setDepartingStatus,
 }
