@@ -4,6 +4,7 @@ const cors = require("cors");
 const logger = require('morgan');
 const path = require('path');
 const fileUpload = require("express-fileupload");
+const jwt = require('jsonwebtoken');
 
 
 require('dotenv').config();
@@ -56,7 +57,8 @@ const manouvre = require('./manouvre');
 const clearance_out = require('./clearance_out');
 const pre_departure = require('./pre_departure');
 const departing = require('./departing');
-
+const user = require ('./user');
+const user_stakeholder = require ('./user_stakeholder');
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -160,6 +162,55 @@ app.patch('/api/V1/masdex/departing/is_departing/:id/:statusdeparting', departin
 app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingStatus);
 // ==========================================================================
 
+// =============================== USER =====================================
+    app.post('/api/V1/masdex/user', user.create);
+    app.get('/api/V1/masdex/user/all', authenticateToken, (req, res) => {
+        user.readall(req,res)
+    });
+    app.get('/api/V1/masdex/user/login', user.read);
+    app.put('/api/V1/masdex/user',authenticateToken, (req, res) => {
+        user.update(req,res)
+    });
+    app.delete('/api/V1/masdex/user/:id',authenticateToken, (req, res) => {
+        user.delete_(req,res)
+    });
+// ==========================================================================
+
+// =============================== USER STAKEHOLDER =====================================
+    app.post('/api/V1/masdex/user_stakeholder', user_stakeholder.create);
+    app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, (req, res) => {
+        user_stakeholder.readall(req,res)
+    });
+    app.get('/api/V1/masdex/user_stakeholder/login', user_stakeholder.read);
+    app.put('/api/V1/masdex/user_stakeholder',authenticateToken, (req, res) => {
+        user_stakeholder.update(req,res)
+    });
+    app.delete('/api/V1/masdex/user_stakeholder/:id',authenticateToken, (req, res) => {
+        user_stakeholder.delete_(req,res)
+    });
+// ==========================================================================
+
+// authentification part======================================================
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+  
+    if (token == null) {
+        //return res.sendStatus(401)
+        return res.status(401).send({success:false,data:'Unathorize'})
+    }
+    try {
+      const verified = jwt.verify(token, process.env.TOKEN_SECRET)
+      req.user = verified
+  
+      next() // continuamos
+  } catch (error) {
+      res.status(400).json({error: 'token not valid'})
+  }
+  
+  }
+// ==============================================================================
 app.get("/", (req, res) => {
     res.send({
         message: "🚀 API Masdex v2.0"

@@ -1,6 +1,8 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const base_url = process.env.base_url;
+var complete_path='';
 
 const create = (request, response) => {
     const { mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,dokumen } 
@@ -12,6 +14,7 @@ const create = (request, response) => {
     console.log(sampleFile);
      const now = Date.now()
      let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+     complete_path = base_url+'dokumens/pkk/'+name;
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/pkk/') + name, function (err) {
          if (err)
@@ -36,7 +39,7 @@ const create = (request, response) => {
 
 
         pool.query('INSERT INTO tbl_masdex_pkk (mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,dokumen_pkk,jenis_telkompel) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17)'
-        , [mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,name,jenis_telkompel], (error, results) =>{
+        , [mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,complete_path,jenis_telkompel], (error, results) =>{
           if (error) {
              throw error
             response.status(201).send(error)
