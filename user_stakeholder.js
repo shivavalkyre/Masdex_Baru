@@ -44,7 +44,7 @@ const create = (request, response) => {
              console.log(sampleFile);
              const now = Date.now()
              let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-             complete_path = base_url+'dokumens/user/'+name;
+             complete_path = base_url+'dokumens/user_stakeholder/'+name;
              console.log(__dirname);
              sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
                  if (err)
@@ -100,16 +100,20 @@ const read = (request, response) => {
 }
 
 const readall = (request, response) => {
-    const { username,password } 
+    const { username} 
     = request.body
-
+    var res = []
+    var items = []
     pool.query('SELECT count(*) as total from tbl_user_stakeholders',(error,results) => {
 
-                pool.query('SELECT * from tbl_user_stakeholders WHERE username =$1 AND is_delete=false',[username],(error,results1) => {
+                pool.query('SELECT * from tbl_user_stakeholders WHERE username =$1 AND is_delete=$2',[username,false],(error,results1) => {
                 //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
                     if(results1) {
-                        response.status(200).json( {success:true,data:results1.rows})
+                        items.push({rows:results1.rows})
+                        res.push(items)
+                        response.status(200).json( {success:true,data:res})
+                        
                     } else {
                         //console.log('Your password not mached.');
                         response.status(400).json({success:false,data: "password tidak sama" });
@@ -158,7 +162,7 @@ const update = (request, response) => {
                             let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
                             complete_path = base_url+'dokumens/user/'+name;
                             console.log(__dirname);
-                            sampleFile.mv(path.join(__dirname + '/dokumens/user/') + name, function (err) {
+                            sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
                                 if (err)
                                     console.log(err);
                             });

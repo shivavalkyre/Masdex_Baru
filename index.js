@@ -59,6 +59,9 @@ const pre_departure = require('./pre_departure');
 const departing = require('./departing');
 const user = require ('./user');
 const user_stakeholder = require ('./user_stakeholder');
+
+const stakeholder = require ('./stakeholder');
+
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -167,7 +170,7 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
     app.get('/api/V1/masdex/user/all', authenticateToken, (req, res) => {
         user.readall(req,res)
     });
-    app.get('/api/V1/masdex/user/login', user.read);
+    app.post('/api/V1/masdex/user/login', user.read);
     app.put('/api/V1/masdex/user',authenticateToken, (req, res) => {
         user.update(req,res)
     });
@@ -181,13 +184,29 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
     app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, (req, res) => {
         user_stakeholder.readall(req,res)
     });
-    app.get('/api/V1/masdex/user_stakeholder/login', user_stakeholder.read);
+    app.post('/api/V1/masdex/user_stakeholder/login', user_stakeholder.read);
     app.put('/api/V1/masdex/user_stakeholder',authenticateToken, (req, res) => {
         user_stakeholder.update(req,res)
     });
     app.delete('/api/V1/masdex/user_stakeholder/:id',authenticateToken, (req, res) => {
         user_stakeholder.delete_(req,res)
     });
+// ==========================================================================
+
+// ================================= STAKEHOLDER ============================
+app.post('/api/V1/masdex/stakeholder',authenticateToken, (req, res) => {
+    stakeholder.create(req,res);
+});
+app.get('/api/V1/masdex/stakeholder', authenticateToken, (req, res) => {
+    stakeholder.read(req,res);
+});
+app.put('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
+    stakeholder.update(req,res);
+});
+
+app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
+    stakeholder.delete_(req,res);
+});
 // ==========================================================================
 
 // authentification part======================================================
@@ -210,6 +229,8 @@ function authenticateToken(req, res, next) {
   }
   
   }
+
+
 // ==============================================================================
 app.get("/", (req, res) => {
     res.send({

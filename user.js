@@ -100,16 +100,21 @@ const read = (request, response) => {
 }
 
 const readall = (request, response) => {
-    const { username,password } 
+    const { username } 
     = request.body
+   // console.log( username);
+    var res = [];
+    var items = [];
 
     pool.query('SELECT count(*) as total from tbl_users',(error,results) => {
 
-                pool.query('SELECT * from tbl_users WHERE username =$1 AND is_delete=false',[username],(error,results1) => {
+                pool.query('SELECT * from tbl_users WHERE username =$1 AND is_delete=$2',[username,false],(error,results1) => {
                 //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
                     if(results1) {
-                        response.status(200).json( {success:true,data:results1.rows})
+                        items.push({rows:results1.rows})
+                        res.push(items)
+                        response.status(200).json( {success:true,data:res})
                     } else {
                         //console.log('Your password not mached.');
                         response.status(400).json({success:false,data: "password tidak sama" });
