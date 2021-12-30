@@ -59,8 +59,9 @@ const pre_departure = require('./pre_departure');
 const departing = require('./departing');
 const user = require ('./user');
 const user_stakeholder = require ('./user_stakeholder');
-
 const stakeholder = require ('./stakeholder');
+const telkompel =  require ('./telkompel');
+const pelabuhan =  require ('./pelabuhan');
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
@@ -84,6 +85,24 @@ app.get('/api/V1/insaf/voyage/:id',voyage.read_by_id);
 app.put('/api/V1/insaf/voyage/:id', voyage.update);
 app.delete('/api/V1/insaf/voyage/:id', voyage.delete_);
 // ==========================================================================
+
+// ============================== Telkompel =================================
+app.post('/api/V1/masdex/telkompel', telkompel.create);
+app.get('/api/V1/masdex/telkompel', telkompel.read);
+app.get('/api/V1/masdex/telkompel/:id', telkompel.read_by_id);
+app.put('/api/V1/masdex/telkompel/:id', telkompel.update);
+app.delete('/api/V1/masdex/telkompel/:id', telkompel.delete_);
+// ==========================================================================
+
+// ============================== Pelabuhan =================================
+app.post('/api/V1/masdex/pelabuhan', pelabuhan.create);
+app.get('/api/V1/masdex/pelabuhan', pelabuhan.read);
+app.get('/api/V1/masdex/pelabuhan/:id', pelabuhan.read_by_id);
+app.put('/api/V1/masdex/pelabuhan/:id', pelabuhan.update);
+app.delete('/api/V1/masdex/pelabuhan/:id', pelabuhan.delete_);
+// ==========================================================================
+
+
 // ============================== 1.PKK =======================================
 
 app.post('/api/V1/masdex/pkk', pkk.create);
