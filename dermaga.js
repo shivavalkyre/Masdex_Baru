@@ -4,13 +4,13 @@ const path = require('path')
 
 
 const create = (request, response) => {
-    const { kode,nama_pelabuhan,alamat_pelabuhan,jenis_pelabuhan,telkompel_id } 
+    const { pelabuhan_id,kode,nama_dermaga } 
     = request.body
 
     
 
-     pool.query('INSERT INTO tbl_masdex_pelabuhan (kode,nama_pelabuhan,alamat_pelabuhan,jenis_pelabuhan,telkompel_id) VALUES($1,$2,$3,$4,$5)'
-     ,[kode,nama_pelabuhan,alamat_pelabuhan,jenis_pelabuhan,telkompel_id],(error, results) =>{
+     pool.query('INSERT INTO tbl_masdex_dermaga (pelabuhan_id,kode,nama_dermaga) VALUES($1,$2,$3)'
+     ,[pelabuhan_id,kode,nama_dermaga],(error, results) =>{
 
         if (error) {
             throw error
@@ -23,7 +23,7 @@ const create = (request, response) => {
            }
          }else
          {
-             response.status(200).send({success:true,data:'data pelabuhan berhasil dibuat'})
+             response.status(200).send({success:true,data:'data dermaga berhasil dibuat'})
          }
      })
 }
@@ -39,14 +39,14 @@ const read = (request, response) => {
     var items = []
 
   
-    pool.query('SELECT count(*) as total FROM tbl_masdex_pelabuhan where is_delete=false', (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_masdex_dermaga where is_delete=false', (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_pelabuhan where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT * FROM tbl_masdex_dermaga where is_delete=false ORDER BY id ASC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -72,14 +72,14 @@ const read_by_id = (request, response) => {
     var res = []
     var items = []
   
-    pool.query('SELECT count(*) as total FROM tbl_masdex_pelabuhan where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_masdex_dermaga where id=$1 and is_delete=false', [id], (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_pelabuhan where id=$1 and is_delete=false'
+     var sql= 'SELECT * FROM tbl_masdex_dermaga where id=$1 and is_delete=false'
      pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
@@ -95,11 +95,11 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { kode,nama_pelabuhan,alamat_pelabuhan,jenis_pelabuhan,telkompel_id } 
+    const { pelabuhan_id,kode,nama_dermaga } 
     = request.body;
     let doc;
 
-    pool.query('SELECT count(*) as total FROM tbl_masdex_pelabuhan where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_masdex_dermaga where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
           throw error
         }else{
@@ -110,15 +110,15 @@ const update = (request, response) => {
 
 
 
-     pool.query('SELECT * FROM tbl_masdex_pelabuhan where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_masdex_dermaga where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }
 
         
          const update_time = new Date;
-         pool.query('UPDATE tbl_masdex_pelabuhan SET kode=$1,nama_pelabuhan=$2,alamat_pelabuhan=$3,jenis_pelabuhan=$4,telkompel_id=$5 where id=$6'
-         , [kode,nama_pelabuhan,alamat_pelabuhan,jenis_pelabuhan,telkompel_id,id], (error, results) =>{
+         pool.query('UPDATE tbl_masdex_dermaga SET pelabuhan_id=$1,kode=$2,nama_dermaga=$3 where id=$4'
+         , [pelabuhan_id,kode,nama_dermaga,id], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
@@ -131,7 +131,7 @@ const update = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data pelabuhan berhasil diperbarui'})
+               response.status(200).send({success:true,data:'data dermaga berhasil diperbarui'})
            }
      
          })
@@ -144,7 +144,7 @@ const delete_ = (request, response) => {
     const id = parseInt(request.params.id);
  
 
-    pool.query('SELECT count(*) as total FROM tbl_masdex_pelabuhan where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_masdex_dermaga where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
           throw error
         }else{
@@ -153,14 +153,14 @@ const delete_ = (request, response) => {
         
     })
 
-     pool.query('SELECT * FROM tbl_masdex_pelabuhan where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_masdex_dermaga where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }
 
 
          const deletetime = new Date;
-         pool.query('UPDATE tbl_masdex_pelabuhan SET deleted_at=$1,is_delete=$2 where id=$3'
+         pool.query('UPDATE tbl_masdex_dermaga SET deleted_at=$1,is_delete=$2 where id=$3'
          , [deletetime, true,id], (error, results) =>{
            if (error) {
 
@@ -172,7 +172,7 @@ const delete_ = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data pelabuhan berhasil dihapus'})
+               response.status(200).send({success:true,data:'data dermaga berhasil dihapus'})
            }
      
          })

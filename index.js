@@ -62,6 +62,8 @@ const user_stakeholder = require ('./user_stakeholder');
 const stakeholder = require ('./stakeholder');
 const telkompel =  require ('./telkompel');
 const pelabuhan =  require ('./pelabuhan');
+const dermaga =  require ('./dermaga');
+const area_tambat =  require ('./area_tambat');
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
@@ -102,6 +104,21 @@ app.put('/api/V1/masdex/pelabuhan/:id', pelabuhan.update);
 app.delete('/api/V1/masdex/pelabuhan/:id', pelabuhan.delete_);
 // ==========================================================================
 
+// ============================== Dermaga =================================
+app.post('/api/V1/masdex/dermaga', dermaga.create);
+app.get('/api/V1/masdex/dermaga', dermaga.read);
+app.get('/api/V1/masdex/dermaga/:id', dermaga.read_by_id);
+app.put('/api/V1/masdex/dermaga/:id', dermaga.update);
+app.delete('/api/V1/masdex/dermaga/:id', dermaga.delete_);
+// ==========================================================================
+
+// ============================== Area Tambat ===============================
+app.post('/api/V1/masdex/area_tambat', area_tambat.create);
+app.get('/api/V1/masdex/area_tambat', area_tambat.read);
+app.get('/api/V1/masdex/area_tambat/:id', area_tambat.read_by_id);
+app.put('/api/V1/masdex/area_tambat/:id', area_tambat.update);
+app.delete('/api/V1/masdex/area_tambat/:id', area_tambat.delete_);
+// ==========================================================================
 
 // ============================== 1.PKK =======================================
 

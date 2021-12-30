@@ -78,23 +78,29 @@ const read = (request, response) => {
     = request.body
 
     pool.query('SELECT count(*) as total from tbl_users WHERE username =$1',[username],(error,results) => {
-
+            if(results.rows[0].total>0)
+            {
                 pool.query('SELECT * from tbl_users WHERE username =$1',[username],(error,results) => {
-                bcrypt.compare(password, results.rows[0].password, function(err, res) {
-
-                    if(res) {
-                        //console.log('Your password mached with database hash password');
-                        //response.status(200).json({success:true,data: "User ditemukan" });
-                        const token = generateAccessToken({ username: username })
-                        console.log(token);
-                        response.status(200).json( {"token":token,"id" : results.rows[0].id,"username" : username })
-                    } else {
-                        //console.log('Your password not mached.');
-                        response.status(400).json({success:false,data: "password tidak sama" });
-                    }
-                });
-
-            })
+                    bcrypt.compare(password, results.rows[0].password, function(err, res) {
+    
+                        if(res) {
+                            //console.log('Your password mached with database hash password');
+                            //response.status(200).json({success:true,data: "User ditemukan" });
+                            const token = generateAccessToken({ username: username })
+                            console.log(token);
+                            response.status(200).json( {"token":token,"id" : results.rows[0].id,"username" : username })
+                        } else {
+                            //console.log('Your password not mached.');
+                            response.status(400).json({success:false,data: "password tidak sama" });
+                        }
+                    });
+    
+                })
+            }else
+            {
+                response.status(400).json({success:false,data: "user tidak ditemukan" });
+            }
+                
         
     })
 }
