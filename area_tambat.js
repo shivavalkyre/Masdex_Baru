@@ -95,7 +95,7 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { zona_id,kode,nama_area_tambat } 
+    const { zona_id,kode,nama_area_tambat,dermaga_id } 
     = request.body;
     let doc;
 
@@ -117,8 +117,8 @@ const update = (request, response) => {
 
         
          const update_time = new Date;
-         pool.query('UPDATE tbl_masdex_area_tambat SET zona_id=$1,kode=$2,nama_area_tambat=$3 where id=$4'
-         , [zona_id,kode,nama_area_tambat,id], (error, results) =>{
+         pool.query('UPDATE tbl_masdex_area_tambat SET zona_id=$1,kode=$2,nama_area_tambat=$3,dermaga_id=$4 where id=$5'
+         , [zona_id,kode,nama_area_tambat,dermaga_id,id], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)

@@ -98,7 +98,39 @@ const read = (request, response) => {
                 })
             }else
             {
-                response.status(400).json({success:false,data: "user tidak ditemukan" });
+                response.status(400).json({success:false,data: "user tidak di temukan" });
+            }
+                
+        
+    })
+}
+
+const login = (request, response) => {
+    const { username,password } 
+    = request.body
+
+    pool.query('SELECT count(*) as total from masdex_users WHERE username =$1',[username],(error,results) => {
+            if(results.rows[0].total>0)
+            {
+                pool.query('SELECT * from masdex_users WHERE username =$1',[username],(error,results) => {
+                    bcrypt.compare(password, results.rows[0].password, function(err, res) {
+    
+                        if(res) {
+                            //console.log('Your password mached with database hash password');
+                            //response.status(200).json({success:true,data: "User ditemukan" });
+                            const token = generateAccessToken({ username: username })
+                            //console.log(token);
+                            response.status(200).json( {"token":token,"id" : results.rows[0].id,"username" : username })
+                        } else {
+                            //console.log('Your password not mached.');
+                            response.status(400).json({success:false,data: "password tidak sama" });
+                        }
+                    });
+    
+                })
+            }else
+            {
+                response.status(400).json({success:false,data: "user tidak di temukan" });
             }
                 
         
@@ -279,6 +311,7 @@ module.exports = {
     create,
     read,
     readall,
+    login,
     // read_by_id,
     update,
     delete_,

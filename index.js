@@ -206,7 +206,7 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
     app.get('/api/V1/masdex/user/all', authenticateToken, (req, res) => {
         user.readall(req,res)
     });
-    app.post('/api/V1/masdex/user/login', user.read);
+    //app.post('/api/V1/masdex/user/login', user.read);
     app.put('/api/V1/masdex/user',authenticateToken, (req, res) => {
         user.update(req,res)
     });
@@ -214,13 +214,15 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
         user.delete_(req,res)
     });
 // ==========================================================================
-
+// =============================== LOGIN USER ===============================
+    app.post('/api/V1/masdex/user/login',user.login);
+// ==========================================================================
 // =============================== USER STAKEHOLDER =====================================
     app.post('/api/V1/masdex/user_stakeholder', user_stakeholder.create);
     app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, (req, res) => {
         user_stakeholder.readall(req,res)
     });
-    app.post('/api/V1/masdex/user_stakeholder/login', user_stakeholder.read);
+    //app.post('/api/V1/masdex/user_stakeholder/login', user_stakeholder.read);
     app.put('/api/V1/masdex/user_stakeholder',authenticateToken, (req, res) => {
         user_stakeholder.update(req,res)
     });
