@@ -9,7 +9,7 @@ var password_hash;
 
 
 const create = (request, response) => {
-    const { username,password,email,photo } 
+    const { username,password,email,photo,nama_lengkap } 
     = request.body
 
 
@@ -56,7 +56,7 @@ const create = (request, response) => {
                 bcrypt.hash(password, salt,function(err,res){
                     password_hash= res;
                     console.log(password_hash);
-                     pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo) VALUES($1,$2,$3,$4)',[username,password_hash,email, name] ,(error, results) => {
+                     pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap) VALUES($1,$2,$3,$4,$5)',[username,password_hash,email, name,nama_lengkap] ,(error, results) => {
                     if (error) {
                         throw error
                     }
@@ -133,7 +133,7 @@ const readall = (request, response) => {
 
 
 const update = (request, response) => {
-    const { username,password,email,photo } 
+    const { username,password,email,photo,nama_lengkap } 
     = request.body
 
 
@@ -159,7 +159,10 @@ const update = (request, response) => {
                             doc = results.rows[0].photo;
                             var doc_path = __dirname +path.join('/dokumens/user_stakeholder/'+ doc);
                             console.log(doc_path);
-                            fs.unlinkSync(doc_path);
+                            if(fs.existsSync(doc_path)){
+                                fs.unlinkSync(doc_path);
+                            }
+                            
                             console.log(doc_path);
 
                             let sampleFile = request.files.photo;
@@ -173,7 +176,7 @@ const update = (request, response) => {
                                     console.log(err);
                             });
 
-                            pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4 WHERE username=$5',[username,password_hash,email, name,username] ,(error, results) => {
+                            pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5 WHERE username=$6',[username,password_hash,email, name,nama_lengkap,username] ,(error, results) => {
                             if (error) {
                                 throw error
                             }                          
