@@ -109,10 +109,10 @@ const login = (request, response) => {
     const { username,password } 
     = request.body
 
-    pool.query('SELECT count(*) as total from masdex_users WHERE username =$1',[username],(error,results) => {
+    pool.query('SELECT count(*) as total from masdex_users_all WHERE username =$1',[username],(error,results) => {
             if(results.rows[0].total>0)
             {
-                pool.query('SELECT * from masdex_users WHERE username =$1',[username],(error,results) => {
+                pool.query('SELECT * from masdex_users_all WHERE username =$1',[username],(error,results) => {
                     bcrypt.compare(password, results.rows[0].password, function(err, res) {
     
                         if(res) {
@@ -120,7 +120,7 @@ const login = (request, response) => {
                             //response.status(200).json({success:true,data: "User ditemukan" });
                             const token = generateAccessToken({ username: username })
                             //console.log(token);
-                            response.status(200).json( {"token":token,"id" : results.rows[0].id,"username" : username })
+                            response.status(200).json( {"token":token,"id" : results.rows[0].id,"username" : username ,role: results.rows[0].stakeholder})
                         } else {
                             //console.log('Your password not mached.');
                             response.status(400).json({success:false,data: "password tidak sama" });
