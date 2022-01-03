@@ -148,22 +148,6 @@ const update = (request, response) => {
         
     })
 
-
-   
-
-
-
-
-
-
-
-   
-
-        
-
-   
-
-   
     
 }
 
@@ -209,13 +193,41 @@ const delete_ = (request, response) => {
 
         });
 
-        
-
-   
-
-   
-    
+  
 }
+
+
+const voyage_status = (request, response) => {
+
+  const {page,rows} = request.body
+  var page_req = page || 1
+  var rows_req = rows || 10
+  var offset = (page_req - 1) * rows_req
+  var res = []
+  var items = []
+
+
+  pool.query('SELECT count(*) as total FROM ship_status_last_status', (error, results) => {
+    if (error) {
+      throw error
+    }
+   //console.log(results.rows[0].total)
+   res.push({total:results.rows[0].total})
+
+   var sql= 'SELECT * FROM ship_status_last_status'
+   pool.query(sql ,(error, results) => {
+     if (error) {
+       throw error
+     }
+     items.push({rows:results.rows})
+     res.push(items)
+     response.status(200).send({success:true,data:res})
+   })
+
+  })
+
+}
+
 
 module.exports = {
 create,
@@ -223,4 +235,5 @@ read,
 read_by_id,
 update,
 delete_,
+voyage_status,
 }
