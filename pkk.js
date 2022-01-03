@@ -1,6 +1,7 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const http = require('http')
 const base_url = process.env.base_url;
 var complete_path='';
 
@@ -38,7 +39,7 @@ const create = (request, response) => {
         //console.log(jenis_telkompel);
 
 
-        pool.query('INSERT INTO tbl_masdex_pkk (mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,dokumen_pkk,jenis_telkompel,url_pkk,no_dokumen) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19)'
+        pool.query('INSERT INTO tbl_masdex_pkk (mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,dokumen_pkk,jenis_telkompel,url_pkk,no_dokumen) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19) RETURNING *'
         , [mmsi, agen_kapal, pelabuhan_asal, pelabuhan_tujuan, pelabuhan_selanjutnya, dermaga_tujuan, area_tambat_tujuan,zona_labuh_tujuan,jenis_muatan,maksimal_draft,eta,etd,jenis_pelayaran,nama_nahkoda,telepon_nahkoda,name,jenis_telkompel,complete_path,no_dokumen], (error, results) =>{
           if (error) {
              throw error
@@ -51,6 +52,52 @@ const create = (request, response) => {
             }
           }else
           {
+              // create voyage
+              //  var data = "pkk_id="
+              // const options = {
+              //   hostname: 'localhost:3012/api/V1/insaf/voyage',
+              //   port: 3012,
+              //   method: 'POST',
+              //   headers: {
+              //     'Content-Type': 'application/x-www-form-urlencoded',
+              //     'Content-Length': data.length
+              //   }
+              // }
+              
+              // const req = https.request(options, res => {
+              //   console.log(`statusCode: ${res.statusCode}`)
+              
+              //   res.on('data', d => {
+              //     process.stdout.write(d)
+              //   })
+              // })
+              
+              // req.on('error', error => {
+              //   console.error(error)
+              // })
+              
+              // req.write(data)
+              // req.end()
+              var pkk_id = results.rows[0].id;
+              console.log(pkk_id);
+              pool.query('INSERT INTO tbl_insaf_voyage (pkk_id) VALUES ($1)'
+              , [pkk_id], (error, results) =>{
+                if (error) {
+                   throw error
+                  response.status(201).send(error)
+                  if (error.code == '23505')
+                  {
+                      //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                      response.status(400).send('Duplicate data')
+                      return;
+                  }
+                }else
+                {
+                    //response.status(200).send({success:true,data:'data voyage berhasil dibuat'})
+                }
+          
+              })
+
               response.status(200).send({success:true,data:'data pkk berhasil dibuat'})
           }
     
