@@ -126,7 +126,7 @@ const read = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_pkk where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT * FROM masdex_pkk where is_delete=false ORDER BY id ASC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -159,7 +159,7 @@ const read_by_id = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_pkk where id=$1 and is_delete=false'
+     var sql= 'SELECT * FROM masdex_pkk where id=$1 and is_delete=false'
      pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
