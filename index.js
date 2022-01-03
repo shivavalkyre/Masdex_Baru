@@ -247,6 +247,12 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
 });
 // ==========================================================================
 
+// ========================== Download Part =================================
+    app.get('/api/V1/dokumens/user_stakeholder/:filename', user_stakeholder.download);
+    app.get('/api/V1/dokumens/user/:filename', user.download);
+
+// ==========================================================================
+
 // authentification part======================================================
 
 function authenticateToken(req, res, next) {

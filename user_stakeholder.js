@@ -56,7 +56,7 @@ const create = (request, response) => {
                 bcrypt.hash(password, salt,function(err,res){
                     password_hash= res;
                     console.log(password_hash);
-                     pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap) VALUES($1,$2,$3,$4,$5)',[username,password_hash,email, name,nama_lengkap] ,(error, results) => {
+                     pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo) VALUES($1,$2,$3,$4,$5,$6)',[username,password_hash,email, name,nama_lengkap,complete_path] ,(error, results) => {
                     if (error) {
                         throw error
                     }
@@ -169,14 +169,14 @@ const update = (request, response) => {
                             console.log(sampleFile);
                             const now = Date.now()
                             let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                            complete_path = base_url+'dokumens/user/'+name;
+                            complete_path = base_url+'dokumens/user_stakeholder/'+name;
                             console.log(__dirname);
                             sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
                                 if (err)
                                     console.log(err);
                             });
 
-                            pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5 WHERE username=$6',[username,password_hash,email, name,nama_lengkap,username] ,(error, results) => {
+                            pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7',[username,password_hash,email, name,nama_lengkap,complete_path,username] ,(error, results) => {
                             if (error) {
                                 throw error
                             }                          
@@ -243,7 +243,13 @@ const delete_ = (request, response) => {
     
 }
 
-
+const download = (request, response) => {
+    const filename = request.params.filename;
+    console.log(filename);
+    var doc_path = __dirname +path.join('/dokumens/user_stakeholder/'+ filename);
+    console.log(doc_path);
+    response.download(doc_path);
+};
 
   // ======================================== Access token =======================================
   function generateAccessToken(username) {
@@ -284,4 +290,5 @@ module.exports = {
     // read_by_id,
     update,
     delete_,
+    download,
     }

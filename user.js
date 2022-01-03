@@ -4,6 +4,7 @@ const path = require('path')
 const base_url = process.env.base_url;
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
+const res = require('express/lib/response');
 var complete_path='';
 var password_hash;
 
@@ -56,7 +57,7 @@ const create = (request, response) => {
                 bcrypt.hash(password, salt,function(err,res){
                     password_hash= res;
                     console.log(password_hash);
-                     pool.query('INSERT INTO tbl_users (username,password,email,photo,nama_lengkap) VALUES($1,$2,$3,$4,$5)',[username,password_hash,email, name,nama_lengkap] ,(error, results) => {
+                     pool.query('INSERT INTO tbl_users (username,password,email,photo,nama_lengkap,url_photo) VALUES($1,$2,$3,$4,$5,$6)',[username,password_hash,email, name,nama_lengkap, complete_path] ,(error, results) => {
                     if (error) {
                         throw error
                     }
@@ -206,7 +207,7 @@ const update = (request, response) => {
                                     console.log(err);
                             });
 
-                            pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5 WHERE username=$6',[username,password_hash,email, name,nama_lengkap,username] ,(error, results) => {
+                            pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7',[username,password_hash,email, name,nama_lengkap,complete_path,username] ,(error, results) => {
                             if (error) {
                                 throw error
                             }                          
@@ -273,7 +274,14 @@ const delete_ = (request, response) => {
     
 }
 
-
+const download = (request, response) => {
+    const filename = request.params.filename;
+    console.log(filename);
+    var doc_path = __dirname +path.join('/dokumens/user/'+ filename);
+    console.log(doc_path);
+    response.download(doc_path);
+    response.status(200).send({success:true,data:'data berhasil diunduh'})
+};
 
   // ======================================== Access token =======================================
   function generateAccessToken(username) {
@@ -315,4 +323,5 @@ module.exports = {
     // read_by_id,
     update,
     delete_,
+    download
     }
