@@ -16,11 +16,11 @@ var nilai_tengah=0;
 
 
 const create = (request, response) => {
-    const {voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable} 
+    const {voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi} 
     = request.body
 
    // get kurs_tengah
-
+    if (mmsi.length==0){
     pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19)'
     , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable], (error, results) =>{
       if (error) {
@@ -38,6 +38,26 @@ const create = (request, response) => {
       }
 
     })
+    }else
+    {
+        pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20)'
+        , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable,mmsi], (error, results) =>{
+          if (error) {
+             throw error
+            response.status(201).send(error)
+            if (error.code == '23505')
+            {
+                //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                response.status(400).send('Duplicate data')
+                return;
+            }
+          }else
+          {
+              response.status(200).send({success:true,data:'data master cable berhasil dibuat'})
+          }
+    
+        })
+    }
 }
 
 

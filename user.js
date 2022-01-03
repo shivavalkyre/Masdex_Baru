@@ -277,10 +277,10 @@ const delete_ = (request, response) => {
 const download = (request, response) => {
     const filename = request.params.filename;
     console.log(filename);
-    var doc_path = __dirname +path.join('/dokumens/user/'+ filename);
+    var doc_path = __dirname + path.join('/dokumens/user/'+ filename);
     console.log(doc_path);
     response.download(doc_path);
-    response.status(200).send({success:true,data:'data berhasil diunduh'})
+    //response.status(200).send({success:true,data:'data berhasil diunduh'})
 };
 
   // ======================================== Access token =======================================
