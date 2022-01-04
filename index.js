@@ -133,6 +133,7 @@ app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
 app.post('/api/V1/masdex/master_cable', master_cable.create);
 app.get('/api/V1/masdex/master_cable', master_cable.read);
 app.get('/api/V1/masdex/master_cable/:id', master_cable.read_by_id);
+app.get('/api/V1/masdex/master_cable/voyage/:id', master_cable.read_by_voyage_id);
 app.put('/api/V1/masdex/master_cable/:id', master_cable.update);
 app.delete('/api/V1/masdex/master_cable/:id', master_cable.delete_);
 
@@ -149,6 +150,7 @@ app.post('/api/V1/total_tagihan/:location', master_cable.cek_total_tagihan);
 app.post('/api/V1/insaf/clearance_in', clearance_in.create);
 app.get('/api/V1/insaf/clearance_in', clearance_in.read);
 app.get('/api/V1/insaf/clearance_in/:id', clearance_in.read_by_id);
+app.get('/api/V1/insaf/clearance_in/voyage/:id', clearance_in.read_by_voyage_id);
 app.put('/api/V1/insaf/clearance_in/:id', clearance_in.update);
 app.put('/api/V1/masdex/clearance_in/:id', clearance_in.update_ksu);
 app.delete('/api/V1/insaf/clearance_in/:id', clearance_in.delete_);
@@ -255,6 +257,7 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/user_stakeholder/:filename', user_stakeholder.download);
     app.get('/api/V1/dokumens/user/:filename', user.download);
     app.get('/api/V1/dokumens/stakeholder/logo/:filename', stakeholder.download);
+    app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
 // ==========================================================================
 
 // authentification part======================================================
