@@ -1,6 +1,7 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const base_url = process.env.base_url;
 
 const create = (request, response) => {
     const { voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2 } 
@@ -10,14 +11,15 @@ const create = (request, response) => {
     console.log(sampleFile);
      const now = Date.now()
      let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+     var complete_path = base_url+'dokumens/clearance_in/'+name;
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/spog/') + name, function (err) {
          if (err)
              console.log(err);
      });
 
-     pool.query('INSERT INTO tbl_insaf_manouvre (voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)'
-     ,[voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2],(error, results) =>{
+     pool.query('INSERT INTO tbl_insaf_manouvre (voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,url_dokumen_spog) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)'
+     ,[voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,complete_path],(error, results) =>{
 
         if (error) {
             throw error
@@ -101,6 +103,39 @@ const read_by_id = (request, response) => {
 
 }
 
+const read_by_voyage_id = (request, response) => {
+
+  const id = parseInt(request.params.id);
+  //console.log('Here');
+  //console.log(id);
+  const {page,rows} = request.body
+  var page_req = page || 1
+  var rows_req = rows || 10
+  var offset = (page_req - 1) * rows_req
+  var res = []
+  var items = []
+
+  pool.query('SELECT count(*) as total FROM tbl_insaf_manouvre where voyage_id=$1 and is_delete=false', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+   //console.log(results.rows[0].total)
+   res.push({total:results.rows[0].total})
+
+   var sql= 'SELECT * FROM tbl_insaf_manouvre where voyage_id=$1 and is_delete=false'
+   pool.query(sql,[id] ,(error, results) => {
+     if (error) {
+       throw error
+     }
+     items.push({rows:results.rows})
+     res.push(items)
+     response.status(200).send({success:true,data:res})
+   })
+
+  })
+
+}
+
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
@@ -127,13 +162,17 @@ const update = (request, response) => {
          doc = results.rows[0].dokumen_spog;
          var doc_path = __dirname +path.join('/dokumens/spog/'+ doc);
          console.log(doc_path);
-         fs.unlinkSync(doc_path);
+         if (fs.existsSync(doc_path)){
+          fs.unlinkSync(doc_path);
+         }
+        
          console.log(doc_path);
 
          let sampleFile = request.files.dokumen_spog;
          console.log(sampleFile);
           const now = Date.now()
           let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+          var complete_path = base_url+'dokumens/spog/'+name;
           console.log(__dirname);
           sampleFile.mv(path.join(__dirname + '/dokumens/spog/') + name, function (err) {
               if (err){
@@ -144,8 +183,8 @@ const update = (request, response) => {
 
           console.log(name);
          const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_manouvre SET voyage_id=$1,nomor_spog=$2,waktu_olah_gerak=$3,alasan_olah_gerak=$4,dokumen_spog=$5,degree1=$6,minute1=$7,second1=$8,direction1=$9,degree2=$10,minute2=$11,second2=$12,direction2=$13,updated_at=$14 where id=$15'
-         , [voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,update_time,id], (error, results) =>{
+         pool.query('UPDATE tbl_insaf_manouvre SET voyage_id=$1,nomor_spog=$2,waktu_olah_gerak=$3,alasan_olah_gerak=$4,dokumen_spog=$5,degree1=$6,minute1=$7,second1=$8,direction1=$9,degree2=$10,minute2=$11,second2=$12,direction2=$13,updated_at=$14,url_dokumen_spog=$15 where id=$16'
+         , [voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,update_time,complete_path,id], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
@@ -270,11 +309,24 @@ const delete_ = (request, response) => {
     
 }
 
+
+const download = (request, response) => {
+  const filename = request.params.filename;
+  console.log(filename);
+  var doc_path = __dirname + path.join('/dokumens/spog/'+ filename);
+  console.log(doc_path);
+  response.download(doc_path);
+  //response.status(200).send({success:true,data:'data berhasil diunduh'})
+};
+
+
 module.exports = {
     create,
     read,
     read_by_id,
+    read_by_voyage_id,
     update,
     update_operator,
     delete_,
+    download,
     }

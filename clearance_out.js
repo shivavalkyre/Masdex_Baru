@@ -1,6 +1,7 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const base_url = process.env.base_url;
 
 const index = (request, response) => {
 	var res = []
@@ -13,7 +14,7 @@ const index = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT id, voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by, updated_at, updated_by FROM tbl_insaf_clearance_out where is_delete=false ORDER BY id ASC';
+     var sql= 'SELECT id, voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by, updated_at, updated_by,url_dokumen_spb FROM tbl_insaf_clearance_out where is_delete=false ORDER BY id ASC';
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -41,6 +42,7 @@ const create = (request, response) => {
 			//console.log(sampleFile);
 			const now = Date.now()
 			let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+			var complete_path = base_url+'dokumens/clearance_out/'+name;
 			//console.log(__dirname);
 			sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
 				if (err)
@@ -49,8 +51,8 @@ const create = (request, response) => {
 				}
 			});
 			
-			pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by)
-						VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by], (error, results) => {
+			pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,url_dokumen_spb)
+						VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,$10);`, [voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,complete_path], (error, results) => {
 				if(error){
 					response.status(400).send({success:false,data:error})
 				}
@@ -69,7 +71,7 @@ const show = (request, response) => {
 	var res = []
     var items = []
   
-    var sql= 'SELECT id, voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by, updated_at, updated_by FROM tbl_insaf_clearance_out where id = '+iddata+' and is_delete=false';
+    var sql= 'SELECT id, voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by, updated_at, updated_by,url_dokumen_spb FROM tbl_insaf_clearance_out where id = '+iddata+' and is_delete=false';
     pool.query(sql ,(error, results) => {
        if (error) {
          response.status(400).send({success:false, data:error})
@@ -77,6 +79,23 @@ const show = (request, response) => {
        response.status(200).send({success:true,data:results.rows})
     })
 }
+
+
+const show_by_voyage = (request, response) => {
+	const iddata = request.params.id
+	var res = []
+    var items = []
+  
+    var sql= 'SELECT id, voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by, updated_at, updated_by,url_dokumen_spb FROM tbl_insaf_clearance_out where voyage_id = '+iddata+' and is_delete=false';
+    pool.query(sql ,(error, results) => {
+       if (error) {
+         response.status(400).send({success:false, data:error})
+       }
+       response.status(200).send({success:true,data:results.rows})
+    })
+}
+
+
 
 const update = (request, response) => {
 	const iddata = request.params.id;
@@ -88,6 +107,7 @@ const update = (request, response) => {
 		//console.log(sampleFile);
 		const now = Date.now()
 		let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+		var complete_path = base_url+'dokumens/clearance_out/'+name;
 		//console.log(__dirname);
 		sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
 			if (err)
@@ -111,9 +131,10 @@ const update = (request, response) => {
 				pelabuhan_tujuan = $5,
 				eta_pelabuhan_tujuan = $6,
 				updated_at = $7, 
-				updated_by = $8
-				WHERE id = $9
-				AND is_delete = false;`, [voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, updated_at, updated_by, iddata], (error, results) => {
+				updated_by = $8,
+				url_dokumen_spb= $9
+				WHERE id = $10
+				AND is_delete = false;`, [voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, updated_at, updated_by,complete_path, iddata], (error, results) => {
 		if(error){
 			response.status(400).send({success:false,data:error})
 		}
@@ -137,10 +158,22 @@ const destroy = (request, response) => {
 	})
 }
 
+
+
+const download = (request, response) => {
+	const filename = request.params.filename;
+	console.log(filename);
+	var doc_path = __dirname +path.join('/dokumens/clearance_out/'+ filename);
+	console.log(doc_path);
+	response.download(doc_path);
+  };
+
 module.exports = {
 	index, 
 	create,
 	show,
+	show_by_voyage,
 	update,
 	destroy,
+	download
 }

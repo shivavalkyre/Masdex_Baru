@@ -162,6 +162,7 @@ app.delete('/api/V1/insaf/clearance_in/:id', clearance_in.delete_);
 app.post('/api/V1/insaf/entering_to_port', entering_to_port.create);
 app.get('/api/V1/insaf/entering_to_port', entering_to_port.read);
 app.get('/api/V1/insaf/entering_to_port/:id', entering_to_port.read_by_id);
+app.get('/api/V1/insaf/entering_to_port/voyage/:id', entering_to_port.read_by_voyage_id);
 app.put('/api/V1/insaf/entering_to_port/:id', entering_to_port.update);
 app.put('/api/V1/insaf/entering_to_port/update_by_otority/:id', entering_to_port.update_by_otoritas);
 app.delete('/api/V1/insaf/entering_to_port/:id', entering_to_port.delete_);
@@ -172,6 +173,7 @@ app.delete('/api/V1/insaf/entering_to_port/:id', entering_to_port.delete_);
 app.post('/api/V1/masdex/manouvre', manouvre.create);
 app.get('/api/V1/masdex/manouvre', manouvre.read);
 app.get('/api/V1/masdex/manouvre/:id', manouvre.read_by_id);
+app.get('/api/V1/masdex/manouvre/voyage/:id', manouvre.read_by_voyage_id);
 app.put('/api/V1/masdex/manouvre/:id', manouvre.update);
 app.put('/api/V1/insaf/manouvre/:id', manouvre.update_operator);
 app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
@@ -182,6 +184,7 @@ app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 app.post('/api/V1/masdex/clearance_out/store', clearance_out.create);
 app.get('/api/V1/masdex/clearance_out/', clearance_out.index);
 app.get('/api/V1/masdex/clearance_out/:id', clearance_out.show);
+app.get('/api/V1/masdex/clearance_out/voyage/:id', clearance_out.show_by_voyage);
 app.put('/api/V1/masdex/clearance_out/update/:id', clearance_out.update);
 app.patch('/api/V1/masdex/clearance_out/delete/:id', clearance_out.destroy);
 // ==========================================================================
@@ -258,6 +261,8 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/user/:filename', user.download);
     app.get('/api/V1/dokumens/stakeholder/logo/:filename', stakeholder.download);
     app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
+    app.get('/api/V1/dokumens/spog/:filename', manouvre.download);
+    app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
 // ==========================================================================
 
 // authentification part======================================================
