@@ -239,6 +239,9 @@ app.post('/api/V1/masdex/stakeholder',authenticateToken, (req, res) => {
 app.get('/api/V1/masdex/stakeholder', authenticateToken, (req, res) => {
     stakeholder.read(req,res);
 });
+app.get('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
+    stakeholder.read_by_id(req,res);
+});
 app.put('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
     stakeholder.update(req,res);
 });
@@ -251,7 +254,7 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
 // ========================== Download Part =================================
     app.get('/api/V1/dokumens/user_stakeholder/:filename', user_stakeholder.download);
     app.get('/api/V1/dokumens/user/:filename', user.download);
-
+    app.get('/api/V1/dokumens/stakeholder/logo/:filename', stakeholder.download);
 // ==========================================================================
 
 // authentification part======================================================
