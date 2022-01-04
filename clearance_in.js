@@ -9,19 +9,19 @@ const create = (request, response) => {
 
     let jenis_telkompel;
 
-    let sampleFile = request.files.dokumen_spm;
-    console.log(sampleFile);
-     const now = Date.now()
-     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-     console.log(__dirname);
-     sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
-         if (err)
-             console.log(err);
-     });
+    let name = '';
 
-
-  
-
+    if(dokumen_spm != '') {
+      let sampleFile = request.files.dokumen_spm;
+      console.log(sampleFile);
+       const now = Date.now()
+       name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+       console.log(__dirname);
+       sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
+           if (err)
+               console.log(err);
+       });
+    }
 
         pool.query('INSERT INTO tbl_insaf_clearance_in (voyage_id,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,air_pressure,temperature_min,temperature_max,low_tide,high_tide,low_tide_time,high_tide_time,weather,informasi_cuaca_lainnya,heading_kapal,speed_kapal,draught_saat_ini,informasi_lainnya,approval_ksu,dokumen_spm) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18, $19, $20, $21, $22, $23, $24,$25,$26, $27, $28, $29, $30, $31, $32,$33)'
         , [voyage_id,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,air_pressure,temperature_min,temperature_max,low_tide,high_tide,low_tide_time,high_tide_time,weather,informasi_cuaca_lainnya,speed_kapal,parseFloat(draught_saat_ini),informasi_lainnya,heading_kapal,approval_ksu,name], (error, results) =>{
