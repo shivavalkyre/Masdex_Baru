@@ -200,6 +200,7 @@ app.patch('/api/V1/masdex/pre_departure/delete/:id', pre_departure.destroy);
 app.get('/api/V1/masdex/departing/', departing.index);
 app.post('/api/V1/masdex/departing/store', departing.create);
 app.get('/api/V1/masdex/departing/:id', departing.show);
+app.get('/api/V1/masdex/departing/voyage/:id', departing.show_by_voyage);
 app.put('/api/V1/masdex/departing/update/:id', departing.update);
 app.patch('/api/V1/masdex/departing/delete/:id', departing.destroy);
 app.put('/api/V1/masdex/departing/update/:id', departing.update);

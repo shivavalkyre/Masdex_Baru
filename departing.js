@@ -123,6 +123,21 @@ const show = (request, response) => {
     })
 }
 
+
+const show_by_voyage = (request, response) => {
+	const iddata = request.params.id
+	var res = []
+    var items = []
+  
+    var sql= 'SELECT * FROM tbl_insaf_departing where voyage_id = '+iddata+' and is_delete=false';
+    pool.query(sql ,(error, results) => {
+       if (error) {
+         response.status(400).send({success:false, data:error})
+       }
+       response.status(200).send({success:true,data:results.rows})
+    })
+}
+
 const destroy = (request, response) => {
 	const iddata = request.params.id;
 	var deleted_at = new Date();
@@ -180,6 +195,7 @@ module.exports = {
 	index, 
 	create,
 	show,
+	show_by_voyage,
 	update,
 	destroy,
 	setStatusdeparting,
