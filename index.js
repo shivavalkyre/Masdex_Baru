@@ -122,6 +122,15 @@ app.put('/api/V1/masdex/area_tambat/:id', area_tambat.update);
 app.delete('/api/V1/masdex/area_tambat/:id', area_tambat.delete_);
 // ==========================================================================
 
+
+// ============================== Jenis Berita ===============================
+app.post('/api/V1/insaf/jenis_berita', jenis_berita.create);
+app.get('/api/V1/insaf/jenis_berita', jenis_berita.read);
+app.get('/api/V1/insaf/jenis_berita/:id', jenis_berita.read_by_id);
+app.put('/api/V1/insaf/jenis_berita/:id', jenis_berita.update);
+app.delete('/api/V1/insaf/jenis_berita/:id', jenis_berita.delete_);
+// ==========================================================================
+
 // ============================== 1.PKK =======================================
 
 app.post('/api/V1/masdex/pkk', pkk.create);

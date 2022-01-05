@@ -22,7 +22,7 @@ const create = (request, response) => {
            }
          }else
          {
-             response.status(200).send({success:true,data:'data kapal berhasil dibuat'})
+             response.status(200).send({success:true,data:'data jenis berita berhasil dibuat'})
          }
      })
 }
@@ -131,7 +131,7 @@ const update = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data kapal berhasil diperbarui'})
+               response.status(200).send({success:true,data:'data jenis berita berhasil diperbarui'})
            }
      
          })
@@ -177,7 +177,7 @@ const delete_ = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data kapal berhasil dihapus'})
+               response.status(200).send({success:true,data:'data jenis berita berhasil dihapus'})
            }
      
          })
