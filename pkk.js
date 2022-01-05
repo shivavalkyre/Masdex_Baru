@@ -294,10 +294,21 @@ const delete_ = (request, response) => {
     
 }
 
+
+const download = (request, response) => {
+  const filename = request.params.filename;
+  console.log(filename);
+  var doc_path = __dirname + path.join('/dokumens/pkk/'+ filename);
+  console.log(doc_path);
+  response.download(doc_path);
+  //response.status(200).send({success:true,data:'data berhasil diunduh'})
+}
+
 module.exports = {
 create,
 read,
 read_by_id,
 update,
 delete_,
+download,
 }
