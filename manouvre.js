@@ -235,8 +235,8 @@ const update_operator = (request, response) => {
 
         
          const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_manouvre SET weather_valid_from=$1,weather_valid_to=$2,weather_data_feed=$3,wind_speed_min=$4,wind_speed_max=$5,wind_from=$6,wind_to=$7,humidity_min=$8,humidity_max=$9,air_pressure=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,low_tide_time=$15,high_tide_time=$16,weather=$17,informasi_cuaca_lainnya=$18,informasi_traffic=$19,laporan_setelah_olah_gerak=$20,status_radio_kapal=$21,informasi_lainnya=$22, is_manouvre=$23,updated_at=$24 where id=$25'
-         , [ weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,air_pressure,temperature_min,temperature_max,low_tide,high_tide,low_tide_time,high_tide_time,weather,informasi_cuaca_lainnya,informasi_traffic,laporan_setelah_olah_gerak,status_radio_kapal,informasi_lainnya, is_manouvre,update_time,id], (error, results) =>{
+         pool.query('UPDATE tbl_insaf_manouvre SET weather_valid_from=$1,weather_valid_to=$2,weather_data_feed=$3,wind_speed_min=$4,wind_speed_max=$5,wind_from=$6,wind_to=$7,humidity_min=$8,humidity_max=$9,air_pressure=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,low_tide_time=$15,high_tide_time=$16,weather=$17,informasi_cuaca_lainnya=$18,informasi_traffic=$19,laporan_setelah_olah_gerak=$20,status_radio_kapal=$21,informasi_lainnya=$22, is_manouvre=$23,updated_at=$24,is_complete=$25 where id=$26'
+         , [ weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,air_pressure,temperature_min,temperature_max,low_tide,high_tide,low_tide_time,high_tide_time,weather,informasi_cuaca_lainnya,informasi_traffic,laporan_setelah_olah_gerak,status_radio_kapal,informasi_lainnya, is_manouvre,update_time,true,id], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
