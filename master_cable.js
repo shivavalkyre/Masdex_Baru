@@ -16,7 +16,7 @@ var nilai_tengah=0;
 
 
 const create = (request, response) => {
-    const {voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi} 
+    const {voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi}
     = request.body
 
    // get kurs_tengah
