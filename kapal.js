@@ -216,7 +216,7 @@ const delete_ = (request, response) => {
         
     })
 
-     pool.query('SELECT * FROM tbl_masdex_pkk where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_masdex_kapal where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }

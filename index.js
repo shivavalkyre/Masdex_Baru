@@ -64,6 +64,7 @@ const telkompel =  require ('./telkompel');
 const pelabuhan =  require ('./pelabuhan');
 const dermaga =  require ('./dermaga');
 const area_tambat =  require ('./area_tambat');
+const jenis_berita = require('./jenis_berita')
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
@@ -164,7 +165,7 @@ app.get('/api/V1/insaf/entering_to_port', entering_to_port.read);
 app.get('/api/V1/insaf/entering_to_port/:id', entering_to_port.read_by_id);
 app.get('/api/V1/insaf/entering_to_port/voyage/:id', entering_to_port.read_by_voyage_id);
 app.put('/api/V1/insaf/entering_to_port/:id', entering_to_port.update);
-app.put('/api/V1/insaf/entering_to_port/update_by_otority/:id', entering_to_port.update_by_otoritas);
+app.put('/api/V1/masdex/entering_to_port/update_by_otority/:id', entering_to_port.update_by_otoritas);
 app.delete('/api/V1/insaf/entering_to_port/:id', entering_to_port.delete_);
 
 // ==========================================================================

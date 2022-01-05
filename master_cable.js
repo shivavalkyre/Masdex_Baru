@@ -16,13 +16,13 @@ var nilai_tengah=0;
 
 
 const create = (request, response) => {
-    const {voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi} 
+    const {voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi,no_jurnal,jenis_berita,more_information} 
     = request.body
 
    // get kurs_tengah
     if (mmsi.length==0){
-    pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19)'
-    , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable], (error, results) =>{
+    pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,no_jurnal,jenis_berita,more_information) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20,$21,$22)'
+    , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable,no_jurnal,jenis_berita,more_information], (error, results) =>{
       if (error) {
          throw error
         response.status(201).send(error)
@@ -40,8 +40,8 @@ const create = (request, response) => {
     })
     }else
     {
-        pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20)'
-        , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable,mmsi], (error, results) =>{
+        pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi,no_jurnal,jenis_berita,more_information) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20,$21,$22,$23)'
+        , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable,mmsi,no_jurnal,jenis_berita,more_information], (error, results) =>{
           if (error) {
              throw error
             response.status(201).send(error)
@@ -161,7 +161,7 @@ const read_by_voyage_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable } 
+    const { voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi,no_jurnal,jenis_berita,more_information } 
     = request.body;
     let doc;
     //console.log(mmsi);
@@ -180,10 +180,12 @@ const update = (request, response) => {
             throw error
           }
 
-       
-         const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_master_cable SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20 where id=$21'
-         , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),update_time,is_payable,id], (error, results) =>{
+          const update_time = new Date;
+
+        if (mmsi.length==0){
+
+            pool.query('UPDATE tbl_insaf_master_cable SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20,no_jurnal=$21,jenis_berita=$22,more_information=$23 where id=$24'
+         , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),update_time,is_payable,no_jurnal,jenis_berita,more_information, id], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
@@ -200,6 +202,31 @@ const update = (request, response) => {
            }
      
          })
+
+        }else{
+
+            pool.query('UPDATE tbl_insaf_master_cable SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20,mmsi=$21,no_jurnal=$22,jenis_berita=$23,more_information=$24 where id=$25'
+            , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),update_time,is_payable,mmsi,no_jurnal,jenis_berita,more_information,id], (error, results) =>{
+              if (error) {
+                 throw error
+                //response.status(201).send(error)
+                //console.log(error);
+                if (error.code == '23505')
+                {
+                    //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                    response.status(400).send('Duplicate data')
+                    return;
+                }
+              }else
+              {
+                  response.status(200).send({success:true,data:'data master cable berhasil diperbarui'})
+              }
+        
+            })
+
+        }
+        
+         
 
 
 
