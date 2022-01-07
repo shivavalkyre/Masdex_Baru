@@ -132,7 +132,7 @@ app.delete('/api/V1/insaf/jenis_berita/:id', jenis_berita.delete_);
 // ==========================================================================
 
 // ============================== Distress =================================
-app.post('/api/V1/insaf/jenis_berita', jenis_berita.create);
+app.post('/api/V1/insaf/', jenis_berita.create);
 app.get('/api/V1/insaf/jenis_berita', jenis_berita.read);
 app.get('/api/V1/insaf/jenis_berita/:id', jenis_berita.read_by_id);
 app.put('/api/V1/insaf/jenis_berita/:id', jenis_berita.update);
@@ -199,12 +199,13 @@ app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 // ==========================================================================
 
 // ============================== 6.Clearance Out ==========================
-app.post('/api/V1/masdex/clearance_out/store', clearance_out.create);
-app.get('/api/V1/masdex/clearance_out/', clearance_out.index);
-app.get('/api/V1/masdex/clearance_out/:id', clearance_out.show);
-app.get('/api/V1/masdex/clearance_out/voyage/:id', clearance_out.show_by_voyage);
-app.put('/api/V1/masdex/clearance_out/update/:id', clearance_out.update);
-app.patch('/api/V1/masdex/clearance_out/delete/:id', clearance_out.destroy);
+app.post('/api/V1/masdex/clearance_out', clearance_out.create);
+app.get('/api/V1/masdex/clearance_out', clearance_out.read);
+app.get('/api/V1/masdex/clearance_out/:id', clearance_out.read_by_id);
+app.get('/api/V1/masdex/clearance_out/voyage/:id', clearance_out.read_by_voyage_id);
+app.put('/api/V1/masdex/clearance_out/update/:id', clearance_out.update_ksu);
+app.put('/api/V1/insaf/clearance_out/update/:id', clearance_out.update_operator);
+app.delete('/api/V1/masdex/clearance_out/delete/:id', clearance_out.delete_);
 // ==========================================================================
 
 // ============================== 7.Pre Departure ==========================
