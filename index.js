@@ -203,9 +203,9 @@ app.post('/api/V1/masdex/clearance_out', clearance_out.create);
 app.get('/api/V1/masdex/clearance_out', clearance_out.read);
 app.get('/api/V1/masdex/clearance_out/:id', clearance_out.read_by_id);
 app.get('/api/V1/masdex/clearance_out/voyage/:id', clearance_out.read_by_voyage_id);
-app.put('/api/V1/masdex/clearance_out/update/:id', clearance_out.update_ksu);
-app.put('/api/V1/insaf/clearance_out/update/:id', clearance_out.update_operator);
-app.delete('/api/V1/masdex/clearance_out/delete/:id', clearance_out.delete_);
+app.put('/api/V1/masdex/clearance_out/:id', clearance_out.update_ksu);
+app.put('/api/V1/insaf/clearance_out/:id', clearance_out.update_operator);
+app.delete('/api/V1/masdex/clearance_out/:id', clearance_out.delete_);
 // ==========================================================================
 
 // ============================== 7.Pre Departure ==========================
