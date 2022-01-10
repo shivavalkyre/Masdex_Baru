@@ -2,13 +2,14 @@ const pool = require('./dbCon');
 
 const createDistress = (request, response) => {
     const {no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id} = request.body
-    pool.query('INSERT INTO tbl_insaf_distress (no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)', [no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id], (error, results) => {
+    pool.query('INSERT INTO tbl_insaf_distress (no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19) ', [no_jurnal,tanggal,parseInt(jenis_distress),parseInt(sumber_informasi),judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,parseInt(voyage_id)], (error, results) => {
       if (error) {
         if (error.code == '23505')
         {
             response.status(400).send({success:false,data:'Duplicate data'})
             return;
         }else{
+            throw error;
             response.status(400).send({success:false,data:error})
         }
       }else{
@@ -75,7 +76,7 @@ const readDistressByID = (request, response) => {
 
 const updateDistress = (request, response) => {
     const id = request.params.id
-    const {no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian} = request.body
+    const {no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id} = request.body
     var update_at = new Date()
     pool.query(`UPDATE tbl_insaf_distress 
 				SET no_jurnal=$1,
@@ -96,8 +97,9 @@ const updateDistress = (request, response) => {
 				second2=$16, 
 				direction2=$17,
 				lokasi_kejadian=$18,
-				updated_at=$19
-				WHERE id=$20`, [no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,update_at,id], (error, results) => {
+				updated_at=$19,
+                voyage_id=$20
+				WHERE id=$21`, [no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,update_at,voyage_id,id], (error, results) => {
       if (error) {
         if (error.code == '23505')
         {

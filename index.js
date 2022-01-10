@@ -65,7 +65,7 @@ const pelabuhan =  require ('./pelabuhan');
 const dermaga =  require ('./dermaga');
 const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
-
+const distress = require('./distress')
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -131,13 +131,6 @@ app.put('/api/V1/insaf/jenis_berita/:id', jenis_berita.update);
 app.delete('/api/V1/insaf/jenis_berita/:id', jenis_berita.delete_);
 // ==========================================================================
 
-// ============================== Distress =================================
-app.post('/api/V1/insaf/', jenis_berita.create);
-app.get('/api/V1/insaf/jenis_berita', jenis_berita.read);
-app.get('/api/V1/insaf/jenis_berita/:id', jenis_berita.read_by_id);
-app.put('/api/V1/insaf/jenis_berita/:id', jenis_berita.update);
-app.delete('/api/V1/insaf/jenis_berita/:id', jenis_berita.delete_);
-// ==========================================================================
 
 // ============================== 1.PKK =======================================
 
@@ -285,6 +278,25 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/spog/:filename', manouvre.download);
     app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
 // ==========================================================================
+
+
+// ================================= distress ===================================
+app.post('/api/V1/masdex/distress/create', distress.createDistress);
+app.post('/api/V1/masdex/distress/read', distress.readDistress);
+app.get('/api/V1/masdex/distress/read/:id', distress.readDistressByID);
+app.put('/api/V1/masdex/distress/update/:id', distress.updateDistress);
+app.delete('/api/V1/masdex/distress/delete/:id', distress.deleteDistress);
+app.post('/api/V1/masdex/distress_detail/insaf/create', distress.createDistressDetail);
+app.post('/api/V1/masdex/distress_detail/insaf/read', distress.readDistressDetail);
+app.get('/api/V1/masdex/distress_detail/read/:id', distress.readDistressDetailByID);
+app.put('/api/V1/masdex/distress_detail/update/:id', distress.updateDistressDetail);
+app.delete('/api/V1/masdex/distress_detail/delete/:id', distress.deleteDistressDetail);
+app.post('/api/V1/masdex/pelapor_distress/insaf/create', distress.createPelaporDistress);
+app.post('/api/V1/masdex/pelapor_distress/insaf/read', distress.readPelaporDistress);
+app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDistressByID);
+app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
+app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
+// ================================= end distress ===============================
 
 // authentification part======================================================
 
