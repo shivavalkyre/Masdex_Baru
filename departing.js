@@ -166,9 +166,10 @@ const setStatusdeparting = (request, response) => {
 	}
 	
 	pool.query(`UPDATE tbl_insaf_departing
-				SET is_departing = $1
-				WHERE id = $2
-				AND is_delete = FALSE`, [setstatus, iddata], (error, results) => {
+				SET is_departing = $1,
+				is_complete=$2
+				 WHERE id = $3
+				AND is_delete = FALSE`, [setstatus, setstatus,iddata], (error, results) => {
 		if(error){
 			response.status(400).send({success:false,data:error})
 		}
@@ -178,12 +179,14 @@ const setStatusdeparting = (request, response) => {
 
 const setDepartingStatus = (request, response) => {
 	const iddata = request.params.id;
-	const {departing_status} = request.body;
+	const {pandu_off,departed,watch_hand_offer} = request.body;
 	
 	pool.query(`UPDATE tbl_insaf_departing
-				SET departing_status = $1
-				WHERE id = $2
-				AND is_delete = FALSE`, [departing_status, iddata], (error, results) => {
+				SET pandu_off = $1,
+				departed=$2,
+				watch_hand_offer=$3
+				 WHERE id = $4
+				AND is_delete = FALSE`, [pandu_off,departed,watch_hand_offer, iddata], (error, results) => {
 		if(error){
 			response.status(400).send({success:false,data:error})
 		}
