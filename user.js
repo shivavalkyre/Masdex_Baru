@@ -16,7 +16,7 @@ const create = (request, response) => {
 
     
 
-     pool.query('SELECT Count(*) as total FROM tbl_users WHERE username = $1',[username] ,(error, results) => {
+     pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1',[username] ,(error, results) => {
         if (error) {
           throw error
         }
