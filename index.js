@@ -67,6 +67,8 @@ const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
 const pan = require('./pan')
+const jenis_distress = require('./jenis_distress')
+const sumber_informasi = require('./sumber_informasi')
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -317,6 +319,14 @@ app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetai
 app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
 app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
 // ===========================================================================
+
+// ================================= jenis distress ===================================
+app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
+// ================================= end jenis distress ===============================
+
+// ================================= jenis distress ===================================
+app.get('/api/V1/masdex/sumber_informasi', sumber_informasi.read);
+// ================================= end jenis distress ===============================
 // authentification part======================================================
 
 function authenticateToken(req, res, next) {

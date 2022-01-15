@@ -106,13 +106,11 @@ const read = (request, response) => {
 }
 
 const readall = (request, response) => {
-    const { username} 
-    = request.body
     var res = []
     var items = []
     pool.query('SELECT count(*) as total from tbl_user_stakeholders',(error,results) => {
 
-                pool.query('SELECT * from tbl_user_stakeholders WHERE username =$1 AND is_delete=$2',[username,false],(error,results1) => {
+                pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1',[false],(error,results1) => {
                 //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
                     if(results1) {

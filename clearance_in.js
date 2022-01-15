@@ -9,15 +9,19 @@ const create = (request, response) => {
 
     let jenis_telkompel;
 
-    let sampleFile = request.files.dokumen_spm;
-    console.log(sampleFile);
-     const now = Date.now()
-     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-     console.log(__dirname);
-     sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
-         if (err)
-             console.log(err);
-     });
+    let name = '';
+
+    if(dokumen_spm != '') {
+      let sampleFile = request.files.dokumen_spm;
+      console.log(sampleFile);
+       const now = Date.now()
+       name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+       console.log(__dirname);
+       sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
+           if (err)
+               console.log(err);
+       });
+    }
 
 
   
