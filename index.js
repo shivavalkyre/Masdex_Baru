@@ -66,6 +66,7 @@ const dermaga =  require ('./dermaga');
 const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
+const pan = require('./pan')
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -297,7 +298,25 @@ app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDi
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
 // ================================= end distress ===============================
+// ================================= pan =====================================
+app.get('/api/V1/masdex/pan', pan.getPAN)
+app.get('/api/V1/masdex/pan/order/:target', pan.getPANorderBY)
+app.post('/api/V1/masdex/pan/create', pan.storePAN)
+app.get('/api/V1/masdex/pan/show/:id', pan.getPANbyId)
+app.get('/api/V1/masdex/pan/show/:range1/:range2', pan.getPANByRange)
+app.put('/api/V1/masdex/pan/update/:id', pan.updatePAN)
+app.delete('/api/V1/masdex/pan/destroy/:id', pan.destroyPAN)
+app.get('/api/V1/masdex/pan/search/:keyword', pan.searchPANdata)
+app.get('/api/V1/masdex/pan/latest', pan.getLatestPAN)
+app.get('/api/V1/masdex/pan/sumberinformasiawal', pan.getSumberInformasiAwal)
+app.get('/api/V1/masdex/pan/jenispan', pan.getJenisPan)
 
+app.get('/api/V1/masdex/pan_detail/:id', pan.getPANdetail)
+app.post('/api/V1/masdex/pan_detail/store/:id', pan.storePANdetail)
+app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetailbyId)
+app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
+app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
+// ===========================================================================
 // authentification part======================================================
 
 function authenticateToken(req, res, next) {
