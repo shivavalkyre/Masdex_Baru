@@ -66,6 +66,8 @@ const dermaga =  require ('./dermaga');
 const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
+const jenis_distress = require('./jenis_distress')
+const sumber_informasi = require('./sumber_informasi')
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -297,6 +299,15 @@ app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDi
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
 // ================================= end distress ===============================
+
+
+// ================================= jenis distress ===================================
+app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
+// ================================= end jenis distress ===============================
+
+// ================================= jenis distress ===================================
+app.get('/api/V1/masdex/sumber_informasi', sumber_informasi.read);
+// ================================= end jenis distress ===============================
 
 // authentification part======================================================
 

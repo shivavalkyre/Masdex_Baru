@@ -9,7 +9,8 @@ const createDistress = (request, response) => {
             response.status(400).send({success:false,data:'Duplicate data'})
             return;
         }else{
-            throw error;
+          console.log(request.body)
+            // throw error;
             response.status(400).send({success:false,data:error})
         }
       }else{
