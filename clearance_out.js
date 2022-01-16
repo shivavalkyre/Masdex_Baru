@@ -143,7 +143,7 @@ const read_by_voyage_id = (request, response) => {
 
 const update_operator = (request, response) => {
     const id = parseInt(request.params.id);
-    const { voyage_id,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,temperature_min,temperature_max,low_tide,high_tide,weather,informasi_cuaca_lainnya,informasi_traffic,advice_update_ais,advice_vts,informasi_lainnya,radio_on,rudder_ok,crew_condition_ok,pandu_on,is_complete } 
+    const { voyage_id,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,temperature_min,temperature_max,low_tide,high_tide,weather,informasi_cuaca_lainnya,informasi_traffic,advice_update_ais,advice_vts,informasi_lainnya,radio_on,rudder_ok,crew_condition_ok,pandu_on,is_complete, engine_on, low_tide_time, high_tide_time, air_pressure } 
     = request.body;
     let doc;
     //console.log(mmsi);
@@ -168,8 +168,8 @@ const update_operator = (request, response) => {
 
         //   console.log(name);
          const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1,weather_valid_from=$2,weather_valid_to=$3,weather_data_feed=$4,wind_speed_min=$5,wind_speed_max=$6,wind_from=$7,wind_to=$8,humidity_min=$9,humidity_max=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,weather=$15,informasi_cuaca_lainnya=$16,informasi_traffic=$17,advice_update_ais=$18,advice_vts=$19,informasi_lainnya=$20,radio_on=$21,rudder_ok=$22,crew_condition_ok=$23,pandu_on=$24,updated_at=$25,is_complete=$26 where id=$27'
-         , [voyage_id,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,temperature_min,temperature_max,low_tide,high_tide,weather,informasi_cuaca_lainnya,informasi_traffic,advice_update_ais,advice_vts,informasi_lainnya,radio_on,rudder_ok,crew_condition_ok,pandu_on,update_time,is_complete,id], (error, results) =>{
+         pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1,weather_valid_from=$2,weather_valid_to=$3,weather_data_feed=$4,wind_speed_min=$5,wind_speed_max=$6,wind_from=$7,wind_to=$8,humidity_min=$9,humidity_max=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,weather=$15,informasi_cuaca_lainnya=$16,informasi_traffic=$17,advice_update_ais=$18,advice_vts=$19,informasi_lainnya=$20,radio_on=$21,rudder_ok=$22,crew_condition_ok=$23,pandu_on=$24,updated_at=$25,is_complete=$26,engine_on=$28,low_tide_time=$29,high_tide_time=$30,air_pressure=$31 where id=$27'
+         , [voyage_id,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,temperature_min,temperature_max,low_tide,high_tide,weather,informasi_cuaca_lainnya,informasi_traffic,advice_update_ais,advice_vts,informasi_lainnya,radio_on,rudder_ok,crew_condition_ok,pandu_on,update_time,is_complete,id,engine_on, low_tide_time, high_tide_time, air_pressure], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)

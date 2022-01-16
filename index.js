@@ -67,7 +67,12 @@ const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
 const pan = require('./pan')
+<<<<<<< HEAD
 const securite = require('./securite')
+=======
+const jenis_distress = require('./jenis_distress')
+const sumber_informasi = require('./sumber_informasi')
+>>>>>>> b957d88dea9f0a9c05e69dd2b8cdf9761d68f35f
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -318,6 +323,7 @@ app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetai
 app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
 app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
 // ===========================================================================
+<<<<<<< HEAD
 // ============================== SECURITE (INSAF) =======================================
 app.post('/api/V1/securite/create', securite.createSecurite)
 app.post('/api/V1/securitedetail/create', securite.createSecuriteDetail)
@@ -330,6 +336,16 @@ app.delete('/api/securitedetail/insaf/delete/:id', securite.deleteSecuriteDetail
 app.put('/api/V1/securite/update/:id', securite.updateSecurite)
 app.get('/api/V1/securite/read_resume/:id', securite.getSecuriteResumeById)
 // ============================ END SECURITE (INSAF) =====================================
+=======
+
+// ================================= jenis distress ===================================
+app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
+// ================================= end jenis distress ===============================
+
+// ================================= jenis distress ===================================
+app.get('/api/V1/masdex/sumber_informasi', sumber_informasi.read);
+// ================================= end jenis distress ===============================
+>>>>>>> b957d88dea9f0a9c05e69dd2b8cdf9761d68f35f
 // authentification part======================================================
 
 function authenticateToken(req, res, next) {
