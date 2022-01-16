@@ -67,6 +67,7 @@ const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
 const pan = require('./pan')
+const securite = require('./securite')
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -317,6 +318,18 @@ app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetai
 app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
 app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
 // ===========================================================================
+// ============================== SECURITE (INSAF) =======================================
+app.post('/api/V1/securite/create', securite.createSecurite)
+app.post('/api/V1/securitedetail/create', securite.createSecuriteDetail)
+app.post('/api/V1/securite/read', securite.getSecurite)
+app.get('/api/V1/securite/read/:id', securite.getSecuriteById)
+app.get('/api/V1/securite/read_detail/:id', securite.getSecuriteDetailById)
+app.post('/api/V1/securite/read/range', securite.getSecuriteByRange)
+app.delete('/api/V1/securite/delete/:id', securite.deleteSecurite)
+app.delete('/api/securitedetail/insaf/delete/:id', securite.deleteSecuriteDetail)
+app.put('/api/V1/securite/update/:id', securite.updateSecurite)
+app.get('/api/V1/securite/read_resume/:id', securite.getSecuriteResumeById)
+// ============================ END SECURITE (INSAF) =====================================
 // authentification part======================================================
 
 function authenticateToken(req, res, next) {
