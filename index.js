@@ -67,12 +67,10 @@ const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
 const pan = require('./pan')
-<<<<<<< HEAD
 const securite = require('./securite')
-=======
 const jenis_distress = require('./jenis_distress')
 const sumber_informasi = require('./sumber_informasi')
->>>>>>> b957d88dea9f0a9c05e69dd2b8cdf9761d68f35f
+
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -342,14 +340,13 @@ app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
 app.get('/api/V1/masdex/sumber_informasi', sumber_informasi.read);
 // ================================= end jenis distress ===============================
 // authentification part======================================================
+// authentification part======================================================
 
+function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
   
-    if (token == null) {
-        //return res.sendStatus(401)
-        return res.status(401).send({success:false,data:'Unathorize'})
-    }
+    if (token == null) return res.sendStatus(401)
     try {
       const verified = jwt.verify(token, process.env.TOKEN_SECRET)
       req.user = verified
