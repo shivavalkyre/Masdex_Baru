@@ -5,6 +5,7 @@ const base_url = process.env.base_url;
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const res = require('express/lib/response');
+const req = require('express/lib/request');
 var complete_path='';
 var password_hash;
 
@@ -139,15 +140,12 @@ const login = (request, response) => {
 }
 
 const readall = (request, response) => {
-    const { username } 
-    = request.body
-   // console.log( username);
     var res = [];
     var items = [];
 
     pool.query('SELECT count(*) as total from tbl_users',(error,results) => {
 
-                pool.query('SELECT * from tbl_users WHERE username =$1 AND is_delete=$2',[username,false],(error,results1) => {
+                pool.query('SELECT * from tbl_users WHERE is_delete=$1',[false],(error,results1) => {
                 //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
                     if(results1) {
@@ -165,15 +163,36 @@ const readall = (request, response) => {
     
 }
 
+const read_by_id = (request, response) => {
+    var res = [];
+    var items = [];
+    const id = parseInt(request.params.id);
+
+    pool.query('SELECT count(*) as total from tbl_users',(error,results) => {
+
+                pool.query('SELECT * from tbl_users WHERE is_delete=$1 AND id=$2',[false, id],(error,results1) => {
+                //bcrypt.compare(password, results.rows[0].password, function(err, res) {
+
+                    if(results1) {
+                        items.push({rows:results1.rows})
+                        res.push(items)
+                        response.status(200).json( {success:true,data:res})
+                    } else {
+                        response.status(400).json({success:false,data: "id tidak ditemukan" });
+                    }
+                });
+
+            });
+        
+    
+}
 
 const update = (request, response) => {
+    const id = parseInt(request.params.id);
     const { username,password,email,photo,nama_lengkap } 
     = request.body
 
-
-    
-
-     pool.query('SELECT Count(*) as total FROM tbl_users WHERE username = $1',[username] ,(error, results) => {
+     pool.query('SELECT Count(*) as total FROM tbl_users WHERE id = $1',[id] ,(error, results) => {
         if (error) {
           throw error
         }
@@ -183,31 +202,44 @@ const update = (request, response) => {
            bcrypt.genSalt(10,function(err, res) {
                salt= res
                bcrypt.hash(password, salt,function(err,res){
-                   password_hash= res;
                    console.log(password_hash);
-                   pool.query('SELECT * FROM tbl_users WHERE username = $1',[username] ,(error, results) => {
+                   pool.query('SELECT * FROM tbl_users WHERE id = $1',[id] ,(error, results) => {
+                    password_hash = results.rows[0].password;
+                     if(password != null || password != '') {
+                         password_hash= res;
+                     }
                     
                     if (error) {
                         throw error
                     }
-                            doc = results.rows[0].photo;
-                            var doc_path = __dirname +path.join('/dokumens/user/'+ doc);
-                            console.log(doc_path);
-                            fs.unlinkSync(doc_path);
-                            console.log(doc_path);
 
-                            let sampleFile = request.files.photo;
-                            console.log(sampleFile);
-                            const now = Date.now()
-                            let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                            complete_path = base_url+'dokumens/user/'+name;
-                            console.log(__dirname);
-                            sampleFile.mv(path.join(__dirname + '/dokumens/user/') + name, function (err) {
-                                if (err)
-                                    console.log(err);
-                            });
+                    var name;
+                    var complete_path;
 
-                            pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7',[username,password_hash,email, name,nama_lengkap,complete_path,username] ,(error, results) => {
+                    name = results.rows[0].photo;
+                    complete_path = results.rows[0].url_photo;
+
+                    if(request.files) {
+                        console.log('ada foto')
+                        doc = results.rows[0].photo;
+                        var doc_path = __dirname +path.join('/dokumens/user/'+ doc);
+                        console.log(doc_path);
+                        fs.unlinkSync(doc_path);
+                        console.log(doc_path);
+
+                        let sampleFile = request.files.photo;
+                        console.log(sampleFile);
+                        const now = Date.now()
+                        name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+                        complete_path = base_url+'dokumens/user/'+name;
+                        console.log('dirname' + __dirname);
+                        sampleFile.mv(path.join(__dirname + '/dokumens/user/') + name, function (err) {
+                            if (err)
+                                console.log(err);
+                        });
+                    }
+
+                        pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7',[username,password_hash,email, name,nama_lengkap,complete_path,username] ,(error, results) => {
                             if (error) {
                                 throw error
                             }                          
@@ -320,7 +352,7 @@ module.exports = {
     read,
     readall,
     login,
-    // read_by_id,
+    read_by_id,
     update,
     delete_,
     download
