@@ -67,8 +67,10 @@ const area_tambat =  require ('./area_tambat');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
 const pan = require('./pan')
+const securite = require('./securite')
 const jenis_distress = require('./jenis_distress')
 const sumber_informasi = require('./sumber_informasi')
+
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
 
@@ -322,8 +324,18 @@ app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetai
 app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
 app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
 // ===========================================================================
+app.post('/api/V1/securite/create', securite.createSecurite)
+app.post('/api/V1/securitedetail/create', securite.createSecuriteDetail)
+app.post('/api/V1/securite/read', securite.getSecurite)
+app.get('/api/V1/securite/read/:id', securite.getSecuriteById)
+app.get('/api/V1/securite/read_detail/:id', securite.getSecuriteDetailById)
+app.post('/api/V1/securite/read/range', securite.getSecuriteByRange)
+app.delete('/api/V1/securite/delete/:id', securite.deleteSecurite)
+app.delete('/api/securitedetail/insaf/delete/:id', securite.deleteSecuriteDetail)
+app.put('/api/V1/securite/update/:id', securite.updateSecurite)
+app.get('/api/V1/securite/read_resume/:id', securite.getSecuriteResumeById)
+// ============================ END SECURITE (INSAF) =====================================
 
-// ================================= jenis distress ===================================
 app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
 // ================================= end jenis distress ===============================
 
@@ -331,15 +343,13 @@ app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
 app.get('/api/V1/masdex/sumber_informasi', sumber_informasi.read);
 // ================================= end jenis distress ===============================
 // authentification part======================================================
+// authentification part======================================================
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
   
-    if (token == null) {
-        //return res.sendStatus(401)
-        return res.status(401).send({success:false,data:'Unathorize'})
-    }
+    if (token == null) return res.sendStatus(401)
     try {
       const verified = jwt.verify(token, process.env.TOKEN_SECRET)
       req.user = verified
