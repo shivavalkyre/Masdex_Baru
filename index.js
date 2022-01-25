@@ -249,8 +249,12 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
     app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, (req, res) => {
         user_stakeholder.readall(req,res)
     });
+    
+    app.get('/api/V1/masdex/user_stakeholder/:id', (req, res) => {
+        user_stakeholder.read_by_id(req,res)
+    });
     //app.post('/api/V1/masdex/user_stakeholder/login', user_stakeholder.read);
-    app.put('/api/V1/masdex/user_stakeholder',authenticateToken, (req, res) => {
+    app.patch('/api/V1/masdex/user_stakeholder/:id',authenticateToken, (req, res) => {
         user_stakeholder.update(req,res)
     });
     app.delete('/api/V1/masdex/user_stakeholder/:id',authenticateToken, (req, res) => {
