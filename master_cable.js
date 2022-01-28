@@ -34,7 +34,19 @@ const create = (request, response) => {
         }
       }else
       {
-          response.status(200).send({success:true,data:'data master cable berhasil dibuat'})
+        pool.query(`SELECT id FROM tbl_insaf_master_cable ORDER BY id DESC limit 1`, (error90, results90) => {
+            if (error90) {
+                response.status(400).send({success:false,data:error90})
+            }
+            let master_cable_id = results90.rows[0].id;
+            response.status(200).send(
+                {
+                    success:true,
+                    data:'data master cable berhasil dibuat',
+                    last_id: master_cable_id
+                }
+            )
+        })
       }
 
     })
@@ -53,7 +65,20 @@ const create = (request, response) => {
             }
           }else
           {
-              response.status(200).send({success:true,data:'data master cable berhasil dibuat'})
+              
+                pool.query(`SELECT id FROM tbl_insaf_master_cable ORDER BY id DESC limit 1`, (error90, results90) => {
+                    if (error90) {
+                        response.status(400).send({success:false,data:error90})
+                    }
+                    let master_cable_id = results90.rows[0].id;
+                    response.status(200).send(
+                        {
+                            success:true,
+                            data:'data master cable berhasil dibuat',
+                            last_id: master_cable_id
+                        }
+                    )
+                })
           }
     
         })
