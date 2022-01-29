@@ -11,10 +11,6 @@ var password_hash;
 const create = (request, response) => {
     const { username, password, email, photo, nama_lengkap }
         = request.body
-
-
-
-
     pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1', [username], (error, results) => {
         if (error) {
             throw error
@@ -130,6 +126,28 @@ const readall = (request, response) => {
 
 }
 
+const detail_profile = (request, response) => {
+
+    var res = []
+    var items = []
+    const id = parseInt(request.params.id);
+    pool.query('SELECT count(*) as total from tbl_user_stakeholders WHERE id =$1 and is_delete=false', [id], (error, results) => {
+        res.push({ total: results.rows[0].total })
+        if (results.rows[0].total > 0) {
+            pool.query('SELECT tbl_user_stakeholders.nama_lengkap as nama_user, tbl_stakeholders.nama_lengkap as nama_kantor, tbl_stakeholders.unit_kantor, tbl_stakeholders.npwp, tbl_stakeholders.telepon_kantor, tbl_stakeholders.alamat_kantor, tbl_user_stakeholders.email, tbl_user_stakeholders.url_photo, tbl_stakeholders.url_logo from tbl_user_stakeholders JOIN tbl_stakeholders ON tbl_user_stakeholders.id = tbl_stakeholders.user_id WHERE tbl_user_stakeholders.id =$1 and tbl_user_stakeholders.is_delete=false', [id], (error2, results2) => {
+
+                items.push({rows:results2.rows})
+                res.push(items)
+                response.status(200).send({success:true,data:res})
+
+            })
+        } else {
+            response.status(400).json({ success: false, data: "user tidak ditemukan" });
+        }
+
+
+    })
+}
 
 const read_by_id = (request, response) => {
     var res = [];
@@ -320,4 +338,5 @@ module.exports = {
     update,
     delete_,
     download,
+    detail_profile
 }
