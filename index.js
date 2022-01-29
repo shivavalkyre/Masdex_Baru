@@ -72,6 +72,7 @@ const securite = require('./securite')
 const jenis_distress = require('./jenis_distress')
 const jenis_stakeholder = require('./jenis_stakeholder')
 const sumber_informasi = require('./sumber_informasi')
+const dbWeathers = require ('./weather')
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
 //app.use('/documents', express.static(path.join(__dirname, 'documents')))
@@ -309,6 +310,9 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
 // ==========================================================================
 
+// ============================= Weather Part ===================================
+    app.get('/api/weather/bmkg', dbWeathers.getBMKGData);
+// ==============================================================================
 
 // ================================= distress ===================================
 app.post('/api/V1/masdex/distress/create', distress.createDistress);
