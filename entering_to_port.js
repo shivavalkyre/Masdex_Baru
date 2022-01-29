@@ -271,8 +271,8 @@ const update_by_otoritas = (request, response) => {
 
 
          const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_entering_to_port SET dokumen_berthing=$1,dokumen_ppk=$2,updated_at=$3 where id=$4'
-         , [name1,name2,update_time,id], (error, results) =>{
+         pool.query('UPDATE tbl_insaf_entering_to_port SET dokumen_berthing=$1,dokumen_ppk=$2,updated_at=$3,is_complete=$5,is_entering_to_port=$5 where id=$4'
+         , [name1,name2,update_time,id, true], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)

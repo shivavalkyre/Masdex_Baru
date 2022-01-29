@@ -170,7 +170,7 @@ const readDistressDetail = (request, response) => {
       }
       res.push({total:results.rows[0].total})
       // var sql=  'SELECT * FROM tbl_insaf_distress_detail WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-      var sql=  "SELECT * FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id ASC"
+      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, * FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id ASC"
 	  pool.query(
        sql,
         (error, results) => {

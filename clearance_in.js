@@ -245,14 +245,17 @@ const update_ksu = (request, response) => {
             throw error
           }
 
-         doc = results.rows[0].dokumen_spm;
-         var doc_path = __dirname +path.join('/dokumens/clearance_in/'+ doc);
-         console.log(doc_path);
-         if (fs.existsSync(doc_path)){
-          fs.unlinkSync(doc_path);
-         }
-         
-         console.log(doc_path);
+          if(results.rows[0].dokumen_spm != '' && results.rows[0].dokumen_spm != null ) {
+            doc = results.rows[0].dokumen_spm;
+            var doc_path = __dirname +path.join('/dokumens/clearance_in/'+ doc);
+            console.log(doc_path);
+            if (fs.existsSync(doc_path)){
+             fs.unlinkSync(doc_path);
+            }
+            
+            console.log(doc_path);
+          }
+
 
          let sampleFile = request.files.dokumen_spm;
          console.log(sampleFile);

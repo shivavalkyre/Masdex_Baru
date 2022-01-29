@@ -11,7 +11,7 @@ const create = (request, response) => {
     console.log(sampleFile);
      const now = Date.now()
      let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-     var complete_path = base_url+'dokumens/clearance_in/'+name;
+     var complete_path = base_url+'dokumens/spog/'+name;
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/spog/') + name, function (err) {
          if (err)
