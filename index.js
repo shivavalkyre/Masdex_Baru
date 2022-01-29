@@ -64,11 +64,13 @@ const telkompel =  require ('./telkompel');
 const pelabuhan =  require ('./pelabuhan');
 const dermaga =  require ('./dermaga');
 const area_tambat =  require ('./area_tambat');
+const area_labuh =  require ('./area_labuh');
 const jenis_berita = require('./jenis_berita')
 const distress = require('./distress')
 const pan = require('./pan')
 const securite = require('./securite')
 const jenis_distress = require('./jenis_distress')
+const jenis_stakeholder = require('./jenis_stakeholder')
 const sumber_informasi = require('./sumber_informasi')
 
 //app.use('/images', express.static(path.join(__dirname, 'images')))
@@ -127,6 +129,13 @@ app.put('/api/V1/masdex/area_tambat/:id', area_tambat.update);
 app.delete('/api/V1/masdex/area_tambat/:id', area_tambat.delete_);
 // ==========================================================================
 
+// ============================== Area Labuh ===============================
+app.post('/api/V1/masdex/area_labuh', area_labuh.create);
+app.get('/api/V1/masdex/area_labuh', area_labuh.read);
+app.get('/api/V1/masdex/area_labuh/:id', area_labuh.read_by_id);
+app.put('/api/V1/masdex/area_labuh/:id', area_labuh.update);
+app.delete('/api/V1/masdex/area_labuh/:id', area_labuh.delete_);
+// ==========================================================================
 
 // ============================== Jenis Berita ===============================
 app.post('/api/V1/insaf/jenis_berita', jenis_berita.create);
@@ -135,6 +144,13 @@ app.get('/api/V1/insaf/jenis_berita/:id', jenis_berita.read_by_id);
 app.put('/api/V1/insaf/jenis_berita/:id', jenis_berita.update);
 app.delete('/api/V1/insaf/jenis_berita/:id', jenis_berita.delete_);
 // ==========================================================================
+
+// ============================== Jenis Stakeholder ===============================
+app.get('/api/V1/masdex/jenis_stakeholder', jenis_stakeholder.read);
+app.get('/api/V1/masdex/jenis_stakeholder/:id', jenis_stakeholder.read_by_id);
+app.post('/api/V1/masdex/jenis_stakeholder/', jenis_stakeholder.create);
+app.delete('/api/V1/masdex/jenis_stakeholder/:id', jenis_stakeholder.delete_);
+app.patch('/api/V1/masdex/jenis_stakeholder/:id', jenis_stakeholder.update);
 
 
 // ============================== 1.PKK =======================================
@@ -285,6 +301,7 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/user_stakeholder/:filename', user_stakeholder.download);
     app.get('/api/V1/dokumens/user/:filename', user.download);
     app.get('/api/V1/dokumens/pkk/:filename', pkk.download);
+    app.get('/api/V1/dokumens/jenis_stakeholder/logo/:filename', jenis_stakeholder.download);
     app.get('/api/V1/dokumens/stakeholder/logo/:filename', stakeholder.download);
     app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
     app.get('/api/V1/dokumens/spog/:filename', manouvre.download);

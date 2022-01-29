@@ -4,23 +4,22 @@ const path = require('path')
 const base_url = process.env.base_url;
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-var complete_path='';
+var complete_path = '';
 var password_hash;
 
 
 const create = (request, response) => {
-    const { username,password,email,photo,nama_lengkap } 
-    = request.body
+    const { username, password, email, photo, nama_lengkap }
+        = request.body
 
 
-    
 
-     pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1',[username] ,(error, results) => {
+
+    pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1', [username], (error, results) => {
         if (error) {
-          throw error
+            throw error
         }
-        if(results.rows[0].total>0)
-        {
+        if (results.rows[0].total > 0) {
             // pool.query('SELECT password from tbl_user_stakeholders WHERE username =$1',[username],(error,results) => {
             //     bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
@@ -34,37 +33,40 @@ const create = (request, response) => {
             //     });
 
             // })
-            response.status(400).json({success:false,data: "user sudah ada" });
-           
-        }else
-        {
+            response.status(400).json({ success: false, data: "user sudah ada" });
+
+        } else {
             // user not exist
+            let name = 'default.jpg'
+            let complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+            if (request.files) {
+                let sampleFile = request.files.photo;
+                console.log(sampleFile);
+                const now = Date.now()
+                let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+                complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+                console.log(__dirname);
+                sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
+                    if (err)
+                        console.log(err);
+                });
 
-            let sampleFile = request.files.photo;
-             console.log(sampleFile);
-             const now = Date.now()
-             let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-             complete_path = base_url+'dokumens/user_stakeholder/'+name;
-             console.log(__dirname);
-             sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
-                 if (err)
-                     console.log(err);
-             });
+            }
 
-            bcrypt.genSalt(10,function(err, res) {
-                salt= res
-                bcrypt.hash(password, salt,function(err,res){
-                    password_hash= res;
+            bcrypt.genSalt(10, function (err, res) {
+                salt = res
+                bcrypt.hash(password, salt, function (err, res) {
+                    password_hash = res;
                     console.log(password_hash);
-                        pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo) VALUES($1,$2,$3,$4,$5,$6)',[username,password_hash,email, name,nama_lengkap,complete_path] ,(error, results) => {
-                    if (error) {
-                        throw error
-                    }
-                    response.status(200).json({success:true,data: "User baru berhasil dibuat" });
-                        })
+                    pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo) VALUES($1,$2,$3,$4,$5,$6)', [username, password_hash, email, name, nama_lengkap, complete_path], (error, results) => {
+                        if (error) {
+                            throw error
+                        }
+                        response.status(200).json({ success: true, data: "User baru berhasil dibuat" });
+                    })
                 });
             });
-            
+
 
 
         }
@@ -74,59 +76,58 @@ const create = (request, response) => {
 }
 
 const read = (request, response) => {
-    const { username,password } 
-    = request.body
+    const { username, password }
+        = request.body
 
-    pool.query('SELECT count(*) as total from tbl_user_stakeholders WHERE username =$1 and is_delete=false',[username],(error,results) => {
-            if (results.rows[0].total>0){
-                pool.query('SELECT * from tbl_user_stakeholders WHERE username =$1 and is_delete=false',[username],(error,results) => {
-                
-                    bcrypt.compare(password, results.rows[0].password, function(err, res) {
-    
-                        if(res) {
-                            //console.log('Your password mached with database hash password');
-                            //response.status(200).json({success:true,data: "User ditemukan" });
-                            const token = generateAccessToken({ username: username })
-                            console.log(token);
-                            response.status(200).json( {"token":token,"id" : results.rows[0].id,"username" : username })
-                        } else {
-                            //console.log('Your password not mached.');
-                            response.status(400).json({success:false,data: "password tidak sama" });
-                        }
-                    });
-    
-                })
-            }else
-            {
-                response.status(400).json({success:false,data: "user tidak ditemukan" });
-            }
-           
-        
+    pool.query('SELECT count(*) as total from tbl_user_stakeholders WHERE username =$1 and is_delete=false', [username], (error, results) => {
+        if (results.rows[0].total > 0) {
+            pool.query('SELECT * from tbl_user_stakeholders WHERE username =$1 and is_delete=false', [username], (error, results) => {
+
+                bcrypt.compare(password, results.rows[0].password, function (err, res) {
+
+                    if (res) {
+                        //console.log('Your password mached with database hash password');
+                        //response.status(200).json({success:true,data: "User ditemukan" });
+                        const token = generateAccessToken({ username: username })
+                        console.log(token);
+                        response.status(200).json({ "token": token, "id": results.rows[0].id, "username": username })
+                    } else {
+                        //console.log('Your password not mached.');
+                        response.status(400).json({ success: false, data: "password tidak sama" });
+                    }
+                });
+
+            })
+        } else {
+            response.status(400).json({ success: false, data: "user tidak ditemukan" });
+        }
+
+
     })
 }
 
 const readall = (request, response) => {
     var res = []
     var items = []
-    pool.query('SELECT count(*) as total from tbl_user_stakeholders',(error,results) => {
+    pool.query('SELECT count(*) as total from tbl_user_stakeholders', (error, results) => {
 
-                pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1',[false],(error,results1) => {
-                //bcrypt.compare(password, results.rows[0].password, function(err, res) {
+        pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1', [false], (error, results1) => {
+            //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
-                    if(results1) {
-                        items.push({rows:results1.rows})
-                        res.push(items)
-                        response.status(200).json( {success:true,data:res})
-                        
-                    } else {
-                        //console.log('Your password not mached.');
-                        response.status(400).json({success:false,data: "password tidak sama" });
-                    }
-                });
+            if (results1) {
+                items.push({ rows: results1.rows })
+                res.push(items)
+                response.status(200).json({ success: true, data: res })
 
-            });
-        
-    
+            } else {
+                //console.log('Your password not mached.');
+                response.status(400).json({ success: false, data: "password tidak sama" });
+            }
+        });
+
+    });
+
+
 }
 
 
@@ -135,92 +136,92 @@ const read_by_id = (request, response) => {
     var items = [];
     const id = parseInt(request.params.id);
 
-    pool.query('SELECT count(*) as total from tbl_users',(error,results) => {
+    pool.query('SELECT count(*) as total from tbl_users', (error, results) => {
 
-                pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1 AND id=$2',[false, id],(error,results1) => {
-                //bcrypt.compare(password, results.rows[0].password, function(err, res) {
+        pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1 AND id=$2', [false, id], (error, results1) => {
+            //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
-                    if(results1) {
-                        items.push({rows:results1.rows})
-                        res.push(items)
-                        response.status(200).json( {success:true,data:res})
-                    } else {
-                        response.status(400).json({success:false,data: "id tidak ditemukan" });
-                    }
-                });
+            if (results1) {
+                items.push({ rows: results1.rows })
+                res.push(items)
+                response.status(200).json({ success: true, data: res })
+            } else {
+                response.status(400).json({ success: false, data: "id tidak ditemukan" });
+            }
+        });
 
-            });
-        
-    
+    });
+
+
 }
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { username,password,email,photo,nama_lengkap } 
-    = request.body
+    const { username, password, email, photo, nama_lengkap }
+        = request.body
 
-     pool.query('SELECT Count(*) as total FROM tbl_user_stakeholders WHERE id = $1',[id] ,(error, results) => {
+    pool.query('SELECT Count(*) as total FROM tbl_user_stakeholders WHERE id = $1', [id], (error, results) => {
         if (error) {
-          throw error
+            throw error
         }
-        if(results.rows[0].total>0)
-        {
+        if (results.rows[0].total > 0) {
             // user exist
-           bcrypt.genSalt(10,function(err, res) {
-               salt= res
-               bcrypt.hash(password, salt,function(err,res){
-                   console.log(password_hash);
-                   pool.query('SELECT * FROM tbl_user_stakeholders WHERE id = $1',[id] ,(error, results) => {
-                    password_hash = results.rows[0].password;
-                     if(password != null || password != '') {
-                         password_hash= res;
-                     }
-                    
-                    if (error) {
-                        throw error
-                    }
+            bcrypt.genSalt(10, function (err, res) {
+                salt = res
+                bcrypt.hash(password, salt, function (err, res) {
+                    console.log(password_hash);
+                    pool.query('SELECT * FROM tbl_user_stakeholders WHERE id = $1', [id], (error, results) => {
+                        password_hash = results.rows[0].password;
+                        if (password != null || password != '') {
+                            password_hash = res;
+                        }
 
-                    var name;
-                    var complete_path;
+                        if (error) {
+                            throw error
+                        }
 
-                    name = results.rows[0].photo;
-                    complete_path = results.rows[0].url_photo;
+                        var name;
+                        var complete_path;
 
-                    if(request.files) {
-                        console.log('ada foto')
-                        doc = results.rows[0].photo;
-                        var doc_path = __dirname +path.join('/dokumens/user_stakeholder/'+ doc);
-                        console.log(doc_path);
-                        fs.unlinkSync(doc_path);
-                        console.log(doc_path);
+                        name = results.rows[0].photo;
+                        complete_path = results.rows[0].url_photo;
 
-                        let sampleFile = request.files.photo;
-                        console.log(sampleFile);
-                        const now = Date.now()
-                        name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                        complete_path = base_url+'dokumens/user_stakeholder/'+name;
-                        console.log('dirname' + __dirname);
-                        sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
-                            if (err)
-                                console.log(err);
-                        });
-                    }
+                        if (request.files) {
+                            console.log('ada foto')
+                            doc = results.rows[0].photo;
+                            if (doc != 'default.jpg') {
+                                var doc_path = __dirname + path.join('/dokumens/user_stakeholder/' + doc);
+                                console.log(doc_path);
+                                fs.unlinkSync(doc_path);
+                                console.log(doc_path);
+                            }
 
-                        pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7',[username,password_hash,email, name,nama_lengkap,complete_path,username] ,(error, results) => {
+                            let sampleFile = request.files.photo;
+                            console.log(sampleFile);
+                            const now = Date.now()
+                            name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+                            complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+                            console.log('dirname' + __dirname);
+                            sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
+                                if (err)
+                                    console.log(err);
+                            });
+                        }
+
+                        pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username], (error, results) => {
                             if (error) {
                                 throw error
-                            }                          
+                            }
 
-                            response.status(200).json({success:true,data: "User baru berhasil diperbarui" });
+                            response.status(200).json({ success: true, data: "User baru berhasil diperbarui" });
                         });
                     });
                 });
-           });
-           
-        }else
-        {
+            });
+
+        } else {
             // user not exist
-            response.status(400).json({success:false,data: "user tidak ada" });
+            response.status(400).json({ success: false, data: "user tidak ada" });
         }
     })
 
@@ -229,78 +230,76 @@ const update = (request, response) => {
 
 const delete_ = (request, response) => {
     const id = parseInt(request.params.id);
- 
+
 
     pool.query('SELECT count(*) as total FROM tbl_user_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
-          throw error
-        }else{
+            throw error
+        } else {
             //console.log(results.rows);
         }
-        
+
     })
 
-     pool.query('SELECT * FROM tbl_user_stakeholders where id=$1 and is_delete=false',[id] ,(error, results) => {
-          if (error) {
+    pool.query('SELECT * FROM tbl_user_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
+        if (error) {
             throw error
-          }
+        }
 
 
-         const deletetime = new Date;
-         pool.query('UPDATE tbl_user_stakeholders SET deleted_at=$1,is_delete=$2 where id=$3'
-         , [deletetime, true,id], (error, results) =>{
-           if (error) {
+        const deletetime = new Date;
+        pool.query('UPDATE tbl_user_stakeholders SET deleted_at=$1,is_delete=$2 where id=$3'
+            , [deletetime, true, id], (error, results) => {
+                if (error) {
 
-             if (error.code == '23505')
-             {
-                 //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
-                 response.status(400).send('Duplicate data')
-                 return;
-             }
-           }else
-           {
-               response.status(200).send({success:true,data:'data user berhasil dihapus'})
-           }
-     
-         })
+                    if (error.code == '23505') {
+                        //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                        response.status(400).send('Duplicate data')
+                        return;
+                    }
+                } else {
+                    response.status(200).send({ success: true, data: 'data user berhasil dihapus' })
+                }
+
+            })
 
 
 
 
-        });
+    });
 
 
-    
+
 }
 
 const download = (request, response) => {
     const filename = request.params.filename;
     console.log(filename);
-    var doc_path = __dirname +path.join('/dokumens/user_stakeholder/'+ filename);
+    var doc_path = __dirname + path.join('/dokumens/user_stakeholder/' + filename);
     console.log(doc_path);
     response.download(doc_path);
 };
 
-  // ======================================== Access token =======================================
-  function generateAccessToken(username) {
-    return jwt.sign(username, process.env.TOKEN_SECRET,{expiresIn: '1800s'});
-  }
+// ======================================== Access token =======================================
+function generateAccessToken(username) {
+    return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+}
 
-  // =============================================================================================
+// =============================================================================================
 
-  // ========================================= encrypt & decript function ========================
+// ========================================= encrypt & decript function ========================
 
-  function encrypt(text) {
+function encrypt(text) {
     let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
     let encrypted = cipher.update(text);
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     //return encrypted.toString('hex')
     iv_text = iv.toString('hex')
 
-    return { iv: iv_text, encryptedData: encrypted.toString('hex'),key:key.toString('hex') };
-   }
-   
-   function decrypt(text) {
+    return { iv: iv_text, encryptedData: encrypted.toString('hex'), key: key.toString('hex') };
+}
+
+function decrypt(text) {
     let iv = Buffer.from(text.iv, 'hex');
     let enkey = Buffer.from(text.key, 'hex')//will return key;
     let encryptedText = Buffer.from(text.encryptedData, 'hex');
@@ -308,10 +307,10 @@ const download = (request, response) => {
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
     return decrypted.toString();
-   }
+}
 
-  //================================================================================================
-   
+//================================================================================================
+
 
 module.exports = {
     create,
@@ -321,4 +320,4 @@ module.exports = {
     update,
     delete_,
     download,
-    }
+}
