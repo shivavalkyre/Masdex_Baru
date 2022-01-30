@@ -155,23 +155,30 @@ const update = (request, response) => {
             throw error
           }
 
-         doc = results.rows[0].foto_kapal;
-         var doc_path = __dirname +path.join('/dokumens/kapal/foto/'+ doc);
-         console.log(doc_path);
-         fs.unlinkSync(doc_path);
-         console.log(doc_path);
-
-         let sampleFile = request.files.foto_kapal;
-         console.log(sampleFile);
-          const now = Date.now()
-          let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-          console.log(__dirname);
-          sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
-              if (err){
+          var name;
+          var complete_path;
+      
+          name = results.rows[0].foto_kapal;
+      
+          if (request.files) {
+            doc = results.rows[0].foto_kapal;
+            var doc_path = __dirname + path.join('/dokumens/kapal/foto/' + doc);
+            console.log(doc_path);
+            fs.unlinkSync(doc_path);
+            console.log(doc_path);
+      
+            let sampleFile = request.files.foto_kapal;
+            console.log(sampleFile);
+            const now = Date.now()
+            let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+            console.log(__dirname);
+            sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
+              if (err) {
                 console.log(err);
               }
-                  
-          });
+      
+            });
+          }
 
           console.log(name);
          const update_time = new Date;
