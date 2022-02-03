@@ -71,6 +71,7 @@ const pan = require('./pan')
 const securite = require('./securite')
 const jenis_distress = require('./jenis_distress')
 const jenis_stakeholder = require('./jenis_stakeholder')
+const jenis_kapal = require('./jenis_kapal')
 const sumber_informasi = require('./sumber_informasi')
 const dbWeathers = require ('./weather')
 
@@ -153,6 +154,12 @@ app.post('/api/V1/masdex/jenis_stakeholder/', jenis_stakeholder.create);
 app.delete('/api/V1/masdex/jenis_stakeholder/:id', jenis_stakeholder.delete_);
 app.patch('/api/V1/masdex/jenis_stakeholder/:id', jenis_stakeholder.update);
 
+// ============================== Jenis Kapal ===============================
+app.get('/api/V1/masdex/jenis_kapal', jenis_kapal.read);
+app.get('/api/V1/masdex/jenis_kapal/:id', jenis_kapal.read_by_id);
+app.post('/api/V1/masdex/jenis_kapal/', jenis_kapal.create);
+app.delete('/api/V1/masdex/jenis_kapal/:id', jenis_kapal.delete_);
+app.patch('/api/V1/masdex/jenis_kapal/:id', jenis_kapal.update);
 
 // ============================== 1.PKK =======================================
 
@@ -309,10 +316,10 @@ app.get('/api/V1/masdex/kapal_by_agen/:mmsi', authenticateToken, (req, res) => {
     info_kapal. read_kapal_agen_kapal_by_mmsi(req,res);
 });
 
-app.get('/api/V1/masdex/kapal_by_perusahaan', authenticateToken, (req, res) => {
+app.post('/api/V1/masdex/kapal_by_perusahaan', authenticateToken, (req, res) => {
     info_kapal.read_kapal_persh_pelayaran(req,res);
 });
-app.get('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
+app.post('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
     info_kapal.read_kapal_agen(req,res);
 });
 
