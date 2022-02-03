@@ -9,16 +9,9 @@ var password_hash;
 
 
 const create = (request, response) => {
-  const { jenis_stakeholder, user_id, nama_lengkap, alamat_kantor, logo, npwp, telepon_kantor, unit_kantor }
+  const { jenis_stakeholder, nama_lengkap, alamat_kantor, logo, npwp, telepon_kantor, unit_kantor, email_company }
     = request.body;
 
-  pool.query('SELECT Count(*) as total FROM tbl_stakeholders WHERE user_id = $1', [user_id], (error, results) => {
-    if (error) {
-      throw error
-    }
-    if (results.rows[0].total > 0) {
-      response.status(400).json({ success: false, data: "data sudah ada" });
-    } else {
       // user not exist
 
       let sampleFile = request.files.logo;
@@ -32,7 +25,7 @@ const create = (request, response) => {
           console.log(err);
       });
 
-      pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,user_id,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, user_id, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path], (error, results) => {
+      pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,email_company,url_logo) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, complete_path], (error, results) => {
         if (error) {
           throw error
         }
@@ -40,9 +33,6 @@ const create = (request, response) => {
 
       });
     }
-  });
-
-}
 
 const read = (request, response) => {
 
@@ -110,7 +100,7 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
   const id = parseInt(request.params.id);
-  const { jenis_stakeholder, user_id, nama_lengkap, alamat_kantor, logo, npwp, telepon_kantor, unit_kantor }
+  const { jenis_stakeholder, nama_lengkap, alamat_kantor, logo, npwp, telepon_kantor, unit_kantor, email_company }
     = request.body;
   let doc;
   //console.log(mmsi);
@@ -151,8 +141,8 @@ const update = (request, response) => {
 
         console.log(name);
         const update_time = new Date;
-        pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,user_id=$2,nama_lengkap=$3,alamat_kantor=$4,logo=$5,npwp=$6,telepon_kantor=$7,unit_kantor=$8,updated_at=$9,url_logo=$10 where id=$11'
-          , [jenis_stakeholder, user_id, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, update_time, complete_path, id], (error, results) => {
+        pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,nama_lengkap=$2,alamat_kantor=$3,logo=$4,npwp=$5,telepon_kantor=$6,unit_kantor=$7,email_company=$8,updated_at=$9,url_logo=$10 where id=$11'
+          , [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, update_time, complete_path, id], (error, results) => {
             if (error) {
               throw error
               //response.status(201).send(error)
