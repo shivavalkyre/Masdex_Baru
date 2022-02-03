@@ -299,6 +299,25 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
 });
 // ==========================================================================
 
+
+const info_kapal = require('./info_kapal');
+// ============================== Info Kapal ================================
+app.get('/api/V1/masdex/kapal_by_perusahaan/:mmsi', authenticateToken, (req, res) => {
+    info_kapal.read_kapal_persh_pelayaran_by_mmsi(req,res);
+});
+app.get('/api/V1/masdex/kapal_by_agen/:mmsi', authenticateToken, (req, res) => {
+    info_kapal. read_kapal_agen_kapal_by_mmsi(req,res);
+});
+
+app.get('/api/V1/masdex/kapal_by_perusahaan', authenticateToken, (req, res) => {
+    info_kapal.read_kapal_persh_pelayaran(req,res);
+});
+app.get('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
+    info_kapal.read_kapal_agen(req,res);
+});
+
+// ==========================================================================
+
 // ========================== Download Part =================================
     app.get('/api/V1/dokumens/user_stakeholder/:filename', user_stakeholder.download);
     app.get('/api/V1/dokumens/user/:filename', user.download);
