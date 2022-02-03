@@ -261,9 +261,18 @@ const update = (request, response) => {
 
                         name = results.rows[0].photo;
                         complete_path = results.rows[0].url_photo;
-                        console.log(doc_path);
-                        var name = '';
                         if (request.files.size > 0) {
+                            console.log('ada foto')
+                            doc = results.rows[0].photo;
+                            if (doc != 'default.jpg') {
+                                var doc_path = __dirname + path.join('/dokumens/user_stakeholder/' + doc);
+                                console.log(doc_path);
+                                fs.unlinkSync(doc_path);
+                                console.log(doc_path);
+                            }
+
+                            console.log(doc_path);
+                            var name = '';
                             let sampleFile = request.files.photo;
                             console.log(sampleFile);
                             const now = Date.now()
