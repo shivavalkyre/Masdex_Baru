@@ -302,6 +302,7 @@ app.delete('/api/V1/masdex/stakeholder/:id', authenticateToken, (req, res) => {
 // ========================== Download Part =================================
     app.get('/api/V1/dokumens/user_stakeholder/:filename', user_stakeholder.download);
     app.get('/api/V1/dokumens/user/:filename', user.download);
+    app.get('/api/V1/dokumens/kapal/foto/:filename', kapal.download);
     app.get('/api/V1/dokumens/pkk/:filename', pkk.download);
     app.get('/api/V1/dokumens/jenis_stakeholder/logo/:filename', jenis_stakeholder.download);
     app.get('/api/V1/dokumens/stakeholder/logo/:filename', stakeholder.download);
