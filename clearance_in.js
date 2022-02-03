@@ -12,6 +12,7 @@ const create = (request, response) => {
     let name = '';
 
     if(dokumen_spm != '') {
+      if (request.files.size>0){
       let sampleFile = request.files.dokumen_spm;
       console.log(sampleFile);
        const now = Date.now()
@@ -21,6 +22,9 @@ const create = (request, response) => {
            if (err)
                console.log(err);
        });
+      }
+    }else{
+      name=null;
     }
 
     if(dokumen_spm != '') {
@@ -253,22 +257,20 @@ const update_ksu = (request, response) => {
             throw error
           }
 
-          if(results.rows[0].dokumen_spm != '' && results.rows[0].dokumen_spm != null ) {
-            doc = results.rows[0].dokumen_spm;
-            var doc_path = __dirname +path.join('/dokumens/clearance_in/'+ doc);
-            console.log(doc_path);
-            if (fs.existsSync(doc_path)){
-             fs.unlinkSync(doc_path);
-            }
-            
-            console.log(doc_path);
-          }
-
-
+         doc = results.rows[0].dokumen_spm;
+         var doc_path = __dirname +path.join('/dokumens/clearance_in/'+ doc);
+         console.log(doc_path);
+         if (fs.existsSync(doc_path)){
+          fs.unlinkSync(doc_path);
+         }
+         
+         console.log(doc_path);
+         var name='';
+         if (request.files.size>0){
          let sampleFile = request.files.dokumen_spm;
          console.log(sampleFile);
           const now = Date.now()
-          let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+          name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
           var complete_path = base_url+'dokumens/clearance_in/'+name;
           console.log(__dirname);
           sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
@@ -277,6 +279,9 @@ const update_ksu = (request, response) => {
               }
                   
           });
+        }else{
+          name=null;
+        }
 
           console.log(name);
          const update_time = new Date;

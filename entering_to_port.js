@@ -242,11 +242,12 @@ const update_by_otoritas = (request, response) => {
                 console.log(doc_path2);
                 fs.unlinkSync(doc_path2);
             }
-        
+            var name1='';
+          if (request.files.size>0){
           let sampleFile1 = request.files.dokumen_berthing;
           console.log(sampleFile1);
            const now1 = Date.now()
-           let name1 = now1 + '_' + sampleFile1['name'].replace(/\s+/g, '')
+           name1 = now1 + '_' + sampleFile1['name'].replace(/\s+/g, '')
            console.log(__dirname);
            sampleFile1.mv(path.join(__dirname + '/dokumens/entering_to_port/dokumen_berthing/') + name1, function (err) {
                if (err){
@@ -255,11 +256,15 @@ const update_by_otoritas = (request, response) => {
                    
            });
 
-
+          }else{
+            name1=null;
+          }
+          var name2='';
+          if (request.files.size>0){
            let sampleFile2 = request.files.dokumen_ppk;
            console.log(sampleFile2);
             const now2 = Date.now()
-            let name2 = now2 + '_' + sampleFile2['name'].replace(/\s+/g, '')
+            name2 = now2 + '_' + sampleFile2['name'].replace(/\s+/g, '')
             console.log(__dirname);
             sampleFile2.mv(path.join(__dirname + '/dokumens/entering_to_port/dokumen_ppk/') + name2, function (err) {
                 if (err){
@@ -267,7 +272,9 @@ const update_by_otoritas = (request, response) => {
                 }
                     
             });
- 
+          }else{
+            name2=null;
+          }
 
 
          const update_time = new Date;
