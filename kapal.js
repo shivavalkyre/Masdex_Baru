@@ -6,16 +6,20 @@ const create = (request, response) => {
     const { perusahaan_pelayaran_id,ship_name,gt,mmsi,imo,callsign,flag,max_draft,length,width,loa,ship_type,foto_kapal } 
     = request.body
 
+    var name='';
+    if (request.files.size>0){
     let sampleFile = request.files.foto_kapal;
     console.log(sampleFile);
      const now = Date.now()
-     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+     name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
          if (err)
              console.log(err);
      });
-
+    }else{
+      name= null;
+    }
      pool.query('INSERT INTO tbl_masdex_kapal (perusahaan_pelayaran_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)'
      ,[perusahaan_pelayaran_id,ship_name,gt,mmsi,imo,callsign,flag,parseFloat(max_draft),length,width,loa,parseInt(ship_type),name],(error, results) =>{
 
@@ -160,11 +164,13 @@ const update = (request, response) => {
          console.log(doc_path);
          fs.unlinkSync(doc_path);
          console.log(doc_path);
+         var name='';
+         if (request.files.size>0){
 
          let sampleFile = request.files.foto_kapal;
          console.log(sampleFile);
           const now = Date.now()
-          let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+          name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
           console.log(__dirname);
           sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
               if (err){
@@ -172,6 +178,10 @@ const update = (request, response) => {
               }
                   
           });
+
+        }else{
+          name=null;
+        }
 
           console.log(name);
          const update_time = new Date;

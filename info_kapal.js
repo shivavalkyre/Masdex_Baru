@@ -8,7 +8,8 @@ const read_kapal_persh_pelayaran = (request, response) => {
     //const mmsi= parseInt(request.params.mmsi);
     const { perusahaan } 
     = request.body
-    //console.log('Here');
+
+    console.log(perusahaan);
     //console.log(id);
     const {page,rows} = request.body
     var page_req = page || 1
@@ -17,7 +18,7 @@ const read_kapal_persh_pelayaran = (request, response) => {
     var res = []
     var items = []
   
-    pool.query('SELECT count(*) as total FROM info_kapal_persh_pelayaran where nama_lengkap=$1 ', [perusahaan], (error, results) => {
+    pool.query('SELECT count(*) as total FROM info_kapal_persh_pelayaran where nama_lengkap=$1', [perusahaan], (error, results) => {
       if (error) {
         throw error
       }

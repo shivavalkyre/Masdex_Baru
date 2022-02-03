@@ -10,17 +10,21 @@ const create = (request, response) => {
     = request.body
 
     let jenis_telkompel;
-
+    var name='';
+    if (request.files.size>0){
     let sampleFile = request.files.dokumen;
     console.log(sampleFile);
      const now = Date.now()
-     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+     name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
      complete_path = base_url+'dokumens/pkk/'+name;
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/pkk/') + name, function (err) {
          if (err)
              console.log(err);
      });
+    }else{
+      name= null;
+    }
 
     // pool.query('SELECT SELECT tbl_masdex_telkompel.jenis_telkompel FROM tbl_masdex_pelabuhan INNER JOIN tbl_masdex_telkompel ON tbl_masdex_pelabuhan.telkompel_id = tbl_masdex_telkompel."id" WHERE tbl_masdex_pelabuhan."id" = $1',[pelabuhan_tujuan], (error,results)=> {
     //   if (error) {
@@ -214,7 +218,8 @@ const update = (request, response) => {
             fs.unlinkSync(doc_path);
             console.log(doc_path);
          }
- 
+         var name='';
+          if(request.files.size>0){
           let sampleFile = request.files.dokumen;
         //  console.log(sampleFile);
            const now = Date.now();
@@ -229,7 +234,9 @@ const update = (request, response) => {
                }
                   
           });
-
+        }else{
+          name=null;
+        }
         //  console.log(name);
             const update_time = new Date;
             pool.query('UPDATE tbl_masdex_pkk SET mmsi=$1, agen_kapal=$2, pelabuhan_asal=$3, pelabuhan_tujuan=$4, pelabuhan_selanjutnya=$5, dermaga_tujuan=$6, area_tambat_tujuan=$7,zona_labuh_tujuan=$8,jenis_muatan=$9,maksimal_draft=$10,eta=$11,etd=$12,jenis_pelayaran=$13,nama_nahkoda=$14,telepon_nahkoda=$15,dokumen_pkk=$16,updated_at=$17,url_pkk=$18,no_dokumen=$19 where id=$20'

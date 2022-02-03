@@ -6,17 +6,22 @@ const base_url = process.env.base_url;
 const create = (request, response) => {
     const { voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2 } 
     = request.body
-
+    
+    var name='';
+    if (request.files.size>0){
     let sampleFile = request.files.dokumen_spog;
     console.log(sampleFile);
      const now = Date.now()
-     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+     name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
      var complete_path = base_url+'dokumens/clearance_in/'+name;
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/spog/') + name, function (err) {
          if (err)
              console.log(err);
      });
+    }else{
+      name=null;
+    }
 
      pool.query('INSERT INTO tbl_insaf_manouvre (voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,url_dokumen_spog) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)'
      ,[voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,complete_path],(error, results) =>{
@@ -167,11 +172,12 @@ const update = (request, response) => {
          }
         
          console.log(doc_path);
-
+         var name='';
+         if (request.files.size>0){
          let sampleFile = request.files.dokumen_spog;
          console.log(sampleFile);
           const now = Date.now()
-          let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+          name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
           var complete_path = base_url+'dokumens/spog/'+name;
           console.log(__dirname);
           sampleFile.mv(path.join(__dirname + '/dokumens/spog/') + name, function (err) {
@@ -180,6 +186,9 @@ const update = (request, response) => {
               }
                   
           });
+        }else{
+          name=null;
+        }
 
           console.log(name);
          const update_time = new Date;

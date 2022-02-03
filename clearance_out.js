@@ -38,10 +38,12 @@ const create = (request, response) => {
 		total = result.rows[0].total;
 		if(parseInt(total) == parseInt('0'))
 		{
+			var name='';
+			if (request.files.size>0){
 			let sampleFile = request.files.dokumen_spb;
 			//console.log(sampleFile);
 			const now = Date.now()
-			let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+			name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
 			var complete_path = base_url+'dokumens/clearance_out/'+name;
 			//console.log(__dirname);
 			sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
@@ -50,6 +52,9 @@ const create = (request, response) => {
 					response.status(400).send({success:false,data:err})
 				}
 			});
+			}else{
+				name=null;
+			}
 			
 			pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,url_dokumen_spb)
 						VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,$10);`, [voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,complete_path], (error, results) => {
@@ -103,10 +108,12 @@ const update = (request, response) => {
 	var updated_at = new Date();
 	if(dokumen_spb != 'kosong'){
 		console.log('masuk')
+		var name='';
+		if (request.files.size>0){
 		let sampleFile = request.files.dokumen_spb;
 		//console.log(sampleFile);
 		const now = Date.now()
-		let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+		name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
 		var complete_path = base_url+'dokumens/clearance_out/'+name;
 		//console.log(__dirname);
 		sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
@@ -115,6 +122,9 @@ const update = (request, response) => {
 				console.log(err);
 			}
 		});
+	}else{
+		name=null;
+	}
 		pool.query(`UPDATE tbl_insaf_clearance_out SET dokumen_spb = $1 WHERE id = $2`, [name, iddata], (error, result) => {
 			if(error)
 			{

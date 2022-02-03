@@ -40,17 +40,23 @@ const create = (request, response) => {
         }else
         {
             // user not exist
-
+            var name='';
+            if (request.files.size>0){
             let sampleFile = request.files.photo;
              console.log(sampleFile);
              const now = Date.now()
-             let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+             name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
              complete_path = base_url+'dokumens/user/'+name;
              console.log(__dirname);
              sampleFile.mv(path.join(__dirname + '/dokumens/user/') + name, function (err) {
                  if (err)
                      console.log(err);
              });
+            }
+             else{
+                name = null;
+            }
+
 
             bcrypt.genSalt(10,function(err, res) {
                 salt= res
@@ -195,18 +201,21 @@ const update = (request, response) => {
                             console.log(doc_path);
                             fs.unlinkSync(doc_path);
                             console.log(doc_path);
-
+                            var name='';
+                            if (request.files.size>0){
                             let sampleFile = request.files.photo;
                             console.log(sampleFile);
                             const now = Date.now()
-                            let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+                             name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
                             complete_path = base_url+'dokumens/user/'+name;
                             console.log(__dirname);
                             sampleFile.mv(path.join(__dirname + '/dokumens/user/') + name, function (err) {
                                 if (err)
                                     console.log(err);
                             });
-
+                            }else{
+                                 name = null;
+                            }
                             pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6 WHERE username=$7',[username,password_hash,email, name,nama_lengkap,complete_path,username] ,(error, results) => {
                             if (error) {
                                 throw error
