@@ -74,6 +74,7 @@ const jenis_stakeholder = require('./jenis_stakeholder')
 const jenis_kapal = require('./jenis_kapal')
 const spesialisasi_kesehatan = require('./spesialisasi_kesehatan')
 const pasien = require('./pasien')
+const tmas = require('./tmas')
 const sumber_informasi = require('./sumber_informasi')
 const dbWeathers = require ('./weather')
 
@@ -179,6 +180,14 @@ app.post('/api/V1/masdex/pasien/create', pasien.create);
 app.delete('/api/V1/masdex/pasien/delete/:id', pasien.delete_);
 app.patch('/api/V1/masdex/pasien/update/:id', pasien.update);
 // app.post('/api/V1/masdex/jeniskapalchild/read', pasien.readShipTypeChild);
+
+// ============================== Telemedical Assistance Services ===============================
+app.get('/api/V1/masdex/tmas/read', tmas.read);
+app.get('/api/V1/masdex/tmas/:id', tmas.read_by_id);
+app.post('/api/V1/masdex/tmas/create', tmas.create);
+app.delete('/api/V1/masdex/tmas/delete/:id', tmas.delete_);
+app.patch('/api/V1/masdex/tmas/update/:id', tmas.update);
+// app.post('/api/V1/masdex/jeniskapalchild/read', tmas.readShipTypeChild);
 
 // ============================== 1.PKK =======================================
 app.post('/api/V1/masdex/pkk', pkk.create);
