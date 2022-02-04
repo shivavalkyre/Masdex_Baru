@@ -369,7 +369,7 @@ const update = (request, response) => {
         // ======================================== Access token =======================================
         function generateAccessToken(username) {
             return jwt.sign(username, process.env.TOKEN_SECRET, {
-                expiresIn: '1800s'
+                expiresIn: '10800s'
             });
         }
 
