@@ -73,6 +73,7 @@ const jenis_distress = require('./jenis_distress')
 const jenis_stakeholder = require('./jenis_stakeholder')
 const jenis_kapal = require('./jenis_kapal')
 const spesialisasi_kesehatan = require('./spesialisasi_kesehatan')
+const pasien = require('./pasien')
 const sumber_informasi = require('./sumber_informasi')
 const dbWeathers = require ('./weather')
 
@@ -170,6 +171,14 @@ app.post('/api/V1/masdex/spesialisasi_kesehatan/create', spesialisasi_kesehatan.
 app.delete('/api/V1/masdex/spesialisasi_kesehatan/delete/:id', spesialisasi_kesehatan.delete_);
 app.patch('/api/V1/masdex/spesialisasi_kesehatan/update/:id', spesialisasi_kesehatan.update);
 // app.post('/api/V1/masdex/jeniskapalchild/read', spesialisasi_kesehatan.readShipTypeChild);
+
+// ============================== Pasien ===============================
+app.get('/api/V1/masdex/pasien/read', pasien.read);
+app.get('/api/V1/masdex/pasien/:id', pasien.read_by_id);
+app.post('/api/V1/masdex/pasien/create', pasien.create);
+app.delete('/api/V1/masdex/pasien/delete/:id', pasien.delete_);
+app.patch('/api/V1/masdex/pasien/update/:id', pasien.update);
+// app.post('/api/V1/masdex/jeniskapalchild/read', pasien.readShipTypeChild);
 
 // ============================== 1.PKK =======================================
 app.post('/api/V1/masdex/pkk', pkk.create);
