@@ -160,7 +160,7 @@ app.get('/api/V1/masdex/jenis_kapal/:id', jenis_kapal.read_by_id);
 app.post('/api/V1/masdex/jenis_kapal/', jenis_kapal.create);
 app.delete('/api/V1/masdex/jenis_kapal/:id', jenis_kapal.delete_);
 app.patch('/api/V1/masdex/jenis_kapal/:id', jenis_kapal.update);
-
+app.post('/api/V1/masdex/jeniskapalchild/read', jenis_kapal.readShipTypeChild);
 // ============================== 1.PKK =======================================
 
 app.post('/api/V1/masdex/pkk', pkk.create);
