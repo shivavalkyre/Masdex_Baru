@@ -20,7 +20,7 @@ const create = (request, response) => {
                     return;
                 }
             } else {
-                response.status(200).send({ success: true, data: 'data pasien berhasil dibuat' })
+                response.status(200).send({ success: true, data: 'data berhasil dibuat' })
             }
         })
 }
@@ -109,7 +109,7 @@ const read_by_tmas = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT * FROM tbl_masdex_tmas_pasien where tmas_id=$1 and is_delete=false'
+        var sql = 'SELECT p.*,s.sepesialisasi FROM tbl_masdex_tmas_pasien p join tbl_spesialisasi_kesehatan s on s.id = p.spesialis_kesehatan_id where p.tmas_id=$1 and p.is_delete=false'
         pool.query(sql, [id], (error, results) => {
             if (error) {
                 throw error
@@ -160,7 +160,7 @@ const update = (request, response) => {
                         return;
                     }
                 } else {
-                    response.status(200).send({ success: true, data: 'data pasien berhasil diperbarui' })
+                    response.status(200).send({ success: true, data: 'data berhasil diperbarui' })
                 }
 
             })
@@ -202,7 +202,7 @@ const delete_ = (request, response) => {
                         return;
                     }
                 } else {
-                    response.status(200).send({ success: true, data: 'data pasien berhasil dihapus' })
+                    response.status(200).send({ success: true, data: 'data berhasil dihapus' })
                 }
 
             })

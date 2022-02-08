@@ -186,7 +186,7 @@ app.get('/api/V1/masdex/tmas/read', tmas.read);
 app.get('/api/V1/masdex/tmas/:id', tmas.read_by_id);
 app.post('/api/V1/masdex/tmas/create', tmas.create);
 app.delete('/api/V1/masdex/tmas/delete/:id', tmas.delete_);
-app.patch('/api/V1/masdex/tmas/update/:id', tmas.update);
+app.put('/api/V1/masdex/tmas/update/:id', tmas.update);
 
 // ============================== 1.PKK =======================================
 app.post('/api/V1/masdex/pkk', pkk.create);
