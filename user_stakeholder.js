@@ -15,7 +15,8 @@ const create = (request, response) => {
         email,
         photo,
         nama_lengkap,
-        stakeholder_id
+        stakeholder_id,
+        role_id
     } = request.body
     pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1', [username], (error, results) => {
         if (error) {
@@ -42,8 +43,9 @@ const create = (request, response) => {
 
         } else {
             // user not exist
-            var name = '';
-            if (request.files.size > 0) {
+            let name = 'default.jpg'
+            let complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+            if (request.files) {
                 let sampleFile = request.files.photo;
                 console.log(sampleFile);
                 const now = Date.now()
@@ -54,8 +56,6 @@ const create = (request, response) => {
                     if (err)
                         console.log(err);
                 });
-            } else {
-                name = null;
             }
 
             bcrypt.genSalt(10, function (err, res) {
@@ -63,7 +63,7 @@ const create = (request, response) => {
                 bcrypt.hash(password, salt, function (err, res) {
                     password_hash = res;
                     console.log(password_hash);
-                    pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo, stakeholder_id) VALUES($1,$2,$3,$4,$5,$6,$7)', [username, password_hash, email, name, nama_lengkap, complete_path, stakeholder_id], (error, results) => {
+                    pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo, stakeholder_id, role_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)', [username, password_hash, email, name, nama_lengkap, complete_path, stakeholder_id, role_id], (error, results) => {
                         if (error) {
                             throw error
                         }
@@ -233,7 +233,8 @@ const update = (request, response) => {
         email,
         photo,
         nama_lengkap,
-        stakeholder_id
+        stakeholder_id,
+        role_id
     } = request.body
 
     pool.query('SELECT Count(*) as total FROM tbl_user_stakeholders WHERE id = $1', [id], (error, results) => {
@@ -261,7 +262,7 @@ const update = (request, response) => {
 
                         name = results.rows[0].photo;
                         complete_path = results.rows[0].url_photo;
-                        if (request.files.size > 0) {
+                        if (request.files) {
                             console.log('ada foto')
                             doc = results.rows[0].photo;
                             if (doc != 'default.jpg') {
@@ -287,7 +288,7 @@ const update = (request, response) => {
                             name = null;
                         }
 
-                        pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,stakeholder_id=$8 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, stakeholder_id], (error, results) => {
+                        pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,stakeholder_id=$8, role_id=$9 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, stakeholder_id, role_id], (error, results) => {
                             if (error) {
                                 throw error
                             }
