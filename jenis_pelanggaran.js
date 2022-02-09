@@ -3,29 +3,30 @@ const fs = require('fs');
 const path = require('path')
 
 const create = (request, response) => {
-  const { jenis_distress, icon, created_by } 
-  = request.body
+    const { jenis_pelanggaran, created_by } 
+    = request.body
 
- 
-   const create_time = new Date;
-   pool.query('INSERT INTO tbl_insaf_jenis_distress (jenis_distress, icon, created_by, created_at) VALUES($1, $2, $3, $4)'
-   ,[jenis_distress, icon, created_by, create_time],(error, results) =>{
+   
+     const create_time = new Date;
+     pool.query('INSERT INTO tbl_insaf_jenis_pelanggaran (jenis_pelanggaran, created_by, created_at) VALUES($1, $2, $3)'
+     ,[jenis_pelanggaran, created_by, create_time],(error, results) =>{
 
-      if (error) {
-          throw error
-         response.status(201).send(error)
-         if (error.code == '23505')
+        if (error) {
+            throw error
+           response.status(201).send(error)
+           if (error.code == '23505')
+           {
+               //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+               response.status(400).send('Duplicate data')
+               return;
+           }
+         }else
          {
-             //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
-             response.status(400).send('Duplicate data')
-             return;
+             response.status(200).send({success:true,data:'data jenis pelanggaran berhasil dibuat'})
          }
-       }else
-       {
-           response.status(200).send({success:true,data:'data jenis distress berhasil dibuat'})
-       }
-   })
+     })
 }
+
 
 const read = (request, response) => {
 
@@ -37,14 +38,14 @@ const read = (request, response) => {
     var items = []
 
   
-    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_distress where is_delete=false', (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_pelanggaran where is_delete=false', (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT id, jenis_distress FROM tbl_insaf_jenis_distress where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT * FROM tbl_insaf_jenis_pelanggaran where is_delete=false ORDER BY id ASC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -70,14 +71,14 @@ const read_by_id = (request, response) => {
     var res = []
     var items = []
   
-    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_distress where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_pelanggaran where id=$1 and is_delete=false', [id], (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_jenis_distress where id=$1 and is_delete=false'
+     var sql= 'SELECT * FROM tbl_insaf_jenis_pelanggaran where id=$1 and is_delete=false'
      pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
@@ -94,11 +95,11 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { jenis_distress, icon, updated_by } 
+    const { jenis_pelanggaran, updated_by } 
     = request.body;
     let doc;
 
-    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_distress where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_pelanggaran where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
           throw error
         }else{
@@ -109,15 +110,15 @@ const update = (request, response) => {
 
 
 
-     pool.query('SELECT * FROM tbl_insaf_jenis_distress where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_insaf_jenis_pelanggaran where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }
 
          
          const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_jenis_distress SET jenis_distress=$1,icon=$2,updated_at=$3,updated_by=$5 where id=$4'
-         , [jenis_distress,icon,update_time,id,updated_by], (error, results) =>{
+         pool.query('UPDATE tbl_insaf_jenis_pelanggaran SET jenis_pelanggaran=$1,updated_at=$2,updated_by=$4 where id=$3'
+         , [jenis_pelanggaran,update_time,id,updated_by], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
@@ -130,7 +131,7 @@ const update = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data jenis distress berhasil diperbarui'})
+               response.status(200).send({success:true,data:'data jenis pelanggaran berhasil diperbarui'})
            }
      
          })
@@ -149,7 +150,7 @@ const delete_ = (request, response) => {
  
     const deleted_by = 0;
 
-    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_distress where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_pelanggaran where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
           throw error
         }else{
@@ -158,14 +159,14 @@ const delete_ = (request, response) => {
         
     })
 
-     pool.query('SELECT * FROM tbl_insaf_jenis_distress where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_insaf_jenis_pelanggaran where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }
 
 
          const deletetime = new Date;
-         pool.query('UPDATE tbl_insaf_jenis_distress SET deleted_at=$1,is_delete=$2, deleted_by=$4 where id=$3'
+         pool.query('UPDATE tbl_insaf_jenis_pelanggaran SET deleted_at=$1,is_delete=$2, deleted_by=$4 where id=$3'
          , [deletetime, true, id, deleted_by], (error, results) =>{
            if (error) {
 
@@ -177,7 +178,7 @@ const delete_ = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data jenis distress berhasil dihapus'})
+               response.status(200).send({success:true,data:'data jenis pelanggaran berhasil dihapus'})
            }
      
          })
@@ -197,4 +198,4 @@ module.exports = {
     read_by_id,
     update,
     delete_,
-}
+    }

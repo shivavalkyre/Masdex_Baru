@@ -66,6 +66,13 @@ const dermaga =  require ('./dermaga');
 const area_tambat =  require ('./area_tambat');
 const area_labuh =  require ('./area_labuh');
 const jenis_berita = require('./jenis_berita')
+const jenis_securite = require('./jenis_securite')
+const jenis_informasi_securite = require('./jenis_informasi_securite')
+const jenis_pelanggaran = require('./jenis_pelanggaran')
+const jenis_pan = require('./jenis_pan')
+const jenis_status_navigation = require('./jenis_status_navigation')
+const jenis_manouvre = require('./jenis_manouvre')
+const jenis_berita_marine_safety_informasi = require('./jenis_berita_marine_safety_informasi')
 const distress = require('./distress')
 const pan = require('./pan')
 const securite = require('./securite')
@@ -142,12 +149,68 @@ app.put('/api/V1/masdex/area_labuh/:id', area_labuh.update);
 app.delete('/api/V1/masdex/area_labuh/:id', area_labuh.delete_);
 // ==========================================================================
 
-// ============================== Jenis Berita ===============================
+// ============================== Jenis Berita Master Cable ===============================
 app.post('/api/V1/insaf/jenis_berita', jenis_berita.create);
 app.get('/api/V1/insaf/jenis_berita', jenis_berita.read);
 app.get('/api/V1/insaf/jenis_berita/:id', jenis_berita.read_by_id);
 app.put('/api/V1/insaf/jenis_berita/:id', jenis_berita.update);
 app.delete('/api/V1/insaf/jenis_berita/:id', jenis_berita.delete_);
+// ==========================================================================
+
+// ============================== Jenis Securite ===============================
+app.post('/api/V1/insaf/jenis_securite/create', jenis_securite.create);
+app.get('/api/V1/insaf/jenis_securite/read', jenis_securite.read);
+app.get('/api/V1/insaf/jenis_securite/:id', jenis_securite.read_by_id);
+app.put('/api/V1/insaf/jenis_securite/update/:id', jenis_securite.update);
+app.delete('/api/V1/insaf/jenis_securite/delete/:id', jenis_securite.delete_);
+// ==========================================================================
+
+// ============================== Jenis Informasi Awal Securite ===============================
+app.post('/api/V1/insaf/jenis_informasi_securite/create', jenis_informasi_securite.create);
+app.get('/api/V1/insaf/jenis_informasi_securite/read', jenis_informasi_securite.read);
+app.get('/api/V1/insaf/jenis_informasi_securite/:id', jenis_informasi_securite.read_by_id);
+app.put('/api/V1/insaf/jenis_informasi_securite/update/:id', jenis_informasi_securite.update);
+app.delete('/api/V1/insaf/jenis_informasi_securite/delete/:id', jenis_informasi_securite.delete_);
+// ==========================================================================
+
+// ============================== Jenis Pelanggaran ===============================
+app.post('/api/V1/insaf/jenis_pelanggaran/create', jenis_pelanggaran.create);
+app.get('/api/V1/insaf/jenis_pelanggaran/read', jenis_pelanggaran.read);
+app.get('/api/V1/insaf/jenis_pelanggaran/:id', jenis_pelanggaran.read_by_id);
+app.put('/api/V1/insaf/jenis_pelanggaran/update/:id', jenis_pelanggaran.update);
+app.delete('/api/V1/insaf/jenis_pelanggaran/delete/:id', jenis_pelanggaran.delete_);
+// ==========================================================================
+
+// ============================== Jenis Pan ===============================
+app.post('/api/V1/insaf/jenis_pan/create', jenis_pan.create);
+app.get('/api/V1/insaf/jenis_pan/read', jenis_pan.read);
+app.get('/api/V1/insaf/jenis_pan/:id', jenis_pan.read_by_id);
+app.put('/api/V1/insaf/jenis_pan/update/:id', jenis_pan.update);
+app.delete('/api/V1/insaf/jenis_pan/delete/:id', jenis_pan.delete_);
+// ==========================================================================
+
+// ============================== Jenis Status Bernavigasi ===============================
+app.post('/api/V1/insaf/jenis_status_navigation/create', jenis_status_navigation.create);
+app.get('/api/V1/insaf/jenis_status_navigation/read', jenis_status_navigation.read);
+app.get('/api/V1/insaf/jenis_status_navigation/:id', jenis_status_navigation.read_by_id);
+app.put('/api/V1/insaf/jenis_status_navigation/update/:id', jenis_status_navigation.update);
+app.delete('/api/V1/insaf/jenis_status_navigation/delete/:id', jenis_status_navigation.delete_);
+// ==========================================================================
+
+// ============================== Jenis Manouvre ===============================
+app.post('/api/V1/insaf/jenis_manouvre/create', jenis_manouvre.create);
+app.get('/api/V1/insaf/jenis_manouvre/read', jenis_manouvre.read);
+app.get('/api/V1/insaf/jenis_manouvre/:id', jenis_manouvre.read_by_id);
+app.put('/api/V1/insaf/jenis_manouvre/update/:id', jenis_manouvre.update);
+app.delete('/api/V1/insaf/jenis_manouvre/delete/:id', jenis_manouvre.delete_);
+// ==========================================================================
+
+// ============================== Jenis Berita Marine Safety Informasi ===============================
+app.post('/api/V1/insaf/jenis_berita_marine_safety_informasi/create', jenis_berita_marine_safety_informasi.create);
+app.get('/api/V1/insaf/jenis_berita_marine_safety_informasi/read', jenis_berita_marine_safety_informasi.read);
+app.get('/api/V1/insaf/jenis_berita_marine_safety_informasi/:id', jenis_berita_marine_safety_informasi.read_by_id);
+app.put('/api/V1/insaf/jenis_berita_marine_safety_informasi/update/:id', jenis_berita_marine_safety_informasi.update);
+app.delete('/api/V1/insaf/jenis_berita_marine_safety_informasi/delete/:id', jenis_berita_marine_safety_informasi.delete_);
 // ==========================================================================
 
 // ============================== Jenis Stakeholder ===============================
@@ -416,6 +479,10 @@ app.get('/api/V1/securite/read_resume/:id', securite.getSecuriteResumeById)
 // ============================ END SECURITE (INSAF) =====================================
 
 app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
+app.post('/api/V1/insaf/jenis_distress/create', jenis_distress.create);
+app.get('/api/V1/insaf/jenis_distress/:id', jenis_distress.read_by_id);
+app.put('/api/V1/insaf/jenis_distress/update/:id', jenis_distress.update);
+app.delete('/api/V1/insaf/jenis_distress/delete/:id', jenis_distress.delete_);
 // ================================= end jenis distress ===============================
 
 // ================================= jenis distress ===================================
