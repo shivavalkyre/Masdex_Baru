@@ -69,7 +69,7 @@ const read = (request, response) => {
   var items = []
 
 
-  pool.query('SELECT count(*) as total FROM tbl_stakeholders where is_delete=false', (error, results) => {
+  pool.query('SELECT count(*) as total FROM tbl_stakeholders where jenis_stakeholder<> 5 and jenis_stakeholder<>6 and is_delete=false', (error, results) => {
     if (error) {
       throw error
     }
