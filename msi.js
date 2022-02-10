@@ -217,7 +217,8 @@ const createMSI = (request, response) => {
     const getMSIDetailById = (request, response) => 
     {
       const id = parseInt(request.params.id);
-      pool.query(`SELECT * FROM insaf_msidetailxmasdexkapal WHERE msi_id = $1 AND is_delete = '0';`, [id], (error, results) => 
+
+      pool.query(`SELECT * FROM insaf_msidetailxmasdexuserstakeholders WHERE msi_id = $1 AND is_delete = '0';`, [id], (error, results) => 
       {
           if (error) 
           {
