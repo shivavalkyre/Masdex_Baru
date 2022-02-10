@@ -488,9 +488,12 @@ app.get('/api/V1/msi/read/:id', msi.getMSIById)
 app.get('/api/V1/msi/read_detail/:id', msi.getMSIDetailById)
 app.delete('/api/V1/msi/delete/:id', msi.deleteMSI)
 app.delete('/api/V1/msi/delete_msi_detail/:id', msi.deleteMSIDetail)
+app.delete('/api/V1/msi/delete_msi_detail_parent/:id', msi.deleteMSIDetailByIdParent)
 app.put('/api/V1/msi/update/:id', msi.updateMSI)
 app.put('/api/V1/msi/update_msi_detail/:id', msi.updateMSIDetail)
 
+// jenis berita msi
+app.post('/api/V1/jenismsi/read', msi.readJenisMSI)
 // ============================ END MSI (INSAF) =====================================
 
 app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);

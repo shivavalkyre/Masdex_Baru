@@ -3,11 +3,11 @@ const fs = require('fs');
 const path = require('path')
 
 const createMSI = (request, response) => {
-    const { no_jurnal, news_title, voyage_id, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info} 
+    const { no_jurnal, news_title, msi_category, voyage_id, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info} 
     = request.body
-    pool.query('INSERT INTO tbl_insaf_msi (no_jurnal, news_title, voyage_id, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)'
-    , [no_jurnal, news_title, voyage_id, "'"+valid_from+"'","'"+valid_to+"'", information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info], (error, results) =>{
-      console.log(no_jurnal, news_title, voyage_id, "'"+valid_from+"'","'"+valid_to+"'", information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info)
+    pool.query('INSERT INTO tbl_insaf_msi (no_jurnal, news_title, msi_category, voyage_id, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)'
+    , [no_jurnal, news_title, msi_category, voyage_id, "'"+valid_from+"'","'"+valid_to+"'", information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info], (error, results) =>{
+      console.log(no_jurnal, news_title, msi_category, voyage_id, "'"+valid_from+"'","'"+valid_to+"'", information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info)
       if (error) {
         // throw error
         response.status(400).send(error)
@@ -134,7 +134,7 @@ const createMSI = (request, response) => {
   
   const getMSIById = (request, response) => {
     const id = parseInt(request.params.id)
-    pool.query('SELECT * FROM insaf_msixmsidetail WHERE id = $1', [id], (error, results) =>  { 
+    pool.query('SELECT * FROM tbl_insaf_msi WHERE id = $1', [id], (error, results) =>  { 
     // pool.query('SELECT * FROM insaf_msixmsidetail WHERE id = $1', [id], (error, results) => {
       if (error) {
         throw error
@@ -146,11 +146,11 @@ const createMSI = (request, response) => {
   const updateMSI = (request, response) => {
     const id = parseInt(request.params.id)
     // console.log(id)
-    const { no_jurnal, news_title, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, voyage_id } = request.body
+    const { no_jurnal, news_title, msi_category, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, voyage_id } = request.body
     var updated_at = new Date()
     pool.query(
-      'UPDATE tbl_insaf_msi set no_jurnal = $1 , news_title = $2, valid_from = $3, valid_to = $4, information = $5, sumber_data = $6, wind_speed_min = $7, wind_speed_max = $8, wind_from = $9, wind_to = $10, humidity_min = $11, humidity_max = $12, air_pressure = $13, temperature_min = $14, temperature_max = $15, low_tide = $16, high_tide = $17, low_tide_time = $18, high_tide_time = $19, weather = $20, additional_info = $21, updated_at = $22, voyage_id = $23 WHERE id = $24',
-      [no_jurnal, news_title, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, updated_at, voyage_id, id],
+      'UPDATE tbl_insaf_msi set no_jurnal = $1 , news_title = $2, valid_from = $3, valid_to = $4, information = $5, sumber_data = $6, wind_speed_min = $7, wind_speed_max = $8, wind_from = $9, wind_to = $10, humidity_min = $11, humidity_max = $12, air_pressure = $13, temperature_min = $14, temperature_max = $15, low_tide = $16, high_tide = $17, low_tide_time = $18, high_tide_time = $19, weather = $20, additional_info = $21, updated_at = $22, voyage_id = $23, msi_category = $24, WHERE id = $25',
+      [no_jurnal, news_title, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, updated_at, voyage_id, msi_category, id],
       (error, results) => {
         if (error) {
           throw error
@@ -178,8 +178,9 @@ const createMSI = (request, response) => {
   }
   
   const deleteMSI = (request, response) => {
+    var deleted_at = new Date()
     const id = parseInt(request.params.id)
-    pool.query('UPDATE tbl_insaf_msi set is_delete = true  WHERE  id = $1 ', [id], (error, results) => {
+    pool.query('UPDATE tbl_insaf_msi set is_delete = true, deleted_at = $1  WHERE  id = $2 ', [deleted_at, id], (error, results) => {
       if (error) {
         throw error
       }
@@ -191,6 +192,18 @@ const createMSI = (request, response) => {
   const deleteMSIDetail = (request, response) => {
     const id = parseInt(request.params.id)
     pool.query('UPDATE tbl_insaf_msi_detail set is_delete = true WHERE  id = $1 ', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send({success:true, data:`MSI Detail Has Been Deleted with ID: ${id}`})
+      
+    })
+  }
+
+  const deleteMSIDetailByIdParent = (request, response) => {
+    var deleted_at = new Date()
+    const id = parseInt(request.params.id)
+    pool.query('UPDATE tbl_insaf_msi_detail set is_delete = true, deleted_at = $1 WHERE  msi_id = $2 ', [deleted_at, id], (error, results) => {
       if (error) {
         throw error
       }
@@ -213,6 +226,44 @@ const createMSI = (request, response) => {
           response.status(200).json(results.rows)
       })
     }
+
+    // jenis msi //
+    const readJenisMSI = (request, response) => 
+    {
+    
+        const {page,rows} = request.body
+        var page_req = page || 1
+        var rows_req = rows || 3
+        var offset = (page_req - 1) * rows_req
+        var res = []
+        var items = []
+    
+        pool.query('SELECT count(*) as total FROM tbl_insaf_jenis_berita_marine_safety_informasi  WHERE is_delete = false', (error, results) => {
+        if (error) {
+            throw error
+        }
+        //  console.log(results.rows[0].total)
+        res.push({total:results.rows[0].total})
+    
+        //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+        var sql= 'SELECT * FROM tbl_insaf_jenis_berita_marine_safety_informasi WHERE is_delete = false ORDER BY id ASC'
+    
+    
+        //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
+    
+        //  response.status(200).send(sql)
+        pool.query(sql ,(error, results) => {
+        if (error) {
+            throw error
+        }
+        items.push({rows:results.rows})
+        res.push(items)
+        //response.status(200).send({success:true,data:res})
+        response.status(200).send(res)
+        })
+    
+        })
+    }
   
     module.exports = {
       createMSI,
@@ -224,5 +275,7 @@ const createMSI = (request, response) => {
       updateMSIDetail,
       deleteMSI,
       deleteMSIDetail,
-      getMSIDetailById
+      getMSIDetailById,
+      deleteMSIDetailByIdParent,
+      readJenisMSI
     }
