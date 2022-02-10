@@ -440,6 +440,7 @@ app.post('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
     app.get('/api/V1/dokumens/spog/:filename', manouvre.download);
     app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
+    app.get('/api/V1/dokumens/notice_to_marine/:filename', notice_to_marine.download);
 // ==========================================================================
 
 // ============================= Weather Part ===================================

@@ -1,6 +1,7 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const http = require('http')
 const base_url = process.env.base_url;
 var complete_path='';
 
@@ -149,8 +150,6 @@ const update = (request, response) => {
                       if (err)
                           console.log(err);
                   });
-              } else {
-                  name = null;
               }
         //  console.log(name);
             const update_time = new Date;
@@ -187,7 +186,7 @@ const delete_ = (request, response) => {
 
     const deletetime = new Date;
     pool.query('UPDATE tbl_insaf_notice_to_mariner SET deleted_at=$1,is_delete=$2 where id=$3'
-    , [deletetime, true,id], (error, results) =>{
+    , [deletetime, true, id], (error, results) =>{
       if (error) {
 
         if (error.code == '23505')
@@ -199,7 +198,7 @@ const delete_ = (request, response) => {
       }else
       {
         
-        pool.query('UPDATE tbl_insaf_notice_to_mariner_detail SET deleted_at=$1,is_delete=$2 WHERE ntm_id = $3 ', [id], (error, results) =>  { 
+        pool.query('UPDATE tbl_insaf_notice_to_mariner_detail SET deleted_at=$1,is_delete=$2 WHERE ntm_id = $3 ', [deletetime, true, id], (error, results) =>  { 
           if (error) {
             throw error
           }
