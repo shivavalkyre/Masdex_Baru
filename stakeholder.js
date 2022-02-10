@@ -27,7 +27,7 @@ const create = (request, response) => {
   let complete_path = base_url + 'dokumens/stakeholder/logo/' + name
 
 
-  if (request.files!==null) {
+  if (request.files) {
     let sampleFile = request.files.logo;
     console.log(sampleFile);
     const now = Date.now()
@@ -170,7 +170,7 @@ const update = (request, response) => {
         name = results.rows[0].logo;
         complete_path = results.rows[0].url_logo;
 
-        if (request.files!==null) {
+        if (request.files) {
           doc = results.rows[0].logo;
           if (doc != 'default.jpg') {
             var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
