@@ -27,7 +27,7 @@ const create = (request, response) => {
   let complete_path = base_url + 'dokumens/stakeholder/logo/' + name
 
 
-  if (request.files) {
+  if (request.files!==null) {
     let sampleFile = request.files.logo;
     console.log(sampleFile);
     const now = Date.now()
@@ -38,6 +38,9 @@ const create = (request, response) => {
       if (err)
         console.log(err);
     });
+  }else
+  {
+    name = null;
   }
 
   pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo,email_company) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path, email_company], (error, results) => {
@@ -167,12 +170,15 @@ const update = (request, response) => {
         name = results.rows[0].logo;
         complete_path = results.rows[0].url_logo;
 
-        if (request.files) {
+        if (request.files!==null) {
           doc = results.rows[0].logo;
           if (doc != 'default.jpg') {
             var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
             console.log(doc_path);
-            fs.unlinkSync(doc_path);
+            if (fs.unlinkSync(doc_path)){
+              fs.unlink(doc_path);
+            }
+            //fs.unlinkSync();
             console.log(doc_path);
           }
 
@@ -186,6 +192,8 @@ const update = (request, response) => {
             if (err)
               console.log(err);
           });
+        }else{
+          name=null;
         }
 
         console.log(name);
