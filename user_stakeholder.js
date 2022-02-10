@@ -170,7 +170,7 @@ const detail_profile = (request, response) => {
             total: results.rows[0].total
         })
         if (results.rows[0].total > 0) {
-            pool.query('SELECT tbl_user_stakeholders.nama_lengkap as nama_user, tbl_stakeholders.nama_lengkap as nama_kantor, tbl_stakeholders.unit_kantor, tbl_stakeholders.npwp, tbl_stakeholders.telepon_kantor, tbl_stakeholders.alamat_kantor, tbl_user_stakeholders.email, tbl_user_stakeholders.url_photo, tbl_stakeholders.url_logo from tbl_user_stakeholders JOIN tbl_stakeholders ON tbl_user_stakeholders.id = tbl_stakeholders.user_id WHERE tbl_user_stakeholders.id =$1 and tbl_user_stakeholders.is_delete=false', [id], (error2, results2) => {
+            pool.query('SELECT tbl_user_stakeholders.nama_lengkap as nama_user, tbl_stakeholders.nama_lengkap as nama_kantor, tbl_stakeholders.unit_kantor, tbl_stakeholders.npwp, tbl_stakeholders.telepon_kantor, tbl_stakeholders.alamat_kantor, tbl_user_stakeholders.email, tbl_user_stakeholders.url_photo, tbl_stakeholders.url_logo from tbl_user_stakeholders JOIN tbl_stakeholders ON tbl_user_stakeholders.stakeholder_id = tbl_stakeholders.id WHERE tbl_user_stakeholders.id = $1 and tbl_user_stakeholders.is_delete=false', [id], (error2, results2) => {
 
                 items.push({
                     rows: results2.rows
