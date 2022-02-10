@@ -80,6 +80,7 @@ const jenis_distress = require('./jenis_distress')
 const jenis_stakeholder = require('./jenis_stakeholder')
 const jenis_kapal = require('./jenis_kapal')
 const spesialisasi_kesehatan = require('./spesialisasi_kesehatan')
+const contravention = require('./contravention')
 const pasien = require('./pasien')
 const tmas = require('./tmas')
 const sumber_informasi = require('./sumber_informasi')
@@ -447,6 +448,18 @@ app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDi
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
 // ================================= end distress ===============================
+
+// ================================= contravention =====================================
+app.get('/api/V1/insaf/contravention', contravention.read);
+app.post('/api/V1/insaf/contravention/create', contravention.create);
+app.get('/api/V1/insaf/contravention/:id', contravention.read_by_id);
+app.patch('/api/V1/insaf/contravention/update/:id', contravention.update);
+app.delete('/api/V1/insaf/contravention/delete/:id', contravention.delete_);
+
+
+app.patch('/api/V1/insaf/contravention/update_ksop/:id', contravention.update_by_ksop);
+// =============================== end contravention ===================================
+
 // ================================= pan =====================================
 app.get('/api/V1/masdex/pan', pan.getPAN)
 app.get('/api/V1/masdex/pan/order/:target', pan.getPANorderBY)
