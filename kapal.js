@@ -21,7 +21,7 @@ const create = (request, response) => {
 
   
   let name = 'default.jpg'
-  if (request.files) {
+  if (request.files!==null) {
     let sampleFile = request.files.foto_kapal;
     console.log(sampleFile);
     const now = Date.now()
@@ -221,7 +221,7 @@ const update = (request, response) => {
 
     name = results.rows[0].foto_kapal;
 
-    if (request.files) {
+    if (request.files!==null) {
       doc = results.rows[0].foto_kapal;
       var doc_path = __dirname + path.join('/dokumens/kapal/foto/' + doc);
       console.log(doc_path);
@@ -233,7 +233,7 @@ const update = (request, response) => {
       let sampleFile = request.files.foto_kapal;
       console.log(sampleFile);
       const now = Date.now()
-      let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+      name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
       console.log(__dirname);
       sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
         if (err) {
@@ -241,6 +241,9 @@ const update = (request, response) => {
         }
 
       });
+    }else{
+      name=null;
+      complete_path=null;
     }
 
     console.log(name);

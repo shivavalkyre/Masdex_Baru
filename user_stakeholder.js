@@ -45,7 +45,7 @@ const create = (request, response) => {
             // user not exist
             let name = 'default.jpg'
             let complete_path = base_url + 'dokumens/user_stakeholder/' + name;
-            if (request.files) {
+            if (request.files !== null) {
                 let sampleFile = request.files.photo;
                 console.log(sampleFile);
                 const now = Date.now()
@@ -56,6 +56,10 @@ const create = (request, response) => {
                     if (err)
                         console.log(err);
                 });
+            }else
+            {
+                name=null;
+                complete_path=null;
             }
 
             bcrypt.genSalt(10, function (err, res) {
@@ -262,7 +266,7 @@ const update = (request, response) => {
 
                         name = results.rows[0].photo;
                         complete_path = results.rows[0].url_photo;
-                        if (request.files) {
+                        if (request.files!==null) {
                             console.log('ada foto')
                             doc = results.rows[0].photo;
                             if (doc != 'default.jpg') {
@@ -286,6 +290,7 @@ const update = (request, response) => {
                             });
                         } else {
                             name = null;
+                            complete_path=null;
                         }
 
                         pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,stakeholder_id=$8, role_id=$9 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, stakeholder_id, role_id], (error, results) => {

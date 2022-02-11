@@ -243,7 +243,7 @@ const update_by_otoritas = (request, response) => {
                 fs.unlinkSync(doc_path2);
             }
             var name1='';
-          if (request.files.size>0){
+          if (request.files!==null){
           let sampleFile1 = request.files.dokumen_berthing;
           console.log(sampleFile1);
            const now1 = Date.now()
@@ -260,7 +260,7 @@ const update_by_otoritas = (request, response) => {
             name1=null;
           }
           var name2='';
-          if (request.files.size>0){
+          if (request.files!==null){
            let sampleFile2 = request.files.dokumen_ppk;
            console.log(sampleFile2);
             const now2 = Date.now()
