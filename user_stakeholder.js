@@ -67,6 +67,9 @@ const create = (request, response) => {
                 bcrypt.hash(password, salt, function (err, res) {
                     password_hash = res;
                     console.log(password_hash);
+                    if (role_id==null){
+                        role_id=0;
+                    }
                     pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo, stakeholder_id, role_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)', [username, password_hash, email, name, nama_lengkap, complete_path, stakeholder_id, role_id], (error, results) => {
                         if (error) {
                             throw error
