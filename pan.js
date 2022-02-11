@@ -362,7 +362,7 @@ const storePANdetail = (request, response) => {
 	// check data if exist
 	pool.query(`INSERT INTO tbl_insaf_pan_detail (pan_id, mmsi,voyage_id) VALUES ($1, $2,$3);`, [id, mmsi, voyage_id], (error, results) => {
 		if (error) {
-			throw error;
+			response.status(400).json(error)
 		}
 		response.status(200).json("Data kapal berhasil bertambah")
 	})
@@ -385,7 +385,7 @@ const updatePANdetail = (request, response) => {
 	})
 }
 
-// delete PAN detail data based on pan_id
+// delete PAN detail data based on pan_id and pan_detail_id
 const destroyPANdetail = (request, response) => {
 	const pan_id = parseInt(request.params.pan_id);
 	const pan_detail_id = parseInt(request.params.pan_detail_id);
@@ -396,7 +396,36 @@ const destroyPANdetail = (request, response) => {
 		if (error) {
 			throw error;
 		}
+		pool.query(`UPDATE tbl_insaf_pan_detail 
+				 SET is_delete = '1'
+				 WHERE pan_id = $1
+				 AND id = $2;`, [pan_id, pan_detail_id], (error, results) => {
+			if (error) {
+				throw error;
+			}
+			response.status(200).json("Data kapal berhasil dihapus")
+		})
 		response.status(200).json("Data kapal berhasil dihapus")
+	})
+}
+
+// delete PAN and detail based on pan_id
+const destroyPANandDetailPAN = (request, response) => {
+	const pan_id = parseInt(request.params.pan_id);
+	pool.query(`UPDATE tbl_insaf_pan_detail 
+				 SET is_delete = '1'
+				 WHERE pan_id = $1;`, [pan_id], (error, results) => {
+		if (error) {
+			console.log(error)
+		}
+		response.status(200).json("Data PAN berhasil dihapus")
+	})
+
+	pool.query(`UPDATE tbl_insaf_pan SET is_delete = '1' WHERE id = $1;`, [pan_id], (error2, results2) => {
+		if (error2) {
+			console.log(error2)
+		}
+		response.status(200).json("Data PAN berhasil dihapus")
 	})
 }
 
@@ -486,6 +515,7 @@ module.exports = {
 	storePANdetail,
 	updatePANdetail,
 	destroyPANdetail,
+	destroyPANandDetailPAN,
 	getPANdetailbyId,
 	searchPANdata,
 	getLatestPAN,

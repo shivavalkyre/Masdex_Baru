@@ -171,7 +171,7 @@ const update = (request, response) => {
         name = results.rows[0].logo;
         complete_path = results.rows[0].url_logo;
 
-        if (request.files!==null) {
+        if (request.files) {
           doc = results.rows[0].logo;
           if (doc != 'default.jpg') {
             var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
