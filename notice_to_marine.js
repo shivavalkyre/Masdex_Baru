@@ -21,8 +21,6 @@ const create = (request, response) => {
             if (err)
                 console.log(err);
         });
-    } else {
-        name = null;
     }
 
     pool.query('INSERT INTO tbl_insaf_notice_to_mariner (dokumen, keterangan_lainnya, title, valid_from, valid_to, url_dokumen, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7)'
@@ -159,7 +157,30 @@ const update = (request, response) => {
                throw error
             }else
             {
-                response.status(200).send({success:true,data:'data berhasil diperbarui'})
+              pool.query('DELETE FROM tbl_insaf_notice_to_mariner_detail where ntm_id=$1'
+              , [id], (error, results) => {
+                  if (error) {
+      
+                      if (error.code == '23505') {
+                          //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                          response.status(400).send('Duplicate data')
+                          return;
+                      }
+                  } else {
+                    
+                    var sql= 'SELECT * FROM tbl_insaf_notice_to_mariner where id=$1 and is_delete=false'
+                    pool.query(sql,[id] ,(error, results) => {
+                        if (error) 
+                        {
+                            throw error
+                        }
+                        response.status(200).send({success:true,data: results.rows[0].id})
+                    })
+                  }
+                
+                // response.status(200).json({status:true, data:results.rows})
+              })
+              
             }
      
           });
@@ -240,6 +261,39 @@ const createDetail = (request, response) => {
       response.status(200).send({status:true,data:`Added Detail Successfuly !`})
     }      
   })
+}
+
+const read_by_ntmDetail = (request, response) => {
+
+  const id = parseInt(request.params.id);
+  //console.log('Here');
+  //console.log(id);
+  const {page,rows} = request.body
+  var page_req = page || 1
+  var rows_req = rows || 10
+  var offset = (page_req - 1) * rows_req
+  var res = []
+  var items = []
+
+  pool.query('SELECT count(*) as total FROM tbl_insaf_notice_to_mariner_detail where ntm_id=$1 and is_delete=false', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+   //console.log(results.rows[0].total)
+   res.push({total:results.rows[0].total})
+
+   var sql= 'SELECT n.*,u.nama_lengkap as nahkoda,u.email FROM tbl_insaf_notice_to_mariner_detail n join tbl_user_stakeholders u on u.id = n.user_id where n.ntm_id=$1 and n.is_delete=false'
+   pool.query(sql,[id] ,(error, results) => {
+     if (error) {
+       throw error
+     }
+     items.push({rows:results.rows})
+     res.push(items)
+     response.status(200).send({success:true,data:res})
+   })
+
+  })
+
 }
 
 const readDetail = (request, response) => {
@@ -347,4 +401,5 @@ readDetail,
 read_by_idDetail,
 updateDetail,
 deleteDetail,
+read_by_ntmDetail,
 }

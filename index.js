@@ -267,9 +267,11 @@ app.get('/api/V1/insaf/notice_to_marine/:id', notice_to_marine.read_by_id);
 app.put('/api/V1/insaf/notice_to_marine/update/:id', notice_to_marine.update);
 app.delete('/api/V1/insaf/notice_to_marine/delete/:id', notice_to_marine.delete_);
 // Notice to Marine Detail
+
 app.post('/api/V1/insaf/notice_to_marine_detail/create', notice_to_marine.createDetail);
 app.get('/api/V1/insaf/notice_to_marine_detail/read', notice_to_marine.readDetail);
 app.get('/api/V1/insaf/notice_to_marine_detail/:id', notice_to_marine.read_by_idDetail);
+app.get('/api/V1/insaf/notice_to_marine_detail/ntm/:id', notice_to_marine.read_by_ntmDetail);
 app.put('/api/V1/insaf/notice_to_marine_detail/update/:id', notice_to_marine.updateDetail);
 app.delete('/api/V1/insaf/notice_to_marine_detail/delete/:id', notice_to_marine.deleteDetail);
 // ==========================================================================
