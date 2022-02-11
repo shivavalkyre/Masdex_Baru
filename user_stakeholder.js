@@ -295,7 +295,10 @@ const update = (request, response) => {
                             name = null;
                             complete_path=null;
                         }
-
+                        if (role_id==null)
+                        {
+                            role_id=0;
+                        }
                         pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,stakeholder_id=$8, role_id=$9 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, stakeholder_id, role_id], (error, results) => {
                             if (error) {
                                 throw error

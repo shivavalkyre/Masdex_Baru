@@ -50,6 +50,10 @@ const create = (request, response) => {
                 name = null;
                 complete_path=null;
             }
+            if (role_id==null)
+            {
+                role_id=0;
+            }
 
             pool.query('INSERT INTO tbl_users (username,password,email,photo,nama_lengkap,url_photo, role_id, pegawai_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)', [username, password, email, name, nama_lengkap, complete_path, role_id, pegawai_id], (error, results) => {
                 if (error) {
@@ -347,6 +351,10 @@ const update = (request, response) => {
                             complete_path=null;
                         }
 
+                        if (role_id==null)
+                        {
+                            role_id=0;
+                        }
 
                         pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,role_id=$8 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, role_id], (error, results) => {
                             if (error) {
