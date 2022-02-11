@@ -192,8 +192,6 @@ const update = (request, response) => {
             if (err)
               console.log(err);
           });
-        }else{
-          name=null;
         }
 
         console.log(name);
