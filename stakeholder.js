@@ -22,61 +22,38 @@ const create = (request, response) => {
 
   // user not exist
 
-  //   var name = '';
-  //   if (request.files) {
-  //     let sampleFile = request.files.logo;
-  //     console.log(sampleFile);
-  //     const now = Date.now()
-  //     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-  //     complete_path = base_url + 'dokumens/stakeholder/logo/' + name;
-  //     console.log(__dirname);
-  //     sampleFile.mv(path.join(__dirname + '/dokumens/stakeholder/logo/') + name, function (err) {
-  //       if (err)
-  //         console.log(err);
-  //     });
-  //   } else {
-  //     name = null;
-  //   }
+  // user not exist
+  let name = 'default.jpg'
+  let complete_path = base_url + 'dokumens/stakeholder/logo/' + name
 
-  // pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,email_company,url_logo) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, complete_path], (error, results) => {
-  //   if (error) {
-  //     throw error
-  //   }
-  //   if (results.rows[0].total > 0) {
-  //     response.status(400).json({
-  //       success: false,
-  //       data: "data sudah ada"
-  //     });
-  //   } else {
-      // user not exist
-      var name = '';
-      if (request.files) {
-        let sampleFile = request.files.logo;
-        console.log(sampleFile);
-        const now = Date.now()
-        name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-        complete_path = base_url + 'dokumens/stakeholder/logo/' + name;
-        console.log(__dirname);
-        sampleFile.mv(path.join(__dirname + '/dokumens/stakeholder/logo/') + name, function (err) {
-          if (err)
-            console.log(err);
-        });
-      } else {
-        name = null;
-      }
 
-      pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo) VALUES($1,$2,$3,$4,$5,$6,$7,$8)', [jenis_stakeholder,  nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path], (error, results) => {
-        if (error) {
-          throw error
-        }
-        response.status(200).send({
-          success: true,
-          data: 'data stakeholder berhasil ditambah'
-        })
+  if (request.files!==null) {
+    let sampleFile = request.files.logo;
+    console.log(sampleFile);
+    const now = Date.now()
+    name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+    complete_path = base_url + 'dokumens/stakeholder/logo/' + name;
+    console.log(__dirname);
+    sampleFile.mv(path.join(__dirname + '/dokumens/stakeholder/logo/') + name, function (err) {
+      if (err)
+        console.log(err);
+    });
+  }else
+  {
+    name = null;
+    complete_path=null;
+  }
 
-      });
-    // }
-  // });
+  pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo,email_company) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path, email_company], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).send({
+      success: true,
+      data: 'data stakeholder berhasil ditambah'
+    })
+
+  });
 
 }
 
@@ -93,7 +70,7 @@ const read = (request, response) => {
   var items = []
 
 
-  pool.query('SELECT count(*) as total FROM tbl_stakeholders where is_delete=false', (error, results) => {
+  pool.query('SELECT count(*) as total FROM tbl_stakeholders where jenis_stakeholder<> 5 and jenis_stakeholder<>6 and is_delete=false', (error, results) => {
     if (error) {
       throw error
     }
@@ -181,85 +158,66 @@ const update = (request, response) => {
   let jenis_telkompel;
 
   pool.query('SELECT count(*) as total FROM tbl_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
-      if (error) {
-        throw error
-      } else {
-        //console.log(results.rows[0].total);
-        pool.query('SELECT * FROM tbl_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
-            if (error) {
-              throw error
-            } else {
-              //console.log(results.rows[0].total);
-              pool.query('SELECT * FROM tbl_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
-                if (error) {
-                  throw error
-                }
-                console.log(results.rows[0].logo);
-                doc = results.rows[0].logo;
-                var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
-                console.log(doc_path);
+    if (error) {
+      throw error
+    } else {
+      //console.log(results.rows[0].total);
+      pool.query('SELECT * FROM tbl_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
+        if (error) {
+          throw error
+        }
+        let name, complete_path, doc
 
-                if (fs.existsSync(doc_path)) {
-                  fs.unlinkSync(doc_path);
-                }
+        name = results.rows[0].logo;
+        complete_path = results.rows[0].url_logo;
 
-                console.log(doc_path);
-                var name = '';
+        if (request.files) {
+          doc = results.rows[0].logo;
+          if (doc != 'default.jpg') {
+            var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
+            console.log(doc_path);
+            if (fs.unlinkSync(doc_path)){
+              fs.unlink(doc_path);
+            }
+            //fs.unlinkSync();
+            console.log(doc_path);
+          }
 
-                if (request.files) {
-                  let sampleFile = request.files.logo;
-                  console.log(sampleFile);
-                  const now = Date.now()
-                  name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                  complete_path = base_url + 'dokumens/stakeholder/logo/' + name;
-                  console.log(__dirname);
-                  sampleFile.mv(path.join(__dirname + '/dokumens/stakeholder/logo/') + name, function (err) {
-                    if (err) {
-                      console.log(err);
-                    }
+          let sampleFile = request.files.logo;
+          console.log(sampleFile);
+          const now = Date.now()
+          name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+          complete_path = base_url + 'dokumens/stakeholder/logo/' + name;
+          console.log('dirname' + __dirname);
+          sampleFile.mv(path.join(__dirname + '/dokumens/stakeholder/logo/') + name, function (err) {
+            if (err)
+              console.log(err);
+          });
+        }else{
+          name=null;
+          complete_path=null;
+        }
 
-                  });
-                } else {
-                  name = null;
-                }
-                console.log(name);
-                const update_time = new Date;
-                pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,nama_lengkap=$2,alamat_kantor=$3,logo=$4,npwp=$5,telepon_kantor=$6,unit_kantor=$7,updated_at=$8,url_logo=$9 where id=$10', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, update_time, complete_path, id], (error, results) => {
-                  if (error) {
-                    throw error
-                    //response.status(201).send(error)
-                    //console.log(error);
-                  } else {
-                    response.status(200).send({
-                      success: true,
-                      data: 'data stakeholder berhasil diperbarui'
-                    })
-                  }
+        console.log(name);
+        const update_time = new Date;
+        pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,nama_lengkap=$2,alamat_kantor=$3,logo=$4,npwp=$5,telepon_kantor=$6,unit_kantor=$7,email_company=$8,updated_at=$9,url_logo=$10 where id=$11', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, update_time, complete_path, id], (error, results) => {
+          if (error) {
+            throw error
+            //response.status(201).send(error)
+            //console.log(error);
+          } else {
+            response.status(200).send({
+              success: true,
+              data: 'data stakeholder berhasil diperbarui'
+            })
+          }
 
-                });
-
-              });
-
-              console.log(name);
-              const update_time = new Date;
-              pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,nama_lengkap=$2,alamat_kantor=$3,logo=$4,npwp=$5,telepon_kantor=$6,unit_kantor=$7,email_company=$8,updated_at=$9,url_logo=$10 where id=$11', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, update_time, complete_path, id], (error, results) => {
-                if (error) {
-                  throw error
-                  //response.status(201).send(error)
-                  //console.log(error);
-                } else {
-                  response.status(200).send({
-                    success: true,
-                    data: 'data stakeholder berhasil diperbarui'
-                  })
-                }
-
-              });
-
-            };
         });
-  }
-})
+
+      });
+
+    }
+  })
 }
 
 const delete_ = (request, response) => {

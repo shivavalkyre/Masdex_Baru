@@ -81,6 +81,7 @@ const jenis_distress = require('./jenis_distress')
 const jenis_stakeholder = require('./jenis_stakeholder')
 const jenis_kapal = require('./jenis_kapal')
 const spesialisasi_kesehatan = require('./spesialisasi_kesehatan')
+const contravention = require('./contravention')
 const pasien = require('./pasien')
 const tmas = require('./tmas')
 const sumber_informasi = require('./sumber_informasi')
@@ -373,7 +374,7 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
     });
 // ==========================================================================
 // =============================== LOGIN USER ===============================
-    app.post('/api/V1/masdex/user/login',user.login);
+    app.post('/api/V1/masdex/user/login',user.login_all);
 // ==========================================================================
 // =============================== USER STAKEHOLDER =====================================
     app.post('/api/V1/masdex/user_stakeholder', user_stakeholder.create);
@@ -466,6 +467,18 @@ app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDi
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
 // ================================= end distress ===============================
+
+// ================================= contravention =====================================
+app.get('/api/V1/insaf/contravention', contravention.read);
+app.post('/api/V1/insaf/contravention/create', contravention.create);
+app.get('/api/V1/insaf/contravention/:id', contravention.read_by_id);
+app.patch('/api/V1/insaf/contravention/update/:id', contravention.update);
+app.delete('/api/V1/insaf/contravention/delete/:id', contravention.delete_);
+
+
+app.patch('/api/V1/insaf/contravention/update_ksop/:id', contravention.update_by_ksop);
+// =============================== end contravention ===================================
+
 // ================================= pan =====================================
 app.get('/api/V1/masdex/pan', pan.getPAN)
 app.get('/api/V1/masdex/pan/order/:target', pan.getPANorderBY)
@@ -474,6 +487,7 @@ app.get('/api/V1/masdex/pan/show/:id', pan.getPANbyId)
 app.get('/api/V1/masdex/pan/show/:range1/:range2', pan.getPANByRange)
 app.put('/api/V1/masdex/pan/update/:id', pan.updatePAN)
 app.delete('/api/V1/masdex/pan/destroy/:id', pan.destroyPAN)
+app.delete('/api/V1/masdex/pan/destroy_all/:id', pan.destroyPANandDetailPAN)
 app.get('/api/V1/masdex/pan/search/:keyword', pan.searchPANdata)
 app.get('/api/V1/masdex/pan/latest', pan.getLatestPAN)
 app.get('/api/V1/masdex/pan/sumberinformasiawal', pan.getSumberInformasiAwal)
@@ -482,6 +496,7 @@ app.get('/api/V1/masdex/pan/jenispan', pan.getJenisPan)
 app.get('/api/V1/masdex/pan_detail/:id', pan.getPANdetail)
 app.post('/api/V1/masdex/pan_detail/store/:id', pan.storePANdetail)
 app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetailbyId)
+app.get('/api/V1/masdex/pan_detail/show_by_pan_id/:pan_detail_id', pan.getPANdetailbyPANId)
 app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
 app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
 // ===========================================================================

@@ -19,8 +19,9 @@ const create = (request, response) => {
     foto_kapal
   } = request.body
 
-  var name = '';
-  if (request.files.size > 0) {
+  
+  let name = 'default.jpg'
+  if (request.files!==null) {
     let sampleFile = request.files.foto_kapal;
     console.log(sampleFile);
     const now = Date.now()
@@ -33,7 +34,7 @@ const create = (request, response) => {
   } else {
     name = null;
   }
-  pool.query('INSERT INTO tbl_masdex_kapal (perusahaan_pelayaran_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)', [perusahaan_pelayaran_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), length, width, loa, parseInt(ship_type), name], (error, results) => {
+  pool.query('INSERT INTO tbl_masdex_kapal (stakeholder_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), length, width, loa, parseInt(ship_type), name], (error, results) => {
 
     if (error) {
       throw error
@@ -220,17 +221,19 @@ const update = (request, response) => {
 
     name = results.rows[0].foto_kapal;
 
-    if (request.files) {
+    if (request.files!==null) {
       doc = results.rows[0].foto_kapal;
       var doc_path = __dirname + path.join('/dokumens/kapal/foto/' + doc);
       console.log(doc_path);
-      fs.unlinkSync(doc_path);
+      if(doc != 'default.jpg') {
+        fs.unlinkSync(doc_path);
+      }
       console.log(doc_path);
 
       let sampleFile = request.files.foto_kapal;
       console.log(sampleFile);
       const now = Date.now()
-      let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+      name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
       console.log(__dirname);
       sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
         if (err) {
@@ -238,6 +241,9 @@ const update = (request, response) => {
         }
 
       });
+    }else{
+      name=null;
+      complete_path=null;
     }
 
     console.log(name);
@@ -258,51 +264,6 @@ const update = (request, response) => {
           data: 'data kapal berhasil diperbarui'
         })
       }
-
-      doc = results.rows[0].foto_kapal;
-      var doc_path = __dirname + path.join('/dokumens/kapal/foto/' + doc);
-      console.log(doc_path);
-      fs.unlinkSync(doc_path);
-      console.log(doc_path);
-      var name = '';
-      if (request.files.size > 0) {
-
-        let sampleFile = request.files.foto_kapal;
-        console.log(sampleFile);
-        const now = Date.now()
-        name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-        console.log(__dirname);
-        sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
-          if (err) {
-            console.log(err);
-          }
-
-        });
-
-      } else {
-        name = null;
-      }
-
-      console.log(name);
-      const update_time = new Date;
-      pool.query('UPDATE tbl_masdex_kapal SET perusahaan_pelayaran_id=$1,ship_name=$2,gt=$3,mmsi=$4,imo=$5,call_sign=$6,flag=$7,max_draft=$8,length=$9,width=$10,loa=$11,ship_type=$12,foto_kapal=$13,updated_at=$14 where id=$15', [perusahaan_pelayaran_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), parseFloat(length), parseFloat(width), loa, parseInt(ship_type), name, update_time, id], (error, results) => {
-        if (error) {
-          throw error
-          //response.status(201).send(error)
-          //console.log(error);
-          if (error.code == '23505') {
-            //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
-            response.status(400).send('Duplicate data')
-            return;
-          }
-        } else {
-          response.status(200).send({
-            success: true,
-            data: 'data kapal berhasil diperbarui'
-          })
-        }
-
-      })
 
     })
 

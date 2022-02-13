@@ -11,7 +11,7 @@ const create = (request, response) => {
 
     let jenis_telkompel;
     var name='';
-    if (request.files.size>0){
+    if (request.files!==null){
     let sampleFile = request.files.dokumen;
     console.log(sampleFile);
      const now = Date.now()
@@ -24,6 +24,7 @@ const create = (request, response) => {
      });
     }else{
       name= null;
+      complete_path=null;
     }
 
     // pool.query('SELECT SELECT tbl_masdex_telkompel.jenis_telkompel FROM tbl_masdex_pelabuhan INNER JOIN tbl_masdex_telkompel ON tbl_masdex_pelabuhan.telkompel_id = tbl_masdex_telkompel."id" WHERE tbl_masdex_pelabuhan."id" = $1',[pelabuhan_tujuan], (error,results)=> {
@@ -219,7 +220,7 @@ const update = (request, response) => {
             console.log(doc_path);
          }
          var name='';
-          if(request.files.size>0){
+          if(request.files!==null){
           let sampleFile = request.files.dokumen;
         //  console.log(sampleFile);
            const now = Date.now();
@@ -236,6 +237,7 @@ const update = (request, response) => {
           });
         }else{
           name=null;
+          complete_path=null;
         }
         //  console.log(name);
             const update_time = new Date;

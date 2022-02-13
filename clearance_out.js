@@ -6,13 +6,13 @@ const base_url = process.env.base_url;
 const create = (request, response) => {
   const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan }
     = request.body
-
-
-
+  var name= null;
+  if (request.files!==null)
+  {
   let sampleFile = request.files.dokumen_spb;
   console.log(sampleFile);
   const now = Date.now()
-  let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+  name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
   let complete_path = base_url + 'dokumens/clearance_out/' + name;
   console.log(__dirname);
   sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
@@ -20,7 +20,10 @@ const create = (request, response) => {
       console.log(err);
   });
 
-
+  }else{
+    name=null;
+    complete_path=null;
+  }
 
   pool.query('INSERT INTO tbl_insaf_clearance_out (voyage_id,nomor_spb,tanggal_jam_spb,pelabuhan_tujuan,eta_pelabuhan_tujuan,dokumen_spb,etd_pelabuhan_tujuan,url_dokumen_spb) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)'
     , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, complete_path], (error, results) => {
@@ -206,7 +209,7 @@ const update_ksu = (request, response) => {
     total = results.rows[0].total;
     if (parseInt(total) == parseInt('0')) {
       var name = '';
-      if (request.files.size > 0) {
+      if (request.files!==null) {
 
         doc = results.rows[0].dokumen_spb;
         var doc_path = __dirname + path.join('/dokumens/clearance_out/' + doc);
@@ -227,6 +230,7 @@ const update_ksu = (request, response) => {
         });
       } else {
         name = null;
+        complete_path=null;
       }
 
       pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,url_dokumen_spb)
@@ -267,7 +271,7 @@ const update = (request, response) => {
   if (dokumen_spb != 'kosong') {
     console.log('masuk')
     var name = '';
-    if (request.files.size > 0) {
+    if (request.files!==null) {
       let sampleFile = request.files.dokumen_spb;
       //console.log(sampleFile);
       const now = Date.now()
@@ -282,6 +286,7 @@ const update = (request, response) => {
       });
     } else {
       name = null;
+      complete_path=null;
     }
     pool.query(`UPDATE tbl_insaf_clearance_out SET dokumen_spb = $1 WHERE id = $2`, [name, iddata], (error, result) => {
       if (error) {
