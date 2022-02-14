@@ -131,12 +131,17 @@ const update = (request, response) => {
 
           name = results.rows[0].dokumen;
           complete_path = results.rows[0].url_dokumen;
+
               if (request.files) {
                   doc = results.rows[0].dokumen;
-                  var doc_path = __dirname + path.join('/dokumens/ntm/' + doc);
-                  console.log(doc_path);
-                  fs.unlinkSync(doc_path);
-                  console.log(doc_path);
+                  console.log(results.rows[0].dokumen);
+                  if(doc != ''){
+                    var doc_path = __dirname + path.join('/dokumens/ntm/' + doc);
+                    console.log(doc_path);
+                    fs.unlinkSync(doc_path);
+                    console.log(doc_path);
+                  }
+
                   var name = '';
                   let sampleFile = request.files.dokumen;
                   console.log(sampleFile);
