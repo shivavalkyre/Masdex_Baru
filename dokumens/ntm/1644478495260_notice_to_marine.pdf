@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASDEX</title>
+  <link rel="shortcut icon" href="http://127.0.0.1:8000/assets/images/favicon.png" type="image/x-icon">
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+  
+  <link href="http://127.0.0.1:8000/lib/apexcharts/dist/apexcharts.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/fc-3.3.3/fh-3.1.9/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.4/sb-1.1.0/sp-1.3.0/sl-1.3.3/datatables.min.css"/>
+  <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTADtF1M7v5FmOPyrAwpNn_yzjv0GkTLg&libraries=&v=weekly&channel=2" async ></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <link href="http://127.0.0.1:8000/css/app.css" rel="stylesheet">
+  <link href="http://127.0.0.1:8000/css/main.css" rel="stylesheet">
+  <link href="http://127.0.0.1:8000/css/index.css" rel="stylesheet">
+  <style>
+    .dataTable thead{
+        background-color: #1D907E !important;
+        color: white !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1D907E !important;
+        border: 1px solid #1D907E !important;
+        color: white !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: #1D907E !important;
+    }
+
+    .dataTables_filter{
+        display: none !important;
+    }
+
+    .table.dataTable.no-footer{
+        border-bottom: none !important;
+    }
+  </style>
+  </head>
+
+<body x-data="{sideOpen : window.innerWidth > 768}" @resize.window="sideOpen = window.innerWidth > 768">
+  
+  <div class="fixed pb-28 top-0 bg-utama left-0 bottom-0 z-20 overflow-hidden transition-all md:block hidden w-72" :class="{'w-72':sideOpen, 'w-20':!sideOpen, 'pb-28': sideOpen, 'pb-14': !sideOpen}">
+        
+        <div class="logo-side-bar justify-center text-white px-6 lg:py-6 md:py-4 flex gap-5">
+            <img src="http://127.0.0.1:8000/assets/images/logoUtama.png" class="w-20">
+        </div>
+    
+        
+        <div class="flex flex-col justify-between pb-28 h-full">
+          <ul class="scroll-menu overflow-y-scroll h-full">
+          
+
+                                            <li class="mt-5" x-data="{open: false}" :class="{'mt-0': !sideOpen, 'mt-5': sideOpen}">
+                    <div class=" icon-link flex justify-between items-center" :class="{'justify-center': !sideOpen, 'justify-between': sideOpen}" style="background-color: #21cdb2">
+                        <a class="flex items-center text-darkGray gap-3 pl-10 pr-3 py-1">
+                            
+                            <span class="link_name font-bold" :class="{'hidden': !sideOpen}">MAIN MENU</span>
+                        </a>
+                        
+                    </div>
+                    <ul class="sub-menu">
+                                                                        <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/home" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/dashboard.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">HOME</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/live-visualization" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/live-visualization.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">LIVE VISUALIZATION</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/pkk" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/pkk.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">PKK</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/voyage" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/voyage.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">VOYAGE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/mayday" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/distress-side.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">MAYDAY</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/pan" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/pan.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">PAN</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/securite" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/securite.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">SECURITE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/tmas" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/tmas.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">TMAS</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white bg-utamaHover">
+                            <a href="/notice-to-marine" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/notice-to-marine.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">NOTICE TO MARINE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/development" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/noon-position.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">NOON POSITION</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/development" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/contravention.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">CONTRAVENTION</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/development" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/msi.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">MSI</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/aton" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/aton.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">ATON</span>
+                            </a>
+                        </li>
+                                                                    </ul>
+                </li>
+                                                            <li class="mt-5" x-data="{open: false}" :class="{'mt-0': !sideOpen, 'mt-5': sideOpen}">
+                    <div class=" icon-link flex justify-between items-center" :class="{'justify-center': !sideOpen, 'justify-between': sideOpen}" style="background-color: #21cdb2">
+                        <a class="flex items-center text-darkGray gap-3 pl-10 pr-3 py-1">
+                            
+                            <span class="link_name font-bold" :class="{'hidden': !sideOpen}">DIRECTORY</span>
+                        </a>
+                        
+                    </div>
+                    <ul class="sub-menu">
+                                                                        <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/stakeholder" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">STAKEHOLDER</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/agen" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">SHIP AGENT</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/shipping-company" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">SHIPPING COMPANY</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/kapal" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">SHIP</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/telkompel" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">COMMUNICATION STATION</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/pelabuhan" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">HARBOR</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/dermaga" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">PIER</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/area-tambat" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">MOORING AREA</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/area-labuh" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/directory_.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">ANCHOR AREA</span>
+                            </a>
+                        </li>
+                                                                    </ul>
+                </li>
+                                                            <li class="mt-5" x-data="{open: false}" :class="{'mt-0': !sideOpen, 'mt-5': sideOpen}">
+                    <div class=" icon-link flex justify-between items-center" :class="{'justify-center': !sideOpen, 'justify-between': sideOpen}" style="background-color: #21cdb2">
+                        <a class="flex items-center text-darkGray gap-3 pl-10 pr-3 py-1">
+                            
+                            <span class="link_name font-bold" :class="{'hidden': !sideOpen}">MASTER</span>
+                        </a>
+                        
+                    </div>
+                    <ul class="sub-menu">
+                                                                        <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-stakeholder" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">STAKEHOLDER TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-spesialisasi-kesehatan" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">HEALTH SPECIALIST TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-kapal" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">SHIP TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-securite" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">SECURITE TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-informasi-securite" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">INITIAL SOURCE INFORMATION</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-contravention" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">CONTRAVENTION TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-berita" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">CABLE NEWS TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-manouvre" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">MANOUVRE TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-pan" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">PAN TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-berita-marine-safety-informasi" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">MSI TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-distress" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">DISTRESS TYPE</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/master-jenis-status-navigation" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/master-data.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">STATUS NAVIGATION</span>
+                            </a>
+                        </li>
+                                                                    </ul>
+                </li>
+                                                            <li class="mt-5" x-data="{open: false}" :class="{'mt-0': !sideOpen, 'mt-5': sideOpen}">
+                    <div class=" icon-link flex justify-between items-center" :class="{'justify-center': !sideOpen, 'justify-between': sideOpen}" style="background-color: #21cdb2">
+                        <a class="flex items-center text-darkGray gap-3 pl-10 pr-3 py-1">
+                            
+                            <span class="link_name font-bold" :class="{'hidden': !sideOpen}">SETTINGS</span>
+                        </a>
+                        
+                    </div>
+                    <ul class="sub-menu">
+                                                                        <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/user-management" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/user-management.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">USER MANAGEMENT</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/development" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/role-management.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">ROLE MANAGEMENT</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="/development" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/configuration.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">CONFIGURATION</span>
+                            </a>
+                        </li>
+                                                                                                <li class="cursor-pointer hover:bg-utamaHover text-white ">
+                            <a href="http://127.0.0.1:8000/user/5" class="flex items-center gap-3 pl-10 pr-3 py-3" :class="{'justify-center': !sideOpen, 'pr-3':sideOpen, 'pl-10':sideOpen}">
+                                
+                                                                    <img class="w-6" src="http://127.0.0.1:8000/assets/icons/svg/sidebar/profile.svg" alt="menu icon">
+                                                                <span class="link_name font-semibold" :class="{'hidden': !sideOpen}">PROFILE</span>
+                            </a>
+                        </li>
+                                                                    </ul>
+                </li>
+                                      </ul>
+        </div>
+        
+        
+        
+        <div class="absolute bottom-5 grid p-2 w-full" :class="{'p-0': !sideOpen, 'p-2': sideOpen}">
+            <a href="http://127.0.0.1:8000/logout" class="focus:outline-none rounded-md flex justify-center items-center gap-2 text-white bg-kedua px-6 py-3 hover:bg-keduaHover" x-show="sideOpen">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>                        
+        Logout
+
+            </a>
+    
+            <a href="http://127.0.0.1:8000/logout" class="focus:outline-none rounded-md flex justify-center items-center gap-2 text-white bg-kedua px-6 py-3 hover:bg-keduaHover" x-show="!sideOpen" style="display: none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>                        
+        
+
+            </a>
+        </div>
+    </div>
+      
+  
+  <main class="relative transition-all w-sideOpen left-72" :class="{'w-sideOpen': sideOpen, 'w-sideClose':!sideOpen, 'left-20' : !sideOpen, 'left-72':sideOpen}">
+      
+      <section class="lg:py-4 md:py-4 py-0 md:px-5 px-0 md:grid gap-5 hidden" >
+        <div class="grid grid-cols-2 gap-4">
+    <div class="flex items-center">
+        
+        <button type="button" @click="sideOpen = !sideOpen" class="md:flex focus:outline-none hidden  items-center justify-center cursor-pointer content-direct h-10 w-10 bg-white hover:bg-utama hover:text-white duration-100 p-2 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+        </button>
+        <div class="flex flex-col ml-5">
+            <h5>MASDEX</h5>
+            <p class="pxsmall text-gray-700">Maritime Surveillance Data Exchange | Disnav Tg. Priok</p>
+        </div>
+    </div>
+    <div class="flex items-center justify-end">
+
+        <div class="flex justify-center items-center space-x-5 ml-8">
+            <div x-data="{ dropdownOpen: false }" class="relative">
+                <div class="flex relative">
+                    <div @click="dropdownOpen = !dropdownOpen" class="flex  items-center cursor-pointer justify-center overflow-hidden w-10 h-10 rounded-full bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25.446" height="26.325" viewBox="0 0 25.446 26.325">
+                            <g id="Group" transform="translate(0.65 0.65)">
+                              <path id="Vector" d="M0,19.685V9.15a9.15,9.15,0,0,1,18.3,0V19.685H0Z" transform="translate(2.93)" fill="none" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.3" stroke-dasharray="0 0"/>
+                              <path id="Vector-2" data-name="Vector" d="M0,0H24.146" transform="translate(0 19.685)" fill="none" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.3" stroke-dasharray="0 0"/>
+                              <path id="Vector-3" data-name="Vector" d="M5.381,0A2.691,2.691,0,0,1,2.69,2.69,2.683,2.683,0,0,1,0,0" transform="translate(9.376 22.335)" fill="none" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.3" stroke-dasharray="0 0"/>
+                            </g>
+                          </svg> 
+                          <span class="absolute top-0 right-2 z-30">
+                            <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                          </span>                         
+                    </div>
+                </div>
+
+                <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
+
+                <div x-show="dropdownOpen" class="absolute right-0 mt-2 w-96 bg-white rounded-md shadow-md z-20" style="display: none">
+                    <div class="notif-head flex items-center justify-center px-4 py-5">
+                        <h5 class="font-semibold">Notifications (0)</h5>
+                    </div>
+                    <div class="notif-body max-h-96 overflow-y-auto overflow-x-hidden">
+                        <a href="#" class="flex flex-col space-y-3 px-10 py-6 text-sm text-center bg-gray-100  hover:bg-blue-400 hover:text-white">
+                            <h5 class="font-semibold text-gray-400">Nothing incoming notification.</h5>
+                        </a>
+                        
+                    </div>
+                    <div class="notif-foot flex items-center justify-center px-4 py-5">
+                        <a href="#" class="font-semibold text-sm text-lightGray hover:underline">See All</a>
+                    </div>
+                </div>
+            </div>
+            <div x-data="{ dropdownOpen: false }" class="relative">
+                <div class="flex">
+                    <div @click="dropdownOpen = !dropdownOpen" class="flex items-center cursor-pointer justify-center overflow-hidden w-10 h-10 rounded-full">
+                        <img src="http://localhost:3012/api/V1/dokumens/user/1641177336753_test.png">
+                    </div>
+                    <div class="flex flex-col items-start mx-3 cursor-pointer" @click="dropdownOpen = !dropdownOpen">
+                        <h6 class="font-regular capitalize">admin</h6>
+                        <p class="pxsmall">disnav</p>
+                    </div>
+                    <button @click="dropdownOpen = !dropdownOpen"
+                        class="relative z-10 block rounded-md cursor-pointer focus:outline-none">
+                        <svg class="h-5 w-5 text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
+
+                <div x-show="dropdownOpen" class="absolute right-0 mt-2 pt-2 pb-0 overflow-hidden w-48 bg-white rounded-md shadow-xl z-20" style="display: none" x-data="{open: false}">
+                    <a href="http://127.0.0.1:8000/user/5" class="flex space-x-4 px-4 py-2 text-sm capitalize text-darkGray hover:bg-utama hover:text-white">
+                        <span class="ico flex items-center justify-center w-1/4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                        <span class="w-3/4">Profile</span>
+                    </a>
+                    <a href="#" class="flex space-x-4 px-4 py-2 text-sm capitalize text-darkGray hover:bg-utama hover:text-white" @click="open=true">
+                        <span class="ico flex items-center justify-center w-1/4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </span>
+                        <span class="w-3/4">Logout</span>
+                    </a>
+                    
+                    <div x-show="open"
+    x-transition:enter="transition duration-200 transform ease-out"
+    x-transition:enter-start="scale-75"
+    x-transition:leave="transition duration-100 transform ease-in"
+    x-transition:leave-end="opacity-0 scale-90" class=" overlay-modal fixed items-center justify-center z-50 w-screen h-screen flex inset-0" style="background-color: rgba(0,0,0,0.5); display:none">
+    <div class="grid gap-5 bg-white overflow-hidden rounded-xl w-96 h-auto z-50 p-5" @click.away="open=false">
+        <div class="flex items-center justify-end">
+            <a href="#" @click="open=false">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="flex flex-col gap-5 items-center justify-center">
+            <span>
+                <img class="logo-brand w-32 h-32" src="http://127.0.0.1:8000/assets/images/logoKedua.png">
+            </span>
+
+            <h2 class="text-3xl font-bold">LOGOUT</h2>
+            <p class="text-base font-medium text-center text-gray-800">ARE YOU SURE WANT TO LEAVE ?</p>
+        </div>
+
+        <div class="flex items-center justify-center gap-2">
+            <button @click="open=false" type="button" class="btn-sm-disabled focus:outline-none">
+                Cancel
+            </button>
+
+            <a href="http://127.0.0.1:8000/logout" class="btn-sm-danger focus:outline-none">
+                Yes, Logout
+            </a>
+        </div>
+    </div>
+</div>                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    
+    
+      </section>
+    
+      
+        
+        <section class="hidden md:flex flex-col p-5 gap-10">
+            <div class="bg-white rounded-xl px-7 py-10 grid gap-5 items-start shadow-md gap-10">
+        <h1 class="uppercase" style="font-size: 24px !important;">DETAIL NOTICE TO MARINE</h1>
+        
+        <h3 class="text-utamaHover">Warning to all Ships</h3>
+        
+        <div class="grid gap-2">
+                    <h5 class="text-utama font-bold">Description Notice to Marine</h5>
+        <p class="text-darkGray font-bold">Perhatian untuk semua Nahkoda Kapal di Area Pelebuhan Tj. Priok untuk tetap bersiaga dan berhati-hati dikarenakan cuaca buruk yang akan melanda Area Pelabuhan Tanjung Priok.</p>
+            </div>
+
+        <div class="grid gap-2">
+            <h5 class="text-utama font-bold">File Pdf Notice to Marine</h5>
+            <section class="flex">
+                <span class="grid justify-items-center rounded-md border-utama border gap-5 p-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="62.684" height="83.578" viewBox="0 0 62.684 83.578">
+                        <path id="Icon_awesome-file-pdf" data-name="Icon awesome-file-pdf" d="M29.693,41.805c-.816-2.612-.8-7.656-.326-7.656C30.738,34.15,30.607,40.173,29.693,41.805Zm-.278,7.7A75.323,75.323,0,0,1,24.78,59.745c2.987-1.143,6.366-2.808,10.268-3.575A21.146,21.146,0,0,1,29.416,49.51ZM14.055,69.882c0,.131,2.155-.881,5.7-6.562C18.658,64.349,15,67.32,14.055,69.882ZM40.483,26.118h22.2V79.66a3.908,3.908,0,0,1-3.918,3.918H3.918A3.908,3.908,0,0,1,0,79.66V3.918A3.908,3.908,0,0,1,3.918,0H36.565V22.2A3.929,3.929,0,0,0,40.483,26.118ZM39.177,54.163a16.384,16.384,0,0,1-6.97-8.782c.735-3.02,1.894-7.607,1.012-10.48-.767-4.8-6.921-4.326-7.8-1.11-.816,2.987-.065,7.2,1.322,12.569a153.286,153.286,0,0,1-6.66,14.006c-.016,0-.016.016-.033.016-4.424,2.269-12.014,7.264-8.9,11.1a5.072,5.072,0,0,0,3.51,1.632c2.922,0,5.828-2.938,9.974-10.088,4.212-1.388,8.831-3.118,12.9-3.787,3.542,1.926,7.689,3.183,10.447,3.183,4.767,0,5.093-5.224,3.216-7.085-2.269-2.22-8.864-1.583-12.014-1.175ZM61.541,17.14l-16-16A3.915,3.915,0,0,0,42.769,0h-.979V20.895H62.684v-1A3.905,3.905,0,0,0,61.541,17.14Zm-12.1,41.675c.669-.441-.408-1.943-6.987-1.469C48.514,59.925,49.445,58.815,49.445,58.815Z" fill="#1d907e"/>
+                    </svg>
+                      
+                    <a href="#" class="focus:outline-none rounded-md flex justify-center items-center gap-2 text-white font-bold bg-utama px-6 py-3 hover:bg-utamaHover" target="_blank" download="notice_to_marine.pdf">
+                                
+        See File
+
+            </a>
+                </span>
+            </section>
+        </div>
+
+        <span class="flex justify-end">
+            <a href="http://127.0.0.1:8000/notice-to-marine" class="focus:outline-none rounded-md flex justify-center items-center gap-2 text-white bg-lightGray px-6 py-3">
+                                
+        Back
+
+            </a>
+        </span>
+</div>
+        </section>
+  </main>
+
+  
+    
+  <!-- Alpine Plugins -->
+    <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Alpine Core -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="http://127.0.0.1:8000/lib/apexcharts/dist/apexcharts.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="http://127.0.0.1:8000/js/index.js" type="text/javascript" charset="utf-8"></script>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/fc-3.3.3/fh-3.1.9/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.4/sb-1.1.0/sp-1.3.0/sl-1.3.3/datatables.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+        
+        $("#toggle-pw").click(function () {
+            if ($(".show-hide-pw").attr("type") == "password")
+            {
+                //Change type attribute
+                $(".show-hide-pw").attr("type", "text");
+                $(".eye-show").addClass("hidden");
+                $(".eye-hide").removeClass("hidden");
+            } 
+            else
+            {
+                //Change type attribute
+                $(".show-hide-pw").attr("type", "password");
+                $(".eye-show").removeClass("hidden");
+                $(".eye-hide").addClass("hidden");
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+
+    let table = $('#table').DataTable({
+            'dom': 'Bfrtip',
+            "searching": true,
+            "lengthChange": false,
+            "buttons": [
+                'csv', 'excel', 'pdf', 'print'
+            ]
+    });
+    
+    let table1 = $('#table-1').DataTable({
+        "searching": false,
+        "lengthChange": false,
+    });
+
+    // $(document).ready( function () {
+    let table2 = $('#table-2').DataTable({
+        "searching": false,
+        "lengthChange": false,
+    });
+    // } );
+    let table3 = $('#table-3').DataTable({
+            'dom': 'Bfrtip',
+            "searching": true,
+            "lengthChange": false,
+    });
+
+    let table4 = $('#table-4').DataTable({
+        "searching": false,
+        "lengthChange": false,
+    });
+
+    $('.dt-buttons').css('display', 'none');
+
+    $('#search').keyup(function(){
+        table.search($(this).val()).draw() ;
+    })
+
+    $('#search1').keyup(function(){
+        table1.search($(this).val()).draw() ;
+    })
+
+    $('#search2').keyup(function(){
+        table2.search($(this).val()).draw() ;
+    })
+
+    $('#search3').keyup(function(){
+        table3.search($(this).val()).draw() ;
+    })
+
+    $('#search4').keyup(function(){
+        table4.search($(this).val()).draw() ;
+    })
+
+    $('#search_from, #search_to').on('change', function () {
+        table.draw();
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // $('#table-3_dataTables_length').css('margin-top', '-100px');
+        // $('#table-3_filter').css('margin-top', '-100px');
+        // $('#table-3_filter').css('margin-bottom', '0px');
+        // $('#table-3_filter label').css('visibility', 'hidden');
+        // $('#table-2_filter label').css('visibility', 'hidden');
+        // $('#table-2_filter').css('display', 'none');
+        $('.dataTables_filter').css('display', 'none');
+    });
+</script>
+
+<script>
+    // utils
+    // untuk handler file upload get name and size
+    function fileUploadHandler(inputElement){
+        const {name, size} = inputElement.files[0]
+        const parentContainer = inputElement.parentElement
+        const svgElement = parentContainer.querySelector('svg')
+        const paragrafElement = parentContainer.querySelector('p')
+
+        svgElement.style = 'visibility: hidden'
+        paragrafElement.classList.remove('hidden')
+        paragrafElement.textContent = `${name} | ${(size / 1024).toFixed(1)}KB`
+    }
+
+    // handler sorting hidden column on table
+    function sorting(currBtn, tableId){
+        const textContent = currBtn.textContent
+        const tableContainer = document.getElementById(tableId);
+        const column = tableContainer.querySelector('.column-hidden')
+        
+        if(textContent === 'Newest' && !column.classList.contains('sorting_asc')){
+            column.click()
+        }else if(textContent === 'Latest' && !column.classList.contains('sorting_desc')){
+            column.click()
+        }
+    }
+
+    // handle tooltip development
+    function handleDevelopmentFeatured(currentElement){
+        const containerCurrentElement = currentElement.nodeName == 'BUTTON' ? currentElement : currentElement.parentElement
+        const tooltip = containerCurrentElement.querySelector('.tooltip')
+        if(tooltip) return
+        containerCurrentElement.classList.add('relative')
+        const containerAbsolute = document.createElement('div')
+        containerAbsolute.classList.add('absolute', 'bottom-full', 'z-20')
+        containerAbsolute.innerHTML = `
+            <div class="bg-red-200 rounded-md p-2 border border-lightRed flex items-center gap-2 relative tooltip">
+    <span class="bg-lightRed rounded-md p-2">
+        <svg id="Iconly_Bold_Danger" data-name="Iconly/Bold/Danger" xmlns="http://www.w3.org/2000/svg" width="22" height="21" viewBox="0 0 22 21">
+            <g id="Danger" transform="translate(0)">
+                <path id="Danger-2" data-name="Danger" d="M19.048,21H2.948a3.274,3.274,0,0,1-1-.231A3.185,3.185,0,0,1,.241,18.988,3.385,3.385,0,0,1,.231,16.5L8.282,1.672A3.113,3.113,0,0,1,9.491.412,2.963,2.963,0,0,1,10.993,0a3.111,3.111,0,0,1,2.733,1.682L21.72,16.4A3.6,3.6,0,0,1,22,17.567a3.33,3.33,0,0,1-.8,2.358A3.056,3.056,0,0,1,19.048,21ZM11,14.318a1.019,1.019,0,0,0,0,2.036,1,1,0,0,0,.956-1.03A.983.983,0,0,0,11,14.318Zm0-7.212a.989.989,0,0,0-.968,1.006v3.271A1.008,1.008,0,0,0,11,12.4a.99.99,0,0,0,.956-1.018V8.111A.983.983,0,0,0,11,7.106Z" fill="#fff"/>
+            </g>
+        </svg>
+    </span>
+    <p class="whitespace-nowrap pr-5 text-dark">This feature is not available now</p>
+    <p class="text-dark absolute top-0 right-1 px-1 x-button cursor-pointer hover:bg-white hover:text-lightRed">x</p>
+</div>        `
+        containerCurrentElement.appendChild(containerAbsolute)
+
+        const xButton = containerAbsolute.querySelector('.x-button')
+        xButton.addEventListener('click', removeTooltip)
+
+        setTimeout(() => {
+            xButton.removeEventListener('click', removeTooltip)
+            xButton.parentElement.parentElement.remove()
+        }, 3000);
+    }
+
+    function removeTooltip(e){
+        e.stopPropagation();
+        e.preventDefault();
+        
+        e.target.parentElement.parentElement.remove()
+    }
+    // end handle tooltip development
+</script>
+
+
+</body>
+
+</html>
