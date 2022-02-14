@@ -35,7 +35,7 @@ const create = (request, response) => {
             // user not exist// user not exist
             let name = 'default.jpg'
             let complete_path = base_url + 'dokumens/user/' + name
-            if (request.files!==null) {
+            if (request.files) {
                 let sampleFile = request.files.photo;
                 console.log(sampleFile);
                 const now = Date.now()
@@ -46,10 +46,8 @@ const create = (request, response) => {
                     if (err)
                         console.log(err);
                 });
-            } else {
-                name = null;
-                complete_path=null;
             }
+
             if (role_id==null)
             {
                 role_id=0;
@@ -297,7 +295,8 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { username, password, email, photo, nama_lengkap, role_id }
+    const { username, password, email, photo, nama_lengkap, role_id, 
+        pegawai_id }
         = request.body
 
     pool.query('SELECT Count(*) as total FROM tbl_users WHERE id = $1', [id], (error, results) => {
@@ -326,7 +325,7 @@ const update = (request, response) => {
                         name = results.rows[0].photo;
                         complete_path = results.rows[0].url_photo;
 
-                        if (request.files!==null) {
+                        if (request.files) {
                             console.log('ada foto')
                             doc = results.rows[0].photo;
                             if (doc != 'default.jpg') {
@@ -346,9 +345,6 @@ const update = (request, response) => {
                                 if (err)
                                     console.log(err);
                             });
-                        }else{
-                            name=null;
-                            complete_path=null;
                         }
 
                         if (role_id==null)
@@ -356,11 +352,10 @@ const update = (request, response) => {
                             role_id=0;
                         }
 
-                        pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,role_id=$8 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, role_id], (error, results) => {
+                        pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,role_id=$8,pegawai_id=$9 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, role_id, pegawai_id], (error, results) => {
                             if (error) {
-                                throw error
+                                console.log(error)
                             }
-
                             response.status(200).json({ success: true, data: "User baru berhasil diperbarui" });
                         });
                     });
