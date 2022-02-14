@@ -144,7 +144,7 @@ const read_by_voyage_id = (request, response) => {
 
 const update_operator = (request, response) => {
   const id = parseInt(request.params.id);
-  const { voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, is_complete, engine_on, low_tide_time, high_tide_time, air_pressure }
+  const { voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, weather_valid_from_2, weather_valid_to_2, weather_data_feed_2, wind_speed_min_2, wind_speed_max_2, wind_from_2, wind_to_2, humidity_min_2, humidity_max_2, temperature_min_2, temperature_max_2, low_tide_2, high_tide_2, weather_2, informasi_cuaca_lainnya_2, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, is_complete, engine_on, low_tide_time, high_tide_time, air_pressure, low_tide_time_2, high_tide_time_2, air_pressure_2 }
     = request.body;
   let doc;
   //console.log(mmsi);
@@ -169,8 +169,8 @@ const update_operator = (request, response) => {
 
     //   console.log(name);
     const update_time = new Date;
-    pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1,weather_valid_from=$2,weather_valid_to=$3,weather_data_feed=$4,wind_speed_min=$5,wind_speed_max=$6,wind_from=$7,wind_to=$8,humidity_min=$9,humidity_max=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,weather=$15,informasi_cuaca_lainnya=$16,informasi_traffic=$17,advice_update_ais=$18,advice_vts=$19,informasi_lainnya=$20,radio_on=$21,rudder_ok=$22,crew_condition_ok=$23,pandu_on=$24,updated_at=$25,is_complete=$26,engine_on=$28,low_tide_time=$29,high_tide_time=$30,air_pressure=$31 where id=$27'
-      , [voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, update_time, is_complete, id, engine_on, low_tide_time, high_tide_time, air_pressure], (error, results) => {
+    pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1,weather_valid_from=$2,weather_valid_to=$3,weather_data_feed=$4,wind_speed_min=$5,wind_speed_max=$6,wind_from=$7,wind_to=$8,humidity_min=$9,humidity_max=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,weather=$15,informasi_cuaca_lainnya=$16,informasi_traffic=$17,advice_update_ais=$18,advice_vts=$19,informasi_lainnya=$20,radio_on=$21,rudder_ok=$22,crew_condition_ok=$23,pandu_on=$24,updated_at=$25,is_complete=$26,engine_on=$28,low_tide_time=$29,high_tide_time=$30,air_pressure=$31,weather_valid_from_2=$32, weather_valid_to_2=$33, weather_data_feed_2=$34, wind_speed_min_2=$35, wind_speed_max_2=$36, wind_from_2=$37, wind_to_2=$38, humidity_min_2=$39, humidity_max_2=$40, temperature_min_2=$41, temperature_max_2=$42, low_tide_2=$43, high_tide_2=$44, weather_2=$45, informasi_cuaca_lainnya_2=$46, low_tide_time_2=$47, high_tide_time_2=$48, air_pressure_2=$49 where id=$27'
+      , [voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, update_time, is_complete, id, engine_on, low_tide_time, high_tide_time, air_pressure, weather_valid_from_2, weather_valid_to_2, weather_data_feed_2, wind_speed_min_2, wind_speed_max_2, wind_from_2, wind_to_2, humidity_min_2, humidity_max_2, temperature_min_2, temperature_max_2, low_tide_2, high_tide_2, weather_2, informasi_cuaca_lainnya_2, low_tide_time_2, high_tide_time_2, air_pressure_2], (error, results) => {
         if (error) {
           throw error
           //response.status(201).send(error)
@@ -209,7 +209,7 @@ const update_ksu = (request, response) => {
     total = results.rows[0].total;
     if (parseInt(total) == parseInt('0')) {
       var name = '';
-      if (request.files!==null) {
+      if (request.files) {
 
         doc = results.rows[0].dokumen_spb;
         var doc_path = __dirname + path.join('/dokumens/clearance_out/' + doc);
