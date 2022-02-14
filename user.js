@@ -46,8 +46,11 @@ const create = (request, response) => {
                     if (err)
                         console.log(err);
                 });
-            } else {
-                name = null;
+            }
+
+            if (role_id==null)
+            {
+                role_id=0;
             }
 
             pool.query('INSERT INTO tbl_users (username,password,email,photo,nama_lengkap,url_photo, role_id, pegawai_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)', [username, password, email, name, nama_lengkap, complete_path, role_id, pegawai_id], (error, results) => {
@@ -292,7 +295,8 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { username, password, email, photo, nama_lengkap, role_id }
+    const { username, password, email, photo, nama_lengkap, role_id, 
+        pegawai_id }
         = request.body
 
     pool.query('SELECT Count(*) as total FROM tbl_users WHERE id = $1', [id], (error, results) => {
@@ -343,11 +347,15 @@ const update = (request, response) => {
                             });
                         }
 
-                        pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,role_id=$8 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, role_id], (error, results) => {
-                            if (error) {
-                                throw error
-                            }
+                        if (role_id==null)
+                        {
+                            role_id=0;
+                        }
 
+                        pool.query('UPDATE tbl_users SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,role_id=$8,pegawai_id=$9 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, role_id, pegawai_id], (error, results) => {
+                            if (error) {
+                                console.log(error)
+                            }
                             response.status(200).json({ success: true, data: "User baru berhasil diperbarui" });
                         });
                     });

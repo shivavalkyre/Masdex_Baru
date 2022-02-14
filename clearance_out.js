@@ -6,13 +6,13 @@ const base_url = process.env.base_url;
 const create = (request, response) => {
   const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan }
     = request.body
-
-
-
+  var name= null;
+  if (request.files!==null)
+  {
   let sampleFile = request.files.dokumen_spb;
   console.log(sampleFile);
   const now = Date.now()
-  let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+  name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
   let complete_path = base_url + 'dokumens/clearance_out/' + name;
   console.log(__dirname);
   sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
@@ -20,7 +20,10 @@ const create = (request, response) => {
       console.log(err);
   });
 
-
+  }else{
+    name=null;
+    complete_path=null;
+  }
 
   pool.query('INSERT INTO tbl_insaf_clearance_out (voyage_id,nomor_spb,tanggal_jam_spb,pelabuhan_tujuan,eta_pelabuhan_tujuan,dokumen_spb,etd_pelabuhan_tujuan,url_dokumen_spb) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)'
     , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, complete_path], (error, results) => {
@@ -141,7 +144,7 @@ const read_by_voyage_id = (request, response) => {
 
 const update_operator = (request, response) => {
   const id = parseInt(request.params.id);
-  const { voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, is_complete, engine_on, low_tide_time, high_tide_time, air_pressure }
+  const { voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, weather_valid_from_2, weather_valid_to_2, weather_data_feed_2, wind_speed_min_2, wind_speed_max_2, wind_from_2, wind_to_2, humidity_min_2, humidity_max_2, temperature_min_2, temperature_max_2, low_tide_2, high_tide_2, weather_2, informasi_cuaca_lainnya_2, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, is_complete, engine_on, low_tide_time, high_tide_time, air_pressure, low_tide_time_2, high_tide_time_2, air_pressure_2 }
     = request.body;
   let doc;
   //console.log(mmsi);
@@ -166,8 +169,8 @@ const update_operator = (request, response) => {
 
     //   console.log(name);
     const update_time = new Date;
-    pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1,weather_valid_from=$2,weather_valid_to=$3,weather_data_feed=$4,wind_speed_min=$5,wind_speed_max=$6,wind_from=$7,wind_to=$8,humidity_min=$9,humidity_max=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,weather=$15,informasi_cuaca_lainnya=$16,informasi_traffic=$17,advice_update_ais=$18,advice_vts=$19,informasi_lainnya=$20,radio_on=$21,rudder_ok=$22,crew_condition_ok=$23,pandu_on=$24,updated_at=$25,is_complete=$26,engine_on=$28,low_tide_time=$29,high_tide_time=$30,air_pressure=$31 where id=$27'
-      , [voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, update_time, is_complete, id, engine_on, low_tide_time, high_tide_time, air_pressure], (error, results) => {
+    pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1,weather_valid_from=$2,weather_valid_to=$3,weather_data_feed=$4,wind_speed_min=$5,wind_speed_max=$6,wind_from=$7,wind_to=$8,humidity_min=$9,humidity_max=$10,temperature_min=$11,temperature_max=$12,low_tide=$13,high_tide=$14,weather=$15,informasi_cuaca_lainnya=$16,informasi_traffic=$17,advice_update_ais=$18,advice_vts=$19,informasi_lainnya=$20,radio_on=$21,rudder_ok=$22,crew_condition_ok=$23,pandu_on=$24,updated_at=$25,is_complete=$26,engine_on=$28,low_tide_time=$29,high_tide_time=$30,air_pressure=$31,weather_valid_from_2=$32, weather_valid_to_2=$33, weather_data_feed_2=$34, wind_speed_min_2=$35, wind_speed_max_2=$36, wind_from_2=$37, wind_to_2=$38, humidity_min_2=$39, humidity_max_2=$40, temperature_min_2=$41, temperature_max_2=$42, low_tide_2=$43, high_tide_2=$44, weather_2=$45, informasi_cuaca_lainnya_2=$46, low_tide_time_2=$47, high_tide_time_2=$48, air_pressure_2=$49 where id=$27'
+      , [voyage_id, weather_valid_from, weather_valid_to, weather_data_feed, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, temperature_min, temperature_max, low_tide, high_tide, weather, informasi_cuaca_lainnya, informasi_traffic, advice_update_ais, advice_vts, informasi_lainnya, radio_on, rudder_ok, crew_condition_ok, pandu_on, update_time, is_complete, id, engine_on, low_tide_time, high_tide_time, air_pressure, weather_valid_from_2, weather_valid_to_2, weather_data_feed_2, wind_speed_min_2, wind_speed_max_2, wind_from_2, wind_to_2, humidity_min_2, humidity_max_2, temperature_min_2, temperature_max_2, low_tide_2, high_tide_2, weather_2, informasi_cuaca_lainnya_2, low_tide_time_2, high_tide_time_2, air_pressure_2], (error, results) => {
         if (error) {
           throw error
           //response.status(201).send(error)
@@ -206,7 +209,7 @@ const update_ksu = (request, response) => {
     total = results.rows[0].total;
     if (parseInt(total) == parseInt('0')) {
       var name = '';
-      if (request.files.size > 0) {
+      if (request.files) {
 
         doc = results.rows[0].dokumen_spb;
         var doc_path = __dirname + path.join('/dokumens/clearance_out/' + doc);
@@ -227,6 +230,7 @@ const update_ksu = (request, response) => {
         });
       } else {
         name = null;
+        complete_path=null;
       }
 
       pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,url_dokumen_spb)
@@ -267,7 +271,7 @@ const update = (request, response) => {
   if (dokumen_spb != 'kosong') {
     console.log('masuk')
     var name = '';
-    if (request.files.size > 0) {
+    if (request.files!==null) {
       let sampleFile = request.files.dokumen_spb;
       //console.log(sampleFile);
       const now = Date.now()
@@ -282,6 +286,7 @@ const update = (request, response) => {
       });
     } else {
       name = null;
+      complete_path=null;
     }
     pool.query(`UPDATE tbl_insaf_clearance_out SET dokumen_spb = $1 WHERE id = $2`, [name, iddata], (error, result) => {
       if (error) {

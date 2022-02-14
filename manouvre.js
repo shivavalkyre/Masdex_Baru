@@ -8,7 +8,7 @@ const create = (request, response) => {
     = request.body
     
     var name='';
-    if (request.files.size>0){
+    if (request.files!==null>0){
     let sampleFile = request.files.dokumen_spog;
     console.log(sampleFile);
      const now = Date.now()
@@ -21,6 +21,7 @@ const create = (request, response) => {
      });
     }else{
       name=null;
+      complete_path=null;
     }
 
      pool.query('INSERT INTO tbl_insaf_manouvre (voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,url_dokumen_spog) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)'
@@ -173,7 +174,7 @@ const update = (request, response) => {
         
          console.log(doc_path);
          var name='';
-         if (request.files.size>0){
+         if (request.files!==null){
          let sampleFile = request.files.dokumen_spog;
          console.log(sampleFile);
           const now = Date.now()
@@ -188,6 +189,7 @@ const update = (request, response) => {
           });
         }else{
           name=null;
+          complete_path=null;
         }
 
           console.log(name);

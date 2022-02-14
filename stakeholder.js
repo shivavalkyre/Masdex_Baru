@@ -27,7 +27,7 @@ const create = (request, response) => {
   let complete_path = base_url + 'dokumens/stakeholder/logo/' + name
 
 
-  if (request.files) {
+  if (request.files!==null) {
     let sampleFile = request.files.logo;
     console.log(sampleFile);
     const now = Date.now()
@@ -41,6 +41,7 @@ const create = (request, response) => {
   }else
   {
     name = null;
+    complete_path=null;
   }
 
   pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo,email_company) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path, email_company], (error, results) => {
@@ -194,6 +195,7 @@ const update = (request, response) => {
           });
         }else{
           name=null;
+          complete_path=null;
         }
 
         console.log(name);

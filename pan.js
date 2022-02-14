@@ -396,16 +396,7 @@ const destroyPANdetail = (request, response) => {
 		if (error) {
 			throw error;
 		}
-		pool.query(`UPDATE tbl_insaf_pan_detail 
-				 SET is_delete = '1'
-				 WHERE pan_id = $1
-				 AND id = $2;`, [pan_id, pan_detail_id], (error, results) => {
-			if (error) {
-				throw error;
-			}
-			response.status(200).json("Data kapal berhasil dihapus")
-		})
-		response.status(200).json("Data kapal berhasil dihapus")
+		response.status(200).json("Data pan berhasil dihapus")
 	})
 }
 
