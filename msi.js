@@ -145,11 +145,10 @@ const createMSI = (request, response) => {
   
   const updateMSI = (request, response) => {
     const id = parseInt(request.params.id)
-    // console.log(id)
-    const { no_jurnal, news_title, msi_category, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, voyage_id } = request.body
+    const { no_jurnal, news_title, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, voyage_id, msi_category} = request.body
     var updated_at = new Date()
     pool.query(
-      'UPDATE tbl_insaf_msi set no_jurnal = $1 , news_title = $2, valid_from = $3, valid_to = $4, information = $5, sumber_data = $6, wind_speed_min = $7, wind_speed_max = $8, wind_from = $9, wind_to = $10, humidity_min = $11, humidity_max = $12, air_pressure = $13, temperature_min = $14, temperature_max = $15, low_tide = $16, high_tide = $17, low_tide_time = $18, high_tide_time = $19, weather = $20, additional_info = $21, updated_at = $22, voyage_id = $23, msi_category = $24, WHERE id = $25',
+      'UPDATE tbl_insaf_msi set no_jurnal = $1 , news_title = $2, valid_from = $3, valid_to = $4, information = $5, sumber_data = $6, wind_speed_min = $7, wind_speed_max = $8, wind_from = $9, wind_to = $10, humidity_min = $11, humidity_max = $12, air_pressure = $13, temperature_min = $14, temperature_max = $15, low_tide = $16, high_tide = $17, low_tide_time = $18, high_tide_time = $19, weather = $20, additional_info = $21, updated_at = $22, voyage_id = $23, msi_category = $24 WHERE id = $25',
       [no_jurnal, news_title, valid_from, valid_to, information, sumber_data, wind_speed_min, wind_speed_max, wind_from, wind_to, humidity_min, humidity_max, air_pressure, temperature_min, temperature_max, low_tide, high_tide, low_tide_time, high_tide_time, weather, additional_info, updated_at, voyage_id, msi_category, id],
       (error, results) => {
         if (error) {
@@ -211,7 +210,18 @@ const createMSI = (request, response) => {
       
     })
   }
-  
+
+  const deleteMSIDetailPermanent = (request, response) => {
+    const id = parseInt(request.params.id)
+    pool.query('DELETE FROM tbl_insaf_msi_detail WHERE msi_id = $1 ', [ id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send({success:true, data:`MSI Detail Has Been Deleted with ID: ${id}`})
+      
+    })
+  }
+
   // insaf_msidetailxmasdexkapal
     // get all NTM detail data based on msi_id
     const getMSIDetailById = (request, response) => 
@@ -278,5 +288,6 @@ const createMSI = (request, response) => {
       deleteMSIDetail,
       getMSIDetailById,
       deleteMSIDetailByIdParent,
+      deleteMSIDetailPermanent,
       readJenisMSI
     }
