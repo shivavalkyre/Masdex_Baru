@@ -268,8 +268,7 @@ const updatePAN = (request, response) => {
 							WHERE id = $21
 							AND is_delete = '0';`, [no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, id, updated_at, updated_by], (errors, results) => {
 				if (errors) {
-					// throw error
-					response.status(201).send(errors)
+					throw errors
 				}
 
 				response.status(200).send({ success: true, data: "Data yang anda pilih berhasil update" });
