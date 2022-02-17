@@ -136,7 +136,7 @@ const deleteDistress = (request, response) => {
 }
 
 const createDistressDetail = (request, response) => {
-    const {distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status,voyage_id} = request.body
+    const {distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status, voyage_id} = request.body
     pool.query('INSERT INTO tbl_insaf_distress_detail (distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status,voyage_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)'
     , [distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status,voyage_id], (error, results) => {
         if (error) {
@@ -188,9 +188,9 @@ const readDistressDetail = (request, response) => {
 
 const readDistressDetailByID = (request, response) => {
     const id = parseInt(request.params.id)
-
+    console.log(id);
     pool.query(
-        'SELECT * FROM tbl_insaf_distress_detail WHERE id=$1', [id],
+        'SELECT * FROM tbl_insaf_distress_detail WHERE distress_id=$1', [id],
         (error, results) => {
           if (error) {
             response.status(400).send({success:false,data:error})
@@ -398,6 +398,37 @@ const deletePelaporDistress = (request, response) => {
 				 })
   }
 
+  // participant
+  const getAllpartisipanBydistressid = (request, response) =>
+  {
+	const distressid = request.params.distressid;	
+	var res = []
+    var items = []
+    pool.query(`SELECT COUNT(*) as total 
+				FROM tbl_insaf_distress_chat_participant
+				WHERE tbl_insaf_distress_chat_participant.distress_id = $1;`, [distressid], (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.push({total:results.rows[0].total})
+      // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+      pool.query(`SELECT * 
+				FROM tbl_insaf_distress_chat_participant
+				WHERE tbl_insaf_distress_chat_participant.distress_id = $1;`, [distressid], (error, result) => 
+			  {
+					if(error)
+					{
+						response.status(400).json({success:false, data: error})
+					}
+					items.push({rows:result.rows})
+					res.push(items)
+					//response.status(200).send({success:true,data:res})
+					response.status(200).send(res)
+			  }
+	  )
+    })
+  }
+
 module.exports = {
     createDistress,
     readDistress,
@@ -415,4 +446,5 @@ module.exports = {
     updatePelaporDistress,
     deletePelaporDistress,
 	getJenisDistress, 
+  getAllpartisipanBydistressid
   }
