@@ -89,6 +89,39 @@ const read_by_id = (request, response) => {
 
 }
 
+const show_by_id = (request, response) => {
+
+    const id = parseInt(request.params.id);
+    //console.log('Here');
+    //console.log(id);
+    const { page, rows } = request.body
+    var page_req = page || 1
+    var rows_req = rows || 10
+    var offset = (page_req - 1) * rows_req
+    var res = []
+    var items = []
+
+    pool.query('SELECT count(*) as total FROM tbl_insaf_contravention where id=$1 and is_delete=false', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        //console.log(results.rows[0].total)
+        res.push({ total: results.rows[0].total })
+
+        var sql = 'SELECT * FROM insaf_contravention_read_all where id=$1'
+        pool.query(sql, [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            items.push({ rows: results.rows })
+            res.push(items)
+            response.status(200).send({ success: true, data: res })
+        })
+
+    })
+
+}
+
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);

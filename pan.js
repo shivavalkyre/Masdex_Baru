@@ -464,6 +464,36 @@ const getPANdetailbyPANId = (request, response) => {
 	)
 }
 
+// get PAN detail data based on pan_id
+// use this function when to check tbl_insaf_pan_detail data exist based on pan_id
+const showPANdetailByPANid = (request, response) => {
+	const pan_detail_id = parseInt(request.params.pan_detail_id);
+	pool.query(`SELECT tbl_insaf_pan.no_jurnal, tbl_insaf_pan.waktu_kejadian, tbl_insaf_pan.degree1, tbl_insaf_pan.minute1, tbl_insaf_pan.second1, tbl_insaf_pan.direction1, tbl_insaf_pan.degree2, tbl_insaf_pan.minute2, tbl_insaf_pan.second2, tbl_insaf_pan.direction2, tbl_insaf_pan.memerlukan_tindakan, tbl_insaf_jenis_pan.jenis_pan, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_pan.keterangan_lainnya, tbl_insaf_pan.master_onboard, tbl_insaf_pan.phone_onboard, tbl_insaf_pan.second_officer, tbl_insaf_pan.phone_second_officer
+	FROM tbl_insaf_pan JOIN tbl_insaf_jenis_pan ON tbl_insaf_pan.jenis_pan = tbl_insaf_jenis_pan.id
+	JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_pan.sumber_informasi = tbl_insaf_sumber_informasi_awal.id
+	WHERE tbl_insaf_pan.id = $1
+	AND tbl_insaf_pan.is_delete = '0'
+	LIMIT 1;`, [pan_detail_id], (error, result) => {
+		if (error) {
+			throw error;
+		}
+		pool.query(`SELECT tbl_insaf_pan_detail.id, tbl_insaf_pan_detail.pan_id, tbl_masdex_kapal.mmsi, tbl_masdex_jenis_kapal.ship_type, tbl_masdex_kapal.imo, tbl_masdex_kapal.gt, tbl_masdex_kapal.ship_name, tbl_masdex_kapal.call_sign, tbl_masdex_kapal.flag, tbl_masdex_kapal.length, tbl_masdex_kapal.width, tbl_masdex_kapal.sensor_type FROM tbl_masdex_kapal
+		JOIN tbl_insaf_pan_detail ON tbl_masdex_kapal.mmsi = tbl_insaf_pan_detail.mmsi
+		JOIN tbl_masdex_jenis_kapal ON tbl_masdex_kapal.ship_type = tbl_masdex_jenis_kapal.id
+		WHERE tbl_insaf_pan_detail.pan_id = $1 AND tbl_insaf_pan_detail.is_delete = '0';`, [pan_detail_id], (error, results) => {
+			if (error) {
+				throw error;
+			}
+			response.status(200).json({
+				success: true,
+				data: results.rows,
+				detail: result.rows
+			})
+		}
+		)
+	})
+}
+
 /*
   get all basic data when user want to create or update PAN data
 */
@@ -511,4 +541,5 @@ module.exports = {
 	getLatestPAN,
 	getSumberInformasiAwal,
 	getJenisPan,
+	showPANdetailByPANid
 }
