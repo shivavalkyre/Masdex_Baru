@@ -468,8 +468,10 @@ app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDi
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
 
+
 // participant
 app.get('/api/V1/masdex/participant_distress/insaf/read/:distressid', distress.getAllpartisipanBydistressid);
+app.post('/api/V1/masdex/room_distress/create/:distressid/chatroom', distress.storePartisipanChatroom);
 
 // jenis distress 
 app.get('/api/V1/masdex/jenis_distress/read', distress.getJenisDistress);
