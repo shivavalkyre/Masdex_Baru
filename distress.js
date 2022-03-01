@@ -136,7 +136,7 @@ const deleteDistress = (request, response) => {
 }
 
 const createDistressDetail = (request, response) => {
-    const {distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status,voyage_id} = request.body
+    const {distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status, voyage_id} = request.body
     pool.query('INSERT INTO tbl_insaf_distress_detail (distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status,voyage_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)'
     , [distress_id, mmsi, pelabuhan_from, pelabuhan_to, status_bernavigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, jumlah_awak_kapal, jumlah_penumpang, jenis_muatan, jenis_bantuan, keterangan_lainnya, penanggulangan_yang_dilakukan, mob_qty, korban_luka_qty, korban_jiwa_qty, kerusakan_kapal, tindakan, need_help, status_upaya, mob_status, korban_luka_status , korban_jiwa_status,voyage_id], (error, results) => {
         if (error) {
@@ -188,9 +188,9 @@ const readDistressDetail = (request, response) => {
 
 const readDistressDetailByID = (request, response) => {
     const id = parseInt(request.params.id)
-
+    console.log(id);
     pool.query(
-        'SELECT * FROM tbl_insaf_distress_detail WHERE id=$1', [id],
+        'SELECT * FROM tbl_insaf_distress_detail WHERE distress_id=$1', [id],
         (error, results) => {
           if (error) {
             response.status(400).send({success:false,data:error})
@@ -398,6 +398,111 @@ const deletePelaporDistress = (request, response) => {
 				 })
   }
 
+  // participant
+  const getAllpartisipanBydistressid = (request, response) =>
+  {
+	const distressid = request.params.distressid;	
+	var res = []
+    var items = []
+    pool.query(`SELECT COUNT(*) as total 
+				FROM tbl_insaf_distress_chat_participant
+				WHERE tbl_insaf_distress_chat_participant.distress_id = $1;`, [distressid], (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.push({total:results.rows[0].total})
+      // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+      pool.query(`SELECT * 
+				FROM tbl_insaf_distress_chat_participant
+				WHERE tbl_insaf_distress_chat_participant.distress_id = $1;`, [distressid], (error, result) => 
+			  {
+					if(error)
+					{
+						response.status(400).json({success:false, data: error})
+					}
+					items.push({rows:result.rows})
+					res.push(items)
+					//response.status(200).send({success:true,data:res})
+					response.status(200).send(res)
+			  }
+	  )
+    })
+  }
+
+  const storePartisipanChatroom = (request, response) => 
+  {
+	  const distress_id = request.params.distressid
+	  const { username, roomname, user_id, email } = request.body
+    var is_osc=0;
+
+	  pool.query(`INSERT INTO tbl_insaf_distress_chat_participant (distress_id, username, roomname, user_id, is_osc) VALUES ($1,$2, $3, $4, '0')`, [distress_id, username, roomname, parseInt(user_id) ], (error, results) => 
+	    {
+			//console.log(results)
+		  if (error) {
+			if (error.code == '23505')
+			{
+				response.status(400).send({success:false,data:'Duplicate data'})
+				return;
+			}else{
+				response.status(400).send({success:false,data:error})
+			}
+		  }else{
+			// response.status(200).send({success:true,data: 'Data saved in database'})
+      // generate link di ubah sesuai kebutuhan
+      var url='';
+       if (parseInt(is_osc)===0){
+         url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
+       }else{
+         url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
+       }
+
+
+       
+                     // send email activation ================================================================
+                     //const transporter = nodemailer.createTransport({
+                    //  host: 'smtp.mailtrap.io',
+                    //  port: 2525,
+                    //  ssl: false,
+                    //  tls: true,
+                    //  auth: {
+                    //    user: 'fa78221d8b890e',
+                    //    pass: 'a5b8b160501000'
+                    //  }
+                    //});
+            // send email forgot password ================================================================
+            const transporter = nodemailer.createTransport({
+              host: 'srv115.niagahoster.com',
+              port: 465,
+              ssl: false,
+              tls: true,
+              auth: {
+                user: 'admin.insaf@disnavpriok.id',
+                pass: 'dispriok123'
+              }
+            });
+            
+            
+                    const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
+                    const mailOptions = {
+                      from: 'admin.insaf@disnavpriok.id',
+                      to: email,
+                      subject: roomname,
+                      html: html_content
+                    };
+                    
+                    transporter.sendMail(mailOptions, function(error, info){
+                      if (error) {
+                        console.log(error);
+                      } else {
+                        response.status(200).send({success:true,data:'Email activation was sent'})
+                      }
+                    });
+
+		  }
+		}
+	  )
+  }
+
 module.exports = {
     createDistress,
     readDistress,
@@ -415,4 +520,6 @@ module.exports = {
     updatePelaporDistress,
     deletePelaporDistress,
 	getJenisDistress, 
+  storePartisipanChatroom,
+  getAllpartisipanBydistressid
   }

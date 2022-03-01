@@ -77,6 +77,7 @@ const jenis_berita_marine_safety_informasi = require('./jenis_berita_marine_safe
 const distress = require('./distress')
 const pan = require('./pan')
 const securite = require('./securite')
+const msi = require('./msi')
 const jenis_distress = require('./jenis_distress')
 const jenis_stakeholder = require('./jenis_stakeholder')
 const jenis_kapal = require('./jenis_kapal')
@@ -466,6 +467,14 @@ app.post('/api/V1/masdex/pelapor_distress/insaf/read', distress.readPelaporDistr
 app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDistressByID);
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
+
+
+// participant
+app.get('/api/V1/masdex/participant_distress/insaf/read/:distressid', distress.getAllpartisipanBydistressid);
+app.post('/api/V1/masdex/room_distress/create/:distressid/chatroom', distress.storePartisipanChatroom);
+
+// jenis distress 
+app.get('/api/V1/masdex/jenis_distress/read', distress.getJenisDistress);
 // ================================= end distress ===============================
 
 // ================================= contravention =====================================
@@ -512,6 +521,23 @@ app.delete('/api/securitedetail/insaf/delete/:id', securite.deleteSecuriteDetail
 app.put('/api/V1/securite/update/:id', securite.updateSecurite)
 app.get('/api/V1/securite/read_resume/:id', securite.getSecuriteResumeById)
 // ============================ END SECURITE (INSAF) =====================================
+
+// ============================ MSI (INSAF) =====================================
+app.post('/api/V1/msi/create', msi.createMSI)
+app.post('/api/V1/msidetail/create', msi.createMSIDetail)
+app.post('/api/V1/msi/read', msi.getMSI)
+app.get('/api/V1/msi/read/:id', msi.getMSIById)
+app.get('/api/V1/msi/read_detail/:id', msi.getMSIDetailById)
+app.delete('/api/V1/msi/delete/:id', msi.deleteMSI)
+app.delete('/api/V1/msi/delete_msi_detail/:id', msi.deleteMSIDetail)
+app.delete('/api/V1/msi/delete_msi_detail_parent/:id', msi.deleteMSIDetailByIdParent)
+app.delete('/api/V1/msi/delete_msi_detail_permanent/:id', msi.deleteMSIDetailPermanent)
+app.put('/api/V1/msi/update/:id', msi.updateMSI)
+app.put('/api/V1/msi/update_msi_detail/:id', msi.updateMSIDetail)
+
+// jenis berita msi
+app.post('/api/V1/jenismsi/read', msi.readJenisMSI)
+// ============================ END MSI (INSAF) =====================================
 
 app.get('/api/V1/masdex/jenis_distress', jenis_distress.read);
 app.post('/api/V1/insaf/jenis_distress/create', jenis_distress.create);
