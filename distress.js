@@ -432,10 +432,10 @@ const deletePelaporDistress = (request, response) => {
   const storePartisipanChatroom = (request, response) => 
   {
 	  const distress_id = request.params.distressid
-	  const { username, roomname, email } = request.body
+	  const { username, roomname, user_id, email } = request.body
     var is_osc=0;
 
-	  pool.query(`INSERT INTO tbl_insaf_distress_chat_participant (roomname, distress_id, username, is_osc) VALUES ($1,$2, $3, '0')`, [roomname, distress_id, username], (error, results) => 
+	  pool.query(`INSERT INTO tbl_insaf_distress_chat_participant (distress_id, username, roomname, user_id, is_osc) VALUES ($1,$2, $3, $4, '0')`, [distress_id, username, roomname, parseInt(user_id) ], (error, results) => 
 	    {
 			//console.log(results)
 		  if (error) {
