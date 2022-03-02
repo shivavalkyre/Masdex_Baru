@@ -49,6 +49,7 @@ app.use(express.urlencoded({
 // modul routing here
 const kapal = require('./kapal');
 const pkk = require('./pkk');
+const noon_position = require('./noon_position');
 const voyage = require('./voyage');
 const notice_to_marine = require('./notice_to_marine');
 const master_cable = require('./master_cable');
@@ -110,6 +111,14 @@ app.get('/api/V1/insaf/voyage', voyage.read);
 app.get('/api/V1/insaf/voyage/:id',voyage.read_by_id);
 app.put('/api/V1/insaf/voyage/:id', voyage.update);
 app.delete('/api/V1/insaf/voyage/:id', voyage.delete_);
+// ==========================================================================
+
+// ============================== Noon Position ==============================
+app.post('/api/V1/insaf/noon_position/create', noon_position.create);
+app.get('/api/V1/insaf/noon_position/read', noon_position.read);
+app.get('/api/V1/insaf/noon_position/:id',noon_position.read_by_id);
+app.put('/api/V1/insaf/noon_position/update/:id', noon_position.update);
+app.delete('/api/V1/insaf/noon_position/delete/:id', noon_position.delete_);
 // ==========================================================================
 
 // ============================== Telkompel =================================
