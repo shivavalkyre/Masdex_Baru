@@ -51,6 +51,7 @@ const kapal = require('./kapal');
 const kategori_kapal = require('./kategori_kapal');
 const pkk = require('./pkk');
 const voyage = require('./voyage');
+const notice_to_marine = require('./notice_to_marine');
 const master_cable = require('./master_cable');
 const clearance_in = require('./clearance_in');
 const entering_to_port = require('./entering_to_port');
@@ -262,6 +263,23 @@ app.get('/api/V1/masdex/pkk/:id', pkk.read_by_id);
 app.put('/api/V1/masdex/pkk/:id', pkk.update);
 app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
 // ==========================================================================
+
+// ============================== Notice to Marine =======================================
+app.post('/api/V1/insaf/notice_to_marine/create', notice_to_marine.create);
+app.get('/api/V1/insaf/notice_to_marine/read', notice_to_marine.read);
+app.get('/api/V1/insaf/notice_to_marine/:id', notice_to_marine.read_by_id);
+app.put('/api/V1/insaf/notice_to_marine/update/:id', notice_to_marine.update);
+app.delete('/api/V1/insaf/notice_to_marine/delete/:id', notice_to_marine.delete_);
+// Notice to Marine Detail
+
+app.post('/api/V1/insaf/notice_to_marine_detail/create', notice_to_marine.createDetail);
+app.get('/api/V1/insaf/notice_to_marine_detail/read', notice_to_marine.readDetail);
+app.get('/api/V1/insaf/notice_to_marine_detail/:id', notice_to_marine.read_by_idDetail);
+app.get('/api/V1/insaf/notice_to_marine_detail/ntm/:id', notice_to_marine.read_by_ntmDetail);
+app.put('/api/V1/insaf/notice_to_marine_detail/update/:id', notice_to_marine.updateDetail);
+app.delete('/api/V1/insaf/notice_to_marine_detail/delete/:id', notice_to_marine.deleteDetail);
+// ==========================================================================
+
 // ============================== 2.Master Cable ==============================
 app.post('/api/V1/masdex/master_cable', master_cable.create);
 app.get('/api/V1/masdex/master_cable', master_cable.read);
@@ -428,6 +446,7 @@ app.post('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
     app.get('/api/V1/dokumens/spog/:filename', manouvre.download);
     app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
+    app.get('/api/V1/dokumens/ntm/:filename', notice_to_marine.download);
 // ==========================================================================
 
 // ============================= Weather Part ===================================
@@ -480,7 +499,8 @@ app.get('/api/V1/masdex/pan/jenispan', pan.getJenisPan)
 app.get('/api/V1/masdex/pan_detail/:id', pan.getPANdetail)
 app.post('/api/V1/masdex/pan_detail/store/:id', pan.storePANdetail)
 app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetailbyId)
-app.get('/api/V1/masdex/pan_detail/show_by_pan_id/:pan_detail_id', pan.getPANdetailbyPANId)
+app.get('/api/V1/masdex/pan_detail/edit_by_pan_id/:pan_detail_id', pan.getPANdetailbyPANId)
+app.get('/api/V1/masdex/pan_detail/show_by_pan_id/:pan_detail_id', pan.showPANdetailByPANid)
 app.put('/api/V1/masdex/pan_detail/update/:pan_id/:pan_detail_id', pan.updatePANdetail)
 app.delete('/api/V1/masdex/pan_detail/destroy/:pan_id/:pan_detail_id', pan.destroyPANdetail)
 // ===========================================================================

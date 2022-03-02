@@ -12,7 +12,7 @@ const create = (request, response) => {
     var name = '';
 
    
-      if (request.files!== null){
+      if (request.files){
       let sampleFile = request.files.dokumen_spm;
       console.log(sampleFile);
        const now = Date.now()
