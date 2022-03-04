@@ -21,7 +21,7 @@ const create = (request, response) => {
 
   
   let name = 'default.jpg'
-  if (request.files!==null) {
+  if (request.files) {
     let sampleFile = request.files.foto_kapal;
     console.log(sampleFile);
     const now = Date.now()
@@ -221,7 +221,7 @@ const update = (request, response) => {
 
     name = results.rows[0].foto_kapal;
 
-    if (request.files!==null) {
+    if (request.files) {
       doc = results.rows[0].foto_kapal;
       var doc_path = __dirname + path.join('/dokumens/kapal/foto/' + doc);
       console.log(doc_path);

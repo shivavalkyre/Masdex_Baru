@@ -45,7 +45,7 @@ const create = (request, response) => {
             // user not exist
             let name = 'default.jpg'
             let complete_path = base_url + 'dokumens/user_stakeholder/' + name;
-            if (request.files !== null) {
+            if (request.files) {
                 let sampleFile = request.files.photo;
                 console.log(sampleFile);
                 const now = Date.now()
@@ -269,7 +269,7 @@ const update = (request, response) => {
 
                         name = results.rows[0].photo;
                         complete_path = results.rows[0].url_photo;
-                        if (request.files!==null) {
+                        if (request.files) {
                             console.log('ada foto')
                             doc = results.rows[0].photo;
                             if (doc != 'default.jpg') {

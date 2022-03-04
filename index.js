@@ -48,6 +48,7 @@ app.use(express.urlencoded({
 
 // modul routing here
 const kapal = require('./kapal');
+const kategori_kapal = require('./kategori_kapal');
 const pkk = require('./pkk');
 const noon_position = require('./noon_position');
 const voyage = require('./voyage');
@@ -102,6 +103,8 @@ app.get('/api/V1/masdex/kapal/:id', kapal.read_by_id);
 app.get('/api/V1/masdex/kapal/mmsi/:mmsi', kapal.read_by_mmsi);
 app.put('/api/V1/masdex/kapal/:id', kapal.update);
 app.delete('/api/V1/masdex/kapal/:id', kapal.delete_);
+app.post('/api/V1/masdex/categoryofship',kategori_kapal.read);
+
 // ==========================================================================
 
 // ============================== Voyage ==============================
