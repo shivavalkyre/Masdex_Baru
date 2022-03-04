@@ -79,7 +79,7 @@ const updateDistress = (request, response) => {
     const id = request.params.id
     const {no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id} = request.body
     var update_at = new Date()
-    pool.query(`UPDATE tbl_insaf_distress 
+      pool.query(`UPDATE tbl_insaf_distress 
 				SET no_jurnal=$1,
 				tanggal=$2,
 				jenis_distress=$3,
@@ -110,7 +110,28 @@ const updateDistress = (request, response) => {
             response.status(400).send({error:error})
         }
       }
-            response.status(200).send({success:true,data:'Update data success'})
+      
+      pool.query('DELETE FROM tbl_insaf_distress_detail WHERE distress_id = $1 ', [ id], (error, results) => {
+        if (error) {
+          throw error
+        }
+        // response.status(200).send({success:true, data:`MSI Detail Has Been Deleted with ID: ${id}`})
+      })
+      pool.query('DELETE FROM tbl_insaf_pelapor_distress WHERE distress_id = $1 ', [ id], (error, results) => {
+        if (error) {
+          throw error
+        }
+        // response.status(200).send({success:true, data:`MSI Detail Has Been Deleted with ID: ${id}`})
+      })
+
+      pool.query('SELECT id FROM tbl_insaf_distress where id = $1 ORDER BY id DESC LIMIT 1', [ id], (error, results) => {
+          if (error) 
+          {
+              throw error
+          }
+          response.status(200).send({success:true,data: results.rows[0].id})
+      })
+      // response.status(200).send({success:true,data:'Update data success'})
 
       
   })
@@ -170,7 +191,7 @@ const readDistressDetail = (request, response) => {
       }
       res.push({total:results.rows[0].total})
       // var sql=  'SELECT * FROM tbl_insaf_distress_detail WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, * FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id ASC"
+      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, *, tbl_masdex_jenis_kapal.ship_type FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi join tbl_masdex_jenis_kapal on tbl_masdex_jenis_kapal.id = tbl_masdex_kapal.ship_type WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id ASC"
 	  pool.query(
        sql,
         (error, results) => {
