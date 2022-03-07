@@ -62,6 +62,37 @@ const read = (request, response) => {
 
 }
 
+const readAll = (request, response) => {
+
+    const { page, rows } = request.body
+    var page_req = page || 1
+    var rows_req = rows || 10
+    var offset = (page_req - 1) * rows_req
+    var res = []
+    var items = []
+
+
+    pool.query('SELECT count(*) as total FROM tbl_masdex_tmas where is_delete=false', (error, results) => {
+        if (error) {
+            throw error
+        }
+        //console.log(results.rows[0].total)
+        res.push({ total: results.rows[0].total })
+
+        var sql = 'SELECT t.*,p.nama_pasien,k.ship_name FROM tbl_masdex_tmas t left join tbl_masdex_tmas_pasien p on t.id = p.tmas_id left join tbl_masdex_kapal k on t.mmsi = k.mmsi where t.is_delete=false ORDER BY t.id ASC'
+        pool.query(sql, (error, results) => {
+            if (error) {
+                throw error
+            }
+            items.push({ rows: results.rows })
+            res.push(items)
+            response.status(200).send({ success: true, data: res })
+        })
+
+    })
+
+}
+
 const read_by_id = (request, response) => {
 
     const id = parseInt(request.params.id);
@@ -229,5 +260,6 @@ module.exports = {
     read,
     read_by_id,
     update,
-    delete_
+    delete_,
+    readAll,
 }

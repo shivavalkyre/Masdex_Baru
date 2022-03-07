@@ -113,6 +113,37 @@ const read_by_id = (request, response) => {
 
 }
 
+const read_by_last = (request, response) => {
+
+  const {page,rows} = request.body
+  var page_req = page || 1
+  var rows_req = rows || 10
+  var offset = (page_req - 1) * rows_req
+  var res = []
+  var items = []
+
+
+  pool.query('SELECT count(*) as total FROM tbl_insaf_notice_to_mariner where is_delete=false', (error, results) => {
+    if (error) {
+      throw error
+    }
+   //console.log(results.rows[0].total)
+   res.push({total:results.rows[0].total})
+
+   var sql= 'SELECT * FROM tbl_insaf_notice_to_mariner where is_delete=false ORDER BY id DESC limit 1'
+   pool.query(sql ,(error, results) => {
+     if (error) {
+       throw error
+     }
+     items.push({rows:results.rows})
+     res.push(items)
+     response.status(200).send({success:true,data:res})
+   })
+
+  })
+
+}
+
 const update = (request, response) => {
     const id = parseInt(request.params.id);
     const { dokumen, keterangan_lainnya, title, valid_from, valid_to, url_dokumen } 
@@ -287,7 +318,7 @@ const read_by_ntmDetail = (request, response) => {
    //console.log(results.rows[0].total)
    res.push({total:results.rows[0].total})
 
-   var sql= 'SELECT n.*,u.nama_lengkap as nahkoda,u.email FROM tbl_insaf_notice_to_mariner_detail n join tbl_user_stakeholders u on u.id = n.user_id where n.ntm_id=$1 and n.is_delete=false'
+   var sql= 'SELECT n.*,u.nama_lengkap as nahkoda,u.email FROM tbl_insaf_notice_to_mariner_detail n left join tbl_user_stakeholders u on u.id = n.user_id where n.ntm_id=$1 and n.is_delete=false'
    pool.query(sql,[id] ,(error, results) => {
      if (error) {
        throw error
@@ -407,4 +438,5 @@ read_by_idDetail,
 updateDetail,
 deleteDetail,
 read_by_ntmDetail,
+read_by_last,
 }

@@ -318,6 +318,17 @@ const getPANdetail = (request, response) => {
 	})
 }
 
+// get all PAN detail data based on pan_id
+const getPANdetailAll = (request, response) => {
+	// const id = parseInt(request.params.id);
+	pool.query(`SELECT * FROM insaf_pandetailxmasdexkapal WHERE is_delete =$1;`, [false], (error, results) => {
+		if (error) {
+			throw error;
+		}
+		response.status(200).json(results.rows)
+	})
+}
+
 // get latest PAN data order by id
 const getLatestPAN = (request, response) => {
 	pool.query(`SELECT no_jurnal, id
@@ -541,5 +552,6 @@ module.exports = {
 	getLatestPAN,
 	getSumberInformasiAwal,
 	getJenisPan,
-	showPANdetailByPANid
+	showPANdetailByPANid,
+	getPANdetailAll,
 }
