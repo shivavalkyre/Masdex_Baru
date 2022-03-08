@@ -1,4 +1,5 @@
 const pool = require('./dbCon');
+const nodemailer = require('nodemailer');
 
 const createDistress = (request, response) => {
     const {no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id} = request.body
@@ -508,7 +509,6 @@ const deletePelaporDistress = (request, response) => {
          url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
        }
 
-
        
                      // send email activation ================================================================
                      //const transporter = nodemailer.createTransport({
@@ -521,6 +521,7 @@ const deletePelaporDistress = (request, response) => {
                     //    pass: 'a5b8b160501000'
                     //  }
                     //});
+                    
             // send email forgot password ================================================================
             const transporter = nodemailer.createTransport({
               host: 'srv115.niagahoster.com',
