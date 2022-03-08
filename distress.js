@@ -509,47 +509,45 @@ const deletePelaporDistress = (request, response) => {
          url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
        }
 
-       
-                     // send email activation ================================================================
-                     //const transporter = nodemailer.createTransport({
-                    //  host: 'smtp.mailtrap.io',
-                    //  port: 2525,
-                    //  ssl: false,
-                    //  tls: true,
-                    //  auth: {
-                    //    user: 'fa78221d8b890e',
-                    //    pass: 'a5b8b160501000'
-                    //  }
-                    //});
-                    
-            // send email forgot password ================================================================
-            const transporter = nodemailer.createTransport({
-              host: 'srv115.niagahoster.com',
-              port: 465,
-              ssl: false,
-              tls: true,
-              auth: {
-                user: 'admin.insaf@disnavpriok.id',
-                pass: 'dispriok123'
-              }
-            });
-            
-            
-                    const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
-                    const mailOptions = {
-                      from: 'admin.insaf@disnavpriok.id',
-                      to: email,
-                      subject: roomname,
-                      html: html_content
-                    };
-                    
-                    transporter.sendMail(mailOptions, function(error, info){
-                      if (error) {
-                        console.log(error);
-                      } else {
-                        response.status(200).send({success:true,data:'Email activation was sent'})
-                      }
-                    });
+          // send email activation ================================================================
+          //const transporter = nodemailer.createTransport({
+          //  host: 'smtp.mailtrap.io',
+          //  port: 2525,
+          //  ssl: false,
+          //  tls: true,
+          //  auth: {
+          //    user: 'fa78221d8b890e',
+          //    pass: 'a5b8b160501000'
+          //  }
+          //});
+
+          // send email forgot password ================================================================
+          const transporter = nodemailer.createTransport({
+            host: 'srv115.niagahoster.com',
+            port: 465,
+            ssl: false,
+            tls: true,
+            auth: {
+              user: 'admin.insaf@disnavpriok.id',
+              pass: 'dispriok123'
+            }
+          });
+          
+          const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
+          const mailOptions = {
+            from: 'admin.insaf@disnavpriok.id',
+            to: email,
+            subject: roomname,
+            html: html_content
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              response.status(200).send({success:true,data:'Email activation was sent'})
+            }
+          });
 
 		  }
 		}
