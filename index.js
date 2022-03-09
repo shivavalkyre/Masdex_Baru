@@ -458,6 +458,8 @@ app.post('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
     app.get('/api/V1/dokumens/spog/:filename', manouvre.download);
     app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
+    app.get('/api/V1/dokumens/entering_to_port/dokumen_ppk/:filename', entering_to_port.download_pkk);
+    app.get('/api/V1/dokumens/entering_to_port/dokumen_berthing/:filename', entering_to_port.download_berthing);
     app.get('/api/V1/dokumens/ntm/:filename', notice_to_marine.download);
 // ==========================================================================
 
