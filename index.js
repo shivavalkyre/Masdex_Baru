@@ -480,6 +480,19 @@ app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDi
 app.put('/api/V1/masdex/pelapor_distress/insaf/update/:id', distress.updatePelaporDistress);
 app.delete('/api/V1/masdex/pelapor_distress/insaf/delete/:id', distress.deletePelaporDistress);
 
+// status OSC
+app.get('/api/V1/masdex/room_distress/status_osc/:id', distress.statusOSC);
+app.post('/api/V1/masdex/room_distress/getOSC', distress.getOSC);
+
+// ship particular chat
+app.post('/api/V1/masdex/room_distress/getShipParticularChat',distress.getShipParticularChat);
+app.get('/api/V1/masdex/room_distress/getShipParticularChat/:id',distress.getShipParticularDistress);
+
+// distress id
+app.post('/api/V1/masdex/room_distress/getdistressidfromchat',distress.getDistressidbyRoomname);
+
+//end distress chat
+app.put('/api/V1/masdex/room_distress/end_distress/:id',distress.endDistress);
 
 // participant
 app.get('/api/V1/masdex/participant_distress/insaf/read/:distressid', distress.getAllpartisipanBydistressid);

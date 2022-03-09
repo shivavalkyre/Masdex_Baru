@@ -524,6 +524,117 @@ const deletePelaporDistress = (request, response) => {
 	  )
   }
 
+  const statusOSC = (request, response) => 
+  {
+	  const id = request.params.id;
+	  pool.query(`SELECT is_osc 
+				 FROM tbl_insaf_distress_chat_participant
+				 WHERE id = $1
+				 LIMIT 1;`, [id], (error, data) =>
+				 {
+					statusdata = data.rows[0].is_osc;
+					updatedata = '';
+					if(statusdata == '1')
+					{
+						updatedata = '0';
+					}
+					else
+					{
+						updatedata = '1';
+					}
+					 
+					pool.query(`UPDATE tbl_insaf_distress_chat_participant
+								SET is_osc = $1
+								WHERE id = $2;`, [updatedata, id], (error, result) =>
+								{
+									if(error)
+									{
+										throw error;
+									}
+									response.status(200).send({success:true,data:updatedata})
+								}
+					)
+				 }
+	  )
+  }
+  
+  const getOSC = (request, response) =>
+  {
+    const {username,roomname} = request.body;
+
+    pool.query('SELECT is_osc FROM tbl_insaf_distress_chat_participant WHERE username = $1 AND roomname= $2', [username,roomname], (error, result) =>
+    {
+      if(error)
+      {
+        throw error;
+      }
+      response.status(200).send({success:true,data:result.rows[0].is_osc})
+    })
+  }
+
+  const getShipParticularChat = (request, response) => 
+  {
+      const {roomname} = request.body;
+      // 
+      let str = roomname;
+      var start_word = str.indexOf("|");
+      var no_jurnal = String(str.substring(start_word+1));
+      //console.log(no_jurnal.trim());
+      pool.query('SELECT id,no_jurnal,judul_distress,waktu_kejadian,jenis_distress,lokasi_kejadian,sumber_informasi_awal,deskripsi_kejadian,foto_kejadian_distress FROM insaf_ship_particular_chat WHERE no_jurnal=$1', [no_jurnal.trim()], (error, result) =>
+      {
+        if(error)
+        {
+          throw error;
+        }
+        response.status(200).send({success:true,data:result.rows})
+      });
+      //response.status(200).send({success:true,data:str.substring(start_word+1)})
+  }
+
+  const getShipParticularDistress = (request, response) => 
+  {
+    const id = parseInt(request.params.id);
+    //console.log(id);
+    pool.query('SELECT ship_name FROM insaf_ship_particular_distress WHERE distress_id=$1', [id], (error, result) =>
+    {
+      if(error)
+      {
+        throw error;
+      }
+      response.status(200).send({success:true,data:result.rows})
+    });
+  }
+
+  const getDistressidbyRoomname = (request, response) =>{
+    const {roomname} = request.body;
+    pool.query('SELECT distress_id FROM tbl_insaf_distress_chat_participant WHERE roomname= $1', [roomname], (error, result) =>
+    {
+      if(error)
+      {
+        throw error;
+      }
+      response.status(200).send({success:true,data:result.rows[0].distress_id})
+    })
+  }
+  
+  const endDistress = (request, response) =>
+  {
+    const distressid = request.params.id;
+    var waktu_selesai = new Date()
+    pool.query(`UPDATE tbl_insaf_distress
+    SET waktu_selesai = $1
+    WHERE id = $2;`, [waktu_selesai, distressid], (error, result) =>
+    {
+      if(error)
+      {
+        throw error;
+      }
+      response.status(200).send({success:true,data:'distress telah berakhir'})
+    }
+)
+
+  }
+
 module.exports = {
     createDistress,
     readDistress,
@@ -540,7 +651,13 @@ module.exports = {
     readPelaporDistressByID,
     updatePelaporDistress,
     deletePelaporDistress,
-	getJenisDistress, 
-  storePartisipanChatroom,
-  getAllpartisipanBydistressid
+    getJenisDistress, 
+    storePartisipanChatroom,
+    getAllpartisipanBydistressid,
+    statusOSC,
+    getOSC,
+    getShipParticularChat,
+    getShipParticularDistress,
+    getDistressidbyRoomname,
+    endDistress,
   }
