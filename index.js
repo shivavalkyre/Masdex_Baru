@@ -261,6 +261,7 @@ app.patch('/api/V1/masdex/pasien/update/:id', pasien.update);
 
 // ============================== Telemedical Assistance Services ===============================
 app.get('/api/V1/masdex/tmas/read', tmas.read);
+app.get('/api/V1/masdex/tmas/read/all', tmas.readAll);
 app.get('/api/V1/masdex/tmas/:id', tmas.read_by_id);
 app.post('/api/V1/masdex/tmas/create', tmas.create);
 app.delete('/api/V1/masdex/tmas/delete/:id', tmas.delete_);
@@ -278,10 +279,11 @@ app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
 app.post('/api/V1/insaf/notice_to_marine/create', notice_to_marine.create);
 app.get('/api/V1/insaf/notice_to_marine/read', notice_to_marine.read);
 app.get('/api/V1/insaf/notice_to_marine/:id', notice_to_marine.read_by_id);
+app.get('/api/V1/insaf/notice_to_marine/read/last', notice_to_marine.read_by_last);
 app.put('/api/V1/insaf/notice_to_marine/update/:id', notice_to_marine.update);
 app.delete('/api/V1/insaf/notice_to_marine/delete/:id', notice_to_marine.delete_);
-// Notice to Marine Detail
 
+// Notice to Marine Detail
 app.post('/api/V1/insaf/notice_to_marine_detail/create', notice_to_marine.createDetail);
 app.get('/api/V1/insaf/notice_to_marine_detail/read', notice_to_marine.readDetail);
 app.get('/api/V1/insaf/notice_to_marine_detail/:id', notice_to_marine.read_by_idDetail);
@@ -456,6 +458,8 @@ app.post('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
     app.get('/api/V1/dokumens/clearance_in/:filename', clearance_in.download);
     app.get('/api/V1/dokumens/spog/:filename', manouvre.download);
     app.get('/api/V1/dokumens/clearance_out/:filename', clearance_out.download);
+    app.get('/api/V1/dokumens/entering_to_port/dokumen_ppk/:filename', entering_to_port.download_pkk);
+    app.get('/api/V1/dokumens/entering_to_port/dokumen_berthing/:filename', entering_to_port.download_berthing);
     app.get('/api/V1/dokumens/ntm/:filename', notice_to_marine.download);
 // ==========================================================================
 
@@ -469,6 +473,7 @@ app.post('/api/V1/masdex/distress/read', distress.readDistress);
 app.get('/api/V1/masdex/distress/read/:id', distress.readDistressByID);
 app.put('/api/V1/masdex/distress/update/:id', distress.updateDistress);
 app.delete('/api/V1/masdex/distress/delete/:id', distress.deleteDistress);
+app.post('/api/V1/masdex/distress_detail/insaf/read/all', distress.readDistressDetailAll);
 app.post('/api/V1/masdex/distress_detail/insaf/create', distress.createDistressDetail);
 app.post('/api/V1/masdex/distress_detail/insaf/read', distress.readDistressDetail);
 app.get('/api/V1/masdex/distress_detail/read/:id', distress.readDistressDetailByID);
@@ -527,6 +532,7 @@ app.get('/api/V1/masdex/pan/latest', pan.getLatestPAN)
 app.get('/api/V1/masdex/pan/sumberinformasiawal', pan.getSumberInformasiAwal)
 app.get('/api/V1/masdex/pan/jenispan', pan.getJenisPan)
 
+app.get('/api/V1/masdex/pan_detail', pan.getPANdetailAll)
 app.get('/api/V1/masdex/pan_detail/:id', pan.getPANdetail)
 app.post('/api/V1/masdex/pan_detail/store/:id', pan.storePANdetail)
 app.get('/api/V1/masdex/pan_detail/show/:pan_id/:pan_detail_id', pan.getPANdetailbyId)
@@ -551,6 +557,7 @@ app.get('/api/V1/securite/read_resume/:id', securite.getSecuriteResumeById)
 app.post('/api/V1/msi/create', msi.createMSI)
 app.post('/api/V1/msidetail/create', msi.createMSIDetail)
 app.post('/api/V1/msi/read', msi.getMSI)
+app.post('/api/V1/msi/read/last', msi.getMSILast)
 app.get('/api/V1/msi/read/:id', msi.getMSIById)
 app.get('/api/V1/msi/read_detail/:id', msi.getMSIDetailById)
 app.delete('/api/V1/msi/delete/:id', msi.deleteMSI)

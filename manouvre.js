@@ -4,15 +4,15 @@ const path = require('path')
 const base_url = process.env.base_url;
 
 const create = (request, response) => {
-    const { voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2 } 
+    const { voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2, created_by } 
     = request.body
     
     var name='';
-    if (request.files!==null>0){
+    if (request.files){
     let sampleFile = request.files.dokumen_spog;
     console.log(sampleFile);
      const now = Date.now()
-     let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+     name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
      var complete_path = base_url+'dokumens/spog/'+name;
      console.log(__dirname);
      sampleFile.mv(path.join(__dirname + '/dokumens/spog/') + name, function (err) {
@@ -23,9 +23,10 @@ const create = (request, response) => {
       name=null;
       complete_path=null;
     }
+    
 
-     pool.query('INSERT INTO tbl_insaf_manouvre (voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,url_dokumen_spog) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)'
-     ,[voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,complete_path],(error, results) =>{
+     pool.query('INSERT INTO tbl_insaf_manouvre (voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,dokumen_spog,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,url_dokumen_spog,created_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)'
+     ,[voyage_id,nomor_spog,waktu_olah_gerak,alasan_olah_gerak,name,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,complete_path,created_by],(error, results) =>{
 
         if (error) {
             throw error
@@ -62,7 +63,7 @@ const read = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_manouvre where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT m.*,u.nama_lengkap FROM tbl_insaf_manouvre m join tbl_user_stakeholders u on u.id = m.created_by where m.is_delete=false ORDER BY m.id ASC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error

@@ -4,7 +4,7 @@ const path = require('path')
 const base_url = process.env.base_url;
 
 const create = (request, response) => {
-  const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan }
+  const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, created_by }
     = request.body
   var name= null;
   if (request.files!==null)
@@ -25,8 +25,8 @@ const create = (request, response) => {
     complete_path=null;
   }
 
-  pool.query('INSERT INTO tbl_insaf_clearance_out (voyage_id,nomor_spb,tanggal_jam_spb,pelabuhan_tujuan,eta_pelabuhan_tujuan,dokumen_spb,etd_pelabuhan_tujuan,url_dokumen_spb) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)'
-    , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, complete_path], (error, results) => {
+  pool.query('INSERT INTO tbl_insaf_clearance_out (voyage_id,nomor_spb,tanggal_jam_spb,pelabuhan_tujuan,eta_pelabuhan_tujuan,dokumen_spb,etd_pelabuhan_tujuan,url_dokumen_spb,created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)'
+    , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, complete_path, created_by], (error, results) => {
       if (error) {
         throw error
         //response.status(201).send(error)
@@ -128,7 +128,7 @@ const read_by_voyage_id = (request, response) => {
     //console.log(results.rows[0].total)
     res.push({ total: results.rows[0].total })
 
-    var sql = 'SELECT * FROM tbl_insaf_clearance_out where voyage_id=$1 and is_delete=false'
+    var sql = 'SELECT c.*,u.nama_lengkap FROM tbl_insaf_clearance_out c join tbl_user_stakeholders u on u.id = c.created_by where c.voyage_id=$1 and c.is_delete=false'
     pool.query(sql, [id], (error, results) => {
       if (error) {
         throw error
@@ -196,54 +196,77 @@ const update_operator = (request, response) => {
 
 const update_ksu = (request, response) => {
   const id = parseInt(request.params.id);
-  const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, complete_path }
+  const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, dokumen_spb, created_by }
     = request.body
 
   let doc;
 
+  pool.query('SELECT count(*) as total FROM tbl_insaf_clearance_out where id=$1 and is_delete=false', [id], (error, results) => {
+      if (error) {
+        throw error
+      }else{
+          //console.log(results.rows);
+      }
+  })
 
-  pool.query('SELECT * FROM tbl_insaf_clearance_out where id=$1 and is_delete=false', [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-    total = results.rows[0].total;
-    if (parseInt(total) == parseInt('0')) {
-      var name = '';
-      if (request.files) {
-
-        doc = results.rows[0].dokumen_spb;
-        var doc_path = __dirname + path.join('/dokumens/clearance_out/' + doc);
-        console.log(doc_path);
-        if (fs.existsSync(doc_path)) {
-          fs.unlinkSync(doc_path);
-        }
-        let sampleFile = request.files.dokumen_spb;
-        //console.log(sampleFile);
-        const now = Date.now()
-        name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-        var complete_path = base_url + 'dokumens/clearance_out/' + name;
-        //console.log(__dirname);
-        sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
-          if (err) {
-            response.status(400).send({ success: false, data: err })
-          }
-        });
-      } else {
-        name = null;
-        complete_path=null;
+  pool.query('SELECT * FROM tbl_insaf_clearance_out where id=$1 and is_delete=false',[id] ,(error, results) => {
+      if (error) {
+        throw error
       }
 
-      pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by,url_dokumen_spb)
-						VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,$10);`, [voyage_id, nomor_spb, tanggal_jam_spb, pandu_on, pelabuhan_tujuan, eta_pelabuhan_tujuan, dokumen_spb, created_at, created_by, complete_path], (error, results) => {
+      var name;
+      var complete_path;
+      name = results.rows[0].dokumen_spb;
+      complete_path = results.rows[0].url_dokumen_spb;
+      if (request.files) {
+          doc = results.rows[0].dokumen_spb;
+          console.log(results.rows[0].dokumen_spb);
+          if(doc != ''){
+            var doc_path = __dirname + path.join('/dokumens/clearance_out/' + doc);
+            console.log(doc_path);
+            fs.unlinkSync(doc_path);
+            console.log(doc_path);
+          }
+
+          var name = '';
+          let sampleFile = request.files.dokumen_spb;
+          console.log(sampleFile);
+          const now = Date.now()
+          name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+          complete_path = base_url + 'dokumens/clearance_out/' + name;
+          console.log(__dirname);
+          sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
+              if (err)
+                  console.log(err);
+          });
+      }
+
+      const update_time = new Date;
+      pool.query('UPDATE tbl_insaf_clearance_out SET voyage_id=$1, nomor_spb=$2, tanggal_jam_spb=$3, pelabuhan_tujuan=$4, eta_pelabuhan_tujuan=$5, etd_pelabuhan_tujuan=$6, dokumen_spb=$7, url_dokumen_spb=$8, created_by=$10 where id=$9'
+      , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, name, complete_path,id,created_by], (error, results) =>{
         if (error) {
-          response.status(400).send({ success: false, data: error })
+           throw error
+          //response.status(201).send(error)
+          //console.log(error);
+          if (error.code == '23505')
+          {
+              //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+              response.status(400).send('Duplicate data')
+              return;
+          }
+        }else
+        {
+            response.status(200).send({success:true,data:'data clearance out berhasil diperbarui'})
         }
-        response.status(200).send({ success: true, data: 'Clearance Out data successfully created' })
+  
       })
-    }
-    else {
-      response.status(400).send({ success: false, data: 'Data has been created in Database' })
-    }
+      // pool.query(`INSERT INTO tbl_insaf_clearance_out(voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, dokumen_spb, url_dokumen_spb)
+			// 			VALUES($1, $2, $3, $4, $5, $6, $7, $8);`, [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, name, complete_path], (error, results) => {
+      //   if (error) {
+      //     response.status(400).send({ success: false, data: error })
+      //   }
+      //   response.status(200).send({ success: true, data: 'Clearance Out data successfully created' })
+      // })
   })
 }
 

@@ -96,6 +96,42 @@ const createMSI = (request, response) => {
     })
   
   }
+
+  const getMSILast = (request, response) => {
+    const {page,rows} = request.body
+    var page_req = page || 1
+    var rows_req = rows || 3
+    var offset = (page_req - 1) * rows_req
+    var res = []
+    var items = []
+  
+    pool.query('SELECT count(*) as total FROM tbl_insaf_msi  WHERE is_delete = false', (error, results) => {
+      if (error) {
+        throw error
+      }
+    //  console.log(results.rows[0].total)
+     res.push({total:results.rows[0].total})
+  
+    //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+     var sql= 'SELECT * FROM tbl_insaf_msi WHERE is_delete = false ORDER BY id DESC limit 1'
+  
+  
+    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
+  
+    //  response.status(200).send(sql)
+     pool.query(sql ,(error, results) => {
+       if (error) {
+         throw error
+       }
+       items.push({rows:results.rows})
+       res.push(items)
+       //response.status(200).send({success:true,data:res})
+       response.status(200).send(res)
+     })
+  
+    })
+  
+  }
   
   const getMSIByRange = (request, response) => {
     const {range1,range2, page,rows} = request.body
@@ -280,6 +316,7 @@ const createMSI = (request, response) => {
       createMSI,
       createMSIDetail,
       getMSI, 
+      getMSILast, 
       getMSIById,
       getMSIByRange,
       updateMSI,

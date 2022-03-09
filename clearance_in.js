@@ -10,7 +10,6 @@ const create = (request, response) => {
     let jenis_telkompel;
 
     var name = '';
-
    
       if (request.files){
       let sampleFile = request.files.dokumen_spm;
@@ -257,33 +256,61 @@ const update_ksu = (request, response) => {
           if (error) {
             throw error
           }
+          
+          var name;
+          var complete_path;
 
-         doc = results.rows[0].dokumen_spm;
-         var doc_path = __dirname +path.join('/dokumens/clearance_in/'+ doc);
-         console.log(doc_path);
-         if (fs.existsSync(doc_path)){
-          fs.unlinkSync(doc_path);
-         }
-         
-         console.log(doc_path);
-         var name='';
-         if (request.files!==null>0){
-         let sampleFile = request.files.dokumen_spm;
-         console.log(sampleFile);
-          const now = Date.now()
-          name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-          var complete_path = base_url+'dokumens/clearance_in/'+name;
-          console.log(__dirname);
-          sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
-              if (err){
-                console.log(err);
+          name = results.rows[0].dokumen_spm;
+          complete_path = results.rows[0].url_dokumen_spm;
+          if (request.files) {
+              doc = results.rows[0].dokumen_spm;
+              console.log(results.rows[0].dokumen_spm);
+              if(doc != ''){
+                var doc_path = __dirname + path.join('/dokumens/clearance_in/' + doc);
+                console.log(doc_path);
+                fs.unlinkSync(doc_path);
+                console.log(doc_path);
               }
-                  
-          });
-        }else{
-          name=null;
-          complete_path=null;
-        }
+
+              var name = '';
+              let sampleFile = request.files.dokumen_spm;
+              console.log(sampleFile);
+              const now = Date.now()
+              name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+              complete_path = base_url + 'dokumens/clearance_in/' + name;
+              console.log(__dirname);
+              sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
+                  if (err)
+                      console.log(err);
+              });
+          }
+
+            //  doc = results.rows[0].dokumen_spm;
+            //  var doc_path = __dirname +path.join('/dokumens/clearance_in/'+ doc);
+            //  console.log(doc_path);
+            //  if (fs.existsSync(doc_path)){
+            //   fs.unlinkSync(doc_path);
+            //  }
+            
+            //  console.log(doc_path);
+            //  var name='';
+            //  if (request.files!==null>0){
+            //  let sampleFile = request.files.dokumen_spm;
+            //  console.log(sampleFile);
+            //   const now = Date.now()
+            //   name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+            //   var complete_path = base_url+'dokumens/clearance_in/'+name;
+            //   console.log(__dirname);
+            //   sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
+            //       if (err){
+            //         console.log(err);
+            //       }
+                      
+            //   });
+            // }else{
+            //   name=null;
+            //   complete_path=null;
+            // }
 
           console.log(name);
          const update_time = new Date;
