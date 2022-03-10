@@ -268,6 +268,25 @@ app.post('/api/V1/masdex/tmas/create', tmas.create);
 app.delete('/api/V1/masdex/tmas/delete/:id', tmas.delete_);
 app.put('/api/V1/masdex/tmas/update/:id', tmas.update);
 
+// status OSC
+app.get('/api/V1/masdex/room_tmas/status_osc/:id', tmas.statusOSC);
+app.post('/api/V1/masdex/room_tmas/getOSC', tmas.getOSC);
+
+
+// ship particular chat
+app.post('/api/V1/masdex/room_tmas/getShipParticularChat',tmas.getShipParticularChat);
+app.get('/api/V1/masdex/room_tmas/getShipParticularChat/:id',tmas.getShipParticularTMAS);
+
+// tmas id
+app.post('/api/V1/masdex/room_tmas/get_tmasid_fromchat',tmas.getTMASidbyRoomname);
+
+//end distress chat
+app.put('/api/V1/masdex/room_tmas/end_distress/:id',tmas.endTMAS);
+
+// participant
+app.get('/api/V1/masdex/participant_tmas/insaf/read/:id', tmas.getAllpartisipanByTMASid);
+app.post('/api/V1/masdex/room_tmas/create/:id/chatroom', tmas.storePartisipanChatroom);
+
 // ============================== 1.PKK =======================================
 app.post('/api/V1/masdex/pkk', pkk.create);
 app.get('/api/V1/masdex/pkk', pkk.read);
