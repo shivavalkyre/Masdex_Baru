@@ -1,6 +1,7 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const nodemailer = require('nodemailer');
 const base_url = process.env.base_url
 
 const create = (request, response) => {
