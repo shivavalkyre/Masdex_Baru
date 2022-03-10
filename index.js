@@ -502,6 +502,7 @@ app.patch('/api/V1/insaf/contravention/update/:id', contravention.update);
 app.delete('/api/V1/insaf/contravention/delete/:id', contravention.delete_);
 
 
+app.get('/api/V1/insaf/contravention/voyage/:id', contravention.read_by_voyage);
 app.patch('/api/V1/insaf/contravention/update_ksop/:id', contravention.update_by_ksop);
 // =============================== end contravention ===================================
 
