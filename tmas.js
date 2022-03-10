@@ -253,7 +253,223 @@ const delete_ = (request, response) => {
 
 }
 
+const statusOSC = (request, response) => 
+{
+    const id = request.params.id;
+    pool.query(`SELECT is_osc 
+               FROM tbl_masdex_tmas_chat_participant
+               WHERE id = $1
+               LIMIT 1;`, [id], (error, data) =>
+               {
+                  statusdata = data.rows[0].is_osc;
+                  updatedata = '';
+                  if(statusdata == '1')
+                  {
+                      updatedata = '0';
+                  }
+                  else
+                  {
+                      updatedata = '1';
+                  }
+                   
+                  pool.query(`UPDATE tbl_masdex_tmas_chat_participant
+                              SET is_osc = $1
+                              WHERE id = $2;`, [updatedata, id], (error, result) =>
+                              {
+                                  if(error)
+                                  {
+                                      throw error;
+                                  }
+                                  response.status(200).send({success:true,data:updatedata})
+                              }
+                  )
+               }
+    )
+}
 
+const getOSC = (request, response) =>
+{
+  const {username,roomname} = request.body;
+
+  pool.query('SELECT is_osc FROM tbl_masdex_tmas_chat_participant WHERE username = $1 AND roomname= $2', [username,roomname], (error, result) =>
+  {
+    if(error)
+    {
+      throw error;
+    }
+    response.status(200).send({success:true,data:result.rows[0].is_osc})
+  })
+}
+
+
+const getShipParticularChat = (request, response) => 
+{
+    const {roomname} = request.body;
+    // 
+    //let str = roomname;
+    //var start_word = str.indexOf("|");
+    //var no_jurnal = String(str.substring(start_word+1));
+    var judul_tmas = roomname;
+    //console.log(no_jurnal.trim());
+    pool.query('SELECT * FROM tbl_masdex_tmas WHERE judul_tmas=$1', [judul_tmas.trim()], (error, result) =>
+    {
+      if(error)
+      {
+        throw error;
+      }
+      response.status(200).send({success:true,data:result.rows})
+    });
+    //response.status(200).send({success:true,data:str.substring(start_word+1)})
+}
+
+const getShipParticularTMAS = (request, response) => 
+{
+  const id = parseInt(request.params.id);
+  //console.log(id);
+  pool.query('SELECT ship_name FROM masdex_ship_particular_tmas WHERE tmas_id=$1', [id], (error, result) =>
+  {
+    if(error)
+    {
+      throw error;
+    }
+    response.status(200).send({success:true,data:result.rows})
+  });
+}
+
+const getTMASidbyRoomname = (request, response) =>{
+  const {roomname} = request.body;
+  pool.query('SELECT tmas_id FROM tbl_masdex_tmas_chat_participant WHERE roomname= $1', [roomname], (error, result) =>
+  {
+    if(error)
+    {
+      throw error;
+    }
+    response.status(200).send({success:true,data:result.rows[0].distress_id})
+  })
+}
+
+const endTMAS = (request, response) =>
+{
+  const distressid = request.params.id;
+  var waktu_selesai = new Date()
+  pool.query(`UPDATE tbl_masdex_tmas
+  SET waktu_selesai = $1
+  WHERE id = $2;`, [waktu_selesai, distressid], (error, result) =>
+  {
+    if(error)
+    {
+      throw error;
+    }
+    response.status(200).send({success:true,data:'distress telah berakhir'})
+  }
+)
+
+}
+
+// participant
+const getAllpartisipanByTMASid = (request, response) =>
+{
+  const tmasid = request.params.id;	
+  var res = []
+  var items = []
+  pool.query(`SELECT COUNT(*) as total 
+              FROM tbl_masdex_tmas_chat_participant
+              WHERE tbl_masdex_tmas_chat_participant.tmas_id = $1;`, [tmasid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.push({total:results.rows[0].total})
+    // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+    pool.query(`SELECT * 
+              FROM tbl_masdex_tmas_chat_participant
+              WHERE tbl_masdex_tmas_chat_participant.tmas_id = $1;`, [tmasid], (error, result) => 
+            {
+                  if(error)
+                  {
+                      response.status(400).json({success:false, data: error})
+                  }
+                  items.push({rows:result.rows})
+                  res.push(items)
+                  //response.status(200).send({success:true,data:res})
+                  response.status(200).send(res)
+            }
+    )
+  })
+}
+
+const storePartisipanChatroom = (request, response) => 
+{
+    const distress_id = request.params.distressid
+    const { username, roomname, user_id, email } = request.body
+  var is_osc=0;
+
+    pool.query(`INSERT INTO tbl_masdex_tmas_chat_participant (tmas_id, username, roomname, user_id, is_osc) VALUES ($1,$2, $3, $4, '0')`, [distress_id, username, roomname, parseInt(user_id) ], (error, results) => 
+      {
+          //console.log(results)
+        if (error) {
+          if (error.code == '23505')
+          {
+              response.status(400).send({success:false,data:'Duplicate data'})
+              return;
+          }else{
+              response.status(400).send({success:false,data:error})
+          }
+        }else{
+          // response.status(200).send({success:true,data: 'Data saved in database'})
+    // generate link di ubah sesuai kebutuhan
+    var url='';
+     if (parseInt(is_osc)===0){
+    //    url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
+          url ='http:/localhost:3014/room?username='+ username +'&roomname='+roomname+'&osc=0';
+     }else{
+    //    url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
+          url ='http://localhost:3014/room?username='+ username +'&roomname='+roomname+'&osc=1';
+     }
+
+        // send email activation ================================================================
+        //const transporter = nodemailer.createTransport({
+        //  host: 'smtp.mailtrap.io',
+        //  port: 2525,
+        //  ssl: false,
+        //  tls: true,
+        //  auth: {
+        //    user: 'fa78221d8b890e',
+        //    pass: 'a5b8b160501000'
+        //  }
+        //});
+
+        // send email forgot password ================================================================
+        const transporter = nodemailer.createTransport({
+          host: 'srv115.niagahoster.com',
+          port: 465,
+          ssl: false,
+          tls: true,
+          auth: {
+            user: 'admin.insaf@disnavpriok.id',
+            pass: 'dispriok123'
+          }
+        });
+        
+        const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
+        const mailOptions = {
+          from: 'admin.insaf@disnavpriok.id',
+          to: email,
+          subject: roomname,
+          html: html_content
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            response.status(200).send({success:true,data:'Email activation was sent'})
+          }
+        });
+
+        }
+      }
+    )
+}
 
 module.exports = {
     create,
@@ -262,4 +478,12 @@ module.exports = {
     update,
     delete_,
     readAll,
+    getOSC,
+    statusOSC,
+    getShipParticularChat,
+    getShipParticularTMAS,
+    getTMASidbyRoomname,
+    endTMAS,
+    getAllpartisipanByTMASid,
+    storePartisipanChatroom,
 }
