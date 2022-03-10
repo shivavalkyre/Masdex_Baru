@@ -139,6 +139,18 @@ const getPANbyId = (request, response) => {
 	})
 }
 
+// get PAN data by id
+const getPANbyVoyage = (request, response) => {
+	const id = parseInt(request.params.id);
+
+	pool.query('SELECT * FROM insaf_panxjenispanxsumberinformasiawal WHERE voyage_id = $1;', [id], (error, results) => {
+		if (error) {
+			throw error;
+		}
+		response.status(200).json(results.rows)
+	})
+}
+
 // get PAN data by Range date
 const getPANByRange = (request, response) => {
 	const range1 = request.params.range1
@@ -538,6 +550,7 @@ module.exports = {
 	getPANorderBY,
 	storePAN,
 	getPANbyId,
+	getPANbyVoyage,
 	destroyPAN,
 	updatePAN,
 	getPANByRange,

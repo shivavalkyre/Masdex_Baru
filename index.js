@@ -120,6 +120,7 @@ app.delete('/api/V1/insaf/voyage/:id', voyage.delete_);
 app.post('/api/V1/insaf/noon_position/create', noon_position.create);
 app.get('/api/V1/insaf/noon_position/read', noon_position.read);
 app.get('/api/V1/insaf/noon_position/:id',noon_position.read_by_id);
+app.get('/api/V1/insaf/noon_position/voyage/:id',noon_position.read_by_voyage);
 app.put('/api/V1/insaf/noon_position/update/:id', noon_position.update);
 app.delete('/api/V1/insaf/noon_position/delete/:id', noon_position.delete_);
 // ==========================================================================
@@ -524,6 +525,7 @@ app.get('/api/V1/masdex/pan', pan.getPAN)
 app.get('/api/V1/masdex/pan/order/:target', pan.getPANorderBY)
 app.post('/api/V1/masdex/pan/create', pan.storePAN)
 app.get('/api/V1/masdex/pan/show/:id', pan.getPANbyId)
+app.get('/api/V1/masdex/pan/voyage/:id', pan.getPANbyVoyage)
 app.get('/api/V1/masdex/pan/show/:range1/:range2', pan.getPANByRange)
 app.put('/api/V1/masdex/pan/update/:id', pan.updatePAN)
 app.delete('/api/V1/masdex/pan/destroy/:id', pan.destroyPAN)
@@ -546,6 +548,7 @@ app.post('/api/V1/securite/create', securite.createSecurite)
 app.post('/api/V1/securitedetail/create', securite.createSecuriteDetail)
 app.post('/api/V1/securite/read', securite.getSecurite)
 app.get('/api/V1/securite/read/:id', securite.getSecuriteById)
+app.get('/api/V1/securite/voyage/:id', securite.getSecuriteByVoyage)
 app.get('/api/V1/securite/read_detail/:id', securite.getSecuriteDetailById)
 app.post('/api/V1/securite/read/range', securite.getSecuriteByRange)
 app.delete('/api/V1/securite/delete/:id', securite.deleteSecurite)
