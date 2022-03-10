@@ -72,7 +72,7 @@ const getPANorderBY = (request, response) => {
 const storePAN = (request, response) => {
 	const
 		{
-			no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, created_at, created_by
+			no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, created_at, created_by, voyage_id
 		} = request.body
 
 	// check if data exist
@@ -97,7 +97,8 @@ const storePAN = (request, response) => {
 				AND phone_second_officer = $18 
 				AND tanggal = $19
 				AND memerlukan_tindakan = $20
-				AND is_delete = '0';`, [no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan], (error, cekdata) => {
+				AND voyage_id = $21
+				AND is_delete = '0';`, [no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, voyage_id], (error, cekdata) => {
 		if (error) {
 			// throw error
 			response.status(201).send(error)
@@ -107,8 +108,8 @@ const storePAN = (request, response) => {
 			response.status(400).send({ success: false, data: 'Tidak bisa memproses data. Data sudah tersimpan dalam database' })
 		}
 		else {
-			pool.query(`INSERT INTO tbl_insaf_pan (no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, created_at, created_by)
-					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22);`, [no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, created_at, created_by], (error, results) => {
+			pool.query(`INSERT INTO tbl_insaf_pan (no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, created_at, created_by, voyage_id)
+					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23);`, [no_jurnal, jenis_pan, waktu_kejadian, sumber_informasi, keterangan_lainnya, deskripsi_laporan, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, master_onboard, phone_onboard, second_officer, phone_second_officer, tanggal, memerlukan_tindakan, created_at, created_by, voyage_id], (error, results) => {
 				if (error) {
 					// throw error
 					response.status(201).send(error)
