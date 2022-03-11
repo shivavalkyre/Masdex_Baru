@@ -76,6 +76,24 @@ const readDistressByID = (request, response) => {
 
 }
 
+const readDistressByVoyage = (request, response) => {
+  const id = parseInt(request.params.id)
+var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete
+       FROM tbl_insaf_distress 
+       LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id
+       LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id
+       WHERE tbl_insaf_distress.voyage_id= '`+id+`';`
+pool.query(
+      sql, (error, results) => {
+        if (error) {
+          response.status(400).send({success:false,data:error})
+        }
+    
+          response.status(200).send(results.rows)
+      })
+
+}
+
 const updateDistress = (request, response) => {
     const id = request.params.id
     const {no_jurnal,tanggal,jenis_distress,sumber_informasi,judul_distress, foto_kejadian_distress, deskripsi_assesment, waktu_kejadian, waktu_selesai, degree1, minute1, second1, direction1,degree2, minute2, second2, direction2,lokasi_kejadian,voyage_id} = request.body
@@ -669,6 +687,7 @@ module.exports = {
     createDistress,
     readDistress,
     readDistressByID,
+    readDistressByVoyage,
     updateDistress,
     deleteDistress,
     createDistressDetail,
