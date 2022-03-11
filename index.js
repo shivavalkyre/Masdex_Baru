@@ -280,8 +280,8 @@ app.get('/api/V1/masdex/room_tmas/getShipParticularChat/:id',tmas.getShipParticu
 // tmas id
 app.post('/api/V1/masdex/room_tmas/get_tmasid_fromchat',tmas.getTMASidbyRoomname);
 
-//end distress chat
-app.put('/api/V1/masdex/room_tmas/end_distress/:id',tmas.endTMAS);
+//end tmas chat
+app.put('/api/V1/masdex/room_tmas/end_tmas/:id',tmas.endTMAS);
 
 // participant
 app.get('/api/V1/masdex/participant_tmas/insaf/read/:id', tmas.getAllpartisipanByTMASid);
