@@ -237,7 +237,7 @@ const voyage_status_by_id = (request, response) => {
   const res = []
   const items = []
 
-  pool.query('SELECT * FROM ship_status_last_status WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM ship_status_last_status WHERE voyage_id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
