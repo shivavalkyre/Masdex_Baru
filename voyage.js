@@ -199,11 +199,11 @@ const delete_ = (request, response) => {
 
 const voyage_status = (request, response) => {
 
-  const {page,rows} = request.query
+  const {page,rows,sortBy,sortDirection} = request.query
   var page_req = page || 1
   var rows_req = rows || 10
-  var sort_by_req = sortBy || 'id'
-  var sort_direction_req = sortDirection || 'ASC'
+  var sort_by_req = sortBy || null
+  var sort_direction_req = sortDirection || null
   var offset = (page_req - 1) * rows_req
   var res = []
   var items = []
@@ -216,7 +216,8 @@ const voyage_status = (request, response) => {
    //console.log(results.rows[0].total)
    res.push({total:results.rows[0].total})
 
-   var sql= `SELECT * FROM ship_status_last_status ORDER BY ${sort_by_req} ${sort_direction_req}`
+   var sql= 'SELECT * FROM ship_status_last_status'
+   if (sort_by_req && sort_direction_req) sql += ` ORDER BY ${sort_by_req} ${sort_direction_req}`
    pool.query(sql ,(error, results) => {
      if (error) {
        throw error
