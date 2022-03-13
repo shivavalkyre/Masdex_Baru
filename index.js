@@ -414,9 +414,8 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
 // =============================== USER STAKEHOLDER =====================================
     app.post('/api/V1/masdex/user_stakeholder', user_stakeholder.create);
     app.get('/api/V1/masdex/user_stakeholder/profile/:id', user_stakeholder.detail_profile);
-    app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, (req, res) => {
-        user_stakeholder.readall(req,res)
-    });
+    app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, user_stakeholder.readall);
+    app.get('/api/V1/masdex/user_stakeholder/nahkoda', authenticateToken, user_stakeholder.read_nahkoda);
     
     app.get('/api/V1/masdex/user_stakeholder/:id', (req, res) => {
         user_stakeholder.read_by_id(req,res)
