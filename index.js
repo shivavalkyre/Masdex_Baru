@@ -110,6 +110,7 @@ app.post('/api/V1/masdex/categoryofship',kategori_kapal.read);
 // ============================== Voyage ==============================
 app.post('/api/V1/insaf/voyage', voyage.create);
 app.get('/api/V1/insaf/voyage_status', voyage.voyage_status);
+app.get('/api/V1/insaf/voyage_status/:id', voyage.voyage_status_by_id);
 app.get('/api/V1/insaf/voyage', voyage.read);
 app.get('/api/V1/insaf/voyage/:id',voyage.read_by_id);
 app.put('/api/V1/insaf/voyage/:id', voyage.update);

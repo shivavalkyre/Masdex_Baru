@@ -231,12 +231,29 @@ const voyage_status = (request, response) => {
 
 }
 
+const voyage_status_by_id = (request, response) => {
+
+  const id = parseInt(request.params.id);
+  const res = []
+  const items = []
+
+  pool.query('SELECT * FROM ship_status_last_status WHERE id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    items.push({ rows:results.rows })
+    res.push(items)
+    response.status(200).send({ success: true, data: res })
+  })
+}
+
 
 module.exports = {
-create,
-read,
-read_by_id,
-update,
-delete_,
-voyage_status,
+  create,
+  read,
+  read_by_id,
+  update,
+  delete_,
+  voyage_status,
+  voyage_status_by_id,
 }
