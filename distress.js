@@ -526,8 +526,10 @@ const deletePelaporDistress = (request, response) => {
       var url='';
        if (parseInt(is_osc)===0){
          url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
+        //  url ='http://localhost:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
        }else{
          url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
+        //  url ='http://localhost:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
        }
 
           // send email activation ================================================================
