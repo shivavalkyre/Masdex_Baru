@@ -124,6 +124,7 @@ app.delete('/api/V1/insaf/voyage/:id', voyage.delete_);
 app.post('/api/V1/insaf/noon_position/create', noon_position.create);
 app.get('/api/V1/insaf/noon_position/read', noon_position.read);
 app.get('/api/V1/insaf/noon_position/:id',noon_position.read_by_id);
+app.get('/api/V1/insaf/noon_position/read/last', noon_position.read_by_last);
 app.get('/api/V1/insaf/noon_position/voyage/:id',noon_position.read_by_voyage);
 app.put('/api/V1/insaf/noon_position/update/:id', noon_position.update);
 app.delete('/api/V1/insaf/noon_position/delete/:id', noon_position.delete_);

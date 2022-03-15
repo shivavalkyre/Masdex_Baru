@@ -89,6 +89,37 @@ const read_by_id = (request, response) => {
 
 }
 
+const read_by_last = (request, response) => {
+
+    const {page,rows} = request.body
+    var page_req = page || 1
+    var rows_req = rows || 10
+    var offset = (page_req - 1) * rows_req
+    var res = []
+    var items = []
+  
+  
+    pool.query('SELECT count(*) as total FROM tbl_insaf_noon_position where is_delete=false', (error, results) => {
+      if (error) {
+        throw error
+      }
+     //console.log(results.rows[0].total)
+     res.push({total:results.rows[0].total})
+  
+     var sql= 'SELECT n.*,k.ship_name FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi where n.is_delete=false ORDER BY n.id DESC limit 1'
+     pool.query(sql ,(error, results) => {
+       if (error) {
+         throw error
+       }
+       items.push({rows:results.rows})
+       res.push(items)
+       response.status(200).send({success:true,data:res})
+     })
+  
+    })
+  
+  }
+
 const read_by_voyage = (request, response) => {
 
     const id = parseInt(request.params.id);
@@ -220,6 +251,7 @@ module.exports = {
     create,
     read,
     read_by_id,
+    read_by_last,
     read_by_voyage,
     update,
     delete_
