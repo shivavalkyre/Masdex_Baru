@@ -345,7 +345,7 @@ const getTMASidbyRoomname = (request, response) =>{
     {
       throw error;
     }
-    response.status(200).send({success:true,data:result.rows[0].distress_id})
+    response.status(200).send({success:true,data:result.rows[0].tmas_id})
   })
 }
 
@@ -400,11 +400,11 @@ const getAllpartisipanByTMASid = (request, response) =>
 
 const storePartisipanChatroom = (request, response) => 
 {
-    const distress_id = request.params.distressid
+    const id = request.params.id
     const { username, roomname, user_id, email } = request.body
   var is_osc=0;
 
-    pool.query(`INSERT INTO tbl_masdex_tmas_chat_participant (tmas_id, username, roomname, user_id, is_osc) VALUES ($1,$2, $3, $4, '0')`, [distress_id, username, roomname, parseInt(user_id) ], (error, results) => 
+    pool.query(`INSERT INTO tbl_masdex_tmas_chat_participant (tmas_id, username, roomname, user_id, is_osc) VALUES ($1,$2, $3, $4, '0')`, [id, username, roomname, parseInt(user_id) ], (error, results) => 
       {
           //console.log(results)
         if (error) {
@@ -420,11 +420,11 @@ const storePartisipanChatroom = (request, response) =>
     // generate link di ubah sesuai kebutuhan
     var url='';
      if (parseInt(is_osc)===0){
-    //    url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
-          url ='http:/localhost:3014/room?username='+ username +'&roomname='+roomname+'&osc=0';
+          url ='http://chat-tmas.disnavpriok.id/room?username='+ username +'&roomname='+roomname+'&osc=0';
+          // url ='http://localhost:3014/room?username='+ username +'&roomname='+roomname+'&osc=0';
      }else{
-    //    url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
-          url ='http://localhost:3014/room?username='+ username +'&roomname='+roomname+'&osc=1';
+          url ='http://chat-tmas.disnavpriok.id/room?username='+ username +'&roomname='+roomname+'&osc=1';
+          // url ='http://localhost:3014/room?username='+ username +'&roomname='+roomname+'&osc=1';
      }
 
         // send email activation ================================================================
@@ -440,6 +440,7 @@ const storePartisipanChatroom = (request, response) =>
         //});
 
         // send email forgot password ================================================================
+<<<<<<< HEAD
         const transporter = nodemailer.createTransport({
           host: 'srv115.niagahoster.com',
           port: 465,
@@ -466,6 +467,34 @@ const storePartisipanChatroom = (request, response) =>
             response.status(200).send({success:true,data:'Email activation was sent'})
           }
         });
+=======
+          const transporter = nodemailer.createTransport({
+            host: 'srv115.niagahoster.com',
+            port: 465,
+            ssl: false,
+            tls: true,
+            auth: {
+              user: 'admin.insaf@disnavpriok.id',
+              pass: 'dispriok123'
+            }
+          });
+          
+          const html_content = '<a href="'+ url +'"><input type="button" value="TMAS Chat" /></a>'
+          const mailOptions = {
+            from: 'admin.insaf@disnavpriok.id',
+            to: email,
+            subject: roomname,
+            html: html_content
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              response.status(200).send({success:true,data:'Email activation was sent'})
+            }
+          });
+>>>>>>> 75ef150dfdcc6fe3bfbdf7ff2a58f11dad76b11e
 
         }
       }

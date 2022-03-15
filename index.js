@@ -54,6 +54,7 @@ const noon_position = require('./noon_position');
 const voyage = require('./voyage');
 const notice_to_marine = require('./notice_to_marine');
 const master_cable = require('./master_cable');
+const alasan_manouvre = require('./alasan_manouvre');
 const clearance_in = require('./clearance_in');
 const entering_to_port = require('./entering_to_port');
 const manouvre = require('./manouvre');
@@ -72,6 +73,8 @@ const jenis_berita = require('./jenis_berita')
 const jenis_securite = require('./jenis_securite')
 const jenis_informasi_securite = require('./jenis_informasi_securite')
 const jenis_pelanggaran = require('./jenis_pelanggaran')
+const jenis_pelayaran = require('./jenis_pelayaran')
+const terminal = require('./terminal')
 const jenis_pan = require('./jenis_pan')
 const jenis_status_navigation = require('./jenis_status_navigation')
 const jenis_manouvre = require('./jenis_manouvre')
@@ -110,6 +113,7 @@ app.post('/api/V1/masdex/categoryofship',kategori_kapal.read);
 // ============================== Voyage ==============================
 app.post('/api/V1/insaf/voyage', voyage.create);
 app.get('/api/V1/insaf/voyage_status', voyage.voyage_status);
+app.get('/api/V1/insaf/voyage_status/:id', voyage.voyage_status_by_id);
 app.get('/api/V1/insaf/voyage', voyage.read);
 app.get('/api/V1/insaf/voyage/:id',voyage.read_by_id);
 app.put('/api/V1/insaf/voyage/:id', voyage.update);
@@ -197,6 +201,23 @@ app.put('/api/V1/insaf/jenis_pelanggaran/update/:id', jenis_pelanggaran.update);
 app.delete('/api/V1/insaf/jenis_pelanggaran/delete/:id', jenis_pelanggaran.delete_);
 // ==========================================================================
 
+// ============================== Jenis Palayaran ===============================
+app.post('/api/V1/masdex/jenis_pelayaran/create', jenis_pelayaran.create);
+app.get('/api/V1/masdex/jenis_pelayaran/read', jenis_pelayaran.read);
+app.get('/api/V1/masdex/jenis_pelayaran/:id', jenis_pelayaran.read_by_id);
+app.put('/api/V1/masdex/jenis_pelayaran/update/:id', jenis_pelayaran.update);
+app.delete('/api/V1/masdex/jenis_pelayaran/delete/:id', jenis_pelayaran.delete_);
+// ==========================================================================
+
+// ============================== Jenis Terminal ===============================
+app.post('/api/V1/masdex/terminal/create', terminal.create);
+app.get('/api/V1/masdex/terminal/read', terminal.read);
+app.get('/api/V1/masdex/terminal/:id', terminal.read_by_id);
+app.put('/api/V1/masdex/terminal/update/:id', terminal.update);
+app.delete('/api/V1/masdex/terminal/delete/:id', terminal.delete_);
+// ==========================================================================
+
+
 // ============================== Jenis Pan ===============================
 app.post('/api/V1/insaf/jenis_pan/create', jenis_pan.create);
 app.get('/api/V1/insaf/jenis_pan/read', jenis_pan.read);
@@ -280,8 +301,8 @@ app.get('/api/V1/masdex/room_tmas/getShipParticularChat/:id',tmas.getShipParticu
 // tmas id
 app.post('/api/V1/masdex/room_tmas/get_tmasid_fromchat',tmas.getTMASidbyRoomname);
 
-//end distress chat
-app.put('/api/V1/masdex/room_tmas/end_distress/:id',tmas.endTMAS);
+//end tmas chat
+app.put('/api/V1/masdex/room_tmas/end_tmas/:id',tmas.endTMAS);
 
 // participant
 app.get('/api/V1/masdex/participant_tmas/insaf/read/:id', tmas.getAllpartisipanByTMASid);
@@ -337,7 +358,6 @@ app.get('/api/V1/insaf/clearance_in/voyage/:id', clearance_in.read_by_voyage_id)
 app.put('/api/V1/insaf/clearance_in/:id', clearance_in.update);
 app.put('/api/V1/masdex/clearance_in/:id', clearance_in.update_ksu);
 app.delete('/api/V1/insaf/clearance_in/:id', clearance_in.delete_);
-
 // ==========================================================================
 
 
@@ -361,6 +381,12 @@ app.put('/api/V1/masdex/manouvre/:id', manouvre.update);
 app.put('/api/V1/insaf/manouvre/:id', manouvre.update_operator);
 app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 
+// ============================== Alasan Manouvre ==============================
+app.post('/api/V1/masdex/alasan_manouvre/create', alasan_manouvre.create);
+app.get('/api/V1/masdex/alasan_manouvre/read', alasan_manouvre.read);
+app.get('/api/V1/masdex/alasan_manouvre/:id', alasan_manouvre.read_by_id);
+app.put('/api/V1/masdex/alasan_manouvre/update/:id', alasan_manouvre.update);
+app.delete('/api/V1/masdex/alasan_manouvre/delete/:id', alasan_manouvre.delete_);
 // ==========================================================================
 
 // ============================== 6.Clearance Out ==========================
@@ -414,9 +440,8 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
 // =============================== USER STAKEHOLDER =====================================
     app.post('/api/V1/masdex/user_stakeholder', user_stakeholder.create);
     app.get('/api/V1/masdex/user_stakeholder/profile/:id', user_stakeholder.detail_profile);
-    app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, (req, res) => {
-        user_stakeholder.readall(req,res)
-    });
+    app.get('/api/V1/masdex/user_stakeholder/all', authenticateToken, user_stakeholder.readall);
+    app.get('/api/V1/masdex/user_stakeholder/nahkoda', authenticateToken, user_stakeholder.read_nahkoda);
     
     app.get('/api/V1/masdex/user_stakeholder/:id', (req, res) => {
         user_stakeholder.read_by_id(req,res)
@@ -491,14 +516,17 @@ app.post('/api/V1/masdex/kapal_by_agen', authenticateToken, (req, res) => {
 app.post('/api/V1/masdex/distress/create', distress.createDistress);
 app.post('/api/V1/masdex/distress/read', distress.readDistress);
 app.get('/api/V1/masdex/distress/read/:id', distress.readDistressByID);
+app.get('/api/V1/masdex/distress/voyage/:id', distress.readDistressByVoyage);
 app.put('/api/V1/masdex/distress/update/:id', distress.updateDistress);
 app.delete('/api/V1/masdex/distress/delete/:id', distress.deleteDistress);
+
 app.post('/api/V1/masdex/distress_detail/insaf/read/all', distress.readDistressDetailAll);
 app.post('/api/V1/masdex/distress_detail/insaf/create', distress.createDistressDetail);
 app.post('/api/V1/masdex/distress_detail/insaf/read', distress.readDistressDetail);
 app.get('/api/V1/masdex/distress_detail/read/:id', distress.readDistressDetailByID);
 app.put('/api/V1/masdex/distress_detail/update/:id', distress.updateDistressDetail);
 app.delete('/api/V1/masdex/distress_detail/delete/:id', distress.deleteDistressDetail);
+
 app.post('/api/V1/masdex/pelapor_distress/insaf/create', distress.createPelaporDistress);
 app.post('/api/V1/masdex/pelapor_distress/insaf/read', distress.readPelaporDistress);
 app.get('/api/V1/masdex/pelapor_distress/insaf/read/:id', distress.readPelaporDistressByID);

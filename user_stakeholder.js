@@ -166,6 +166,37 @@ const readall = (request, response) => {
 
 
 }
+const read_nahkoda = (request, response) => {
+    var res = []
+    var items = []
+    pool.query('SELECT count(*) as total from tbl_user_stakeholders WHERE is_delete=$1 AND role_id=(SELECT id FROM tbl_role WHERE role=$2)', [false, 'Nahkoda'], (error, results) => {
+
+        pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1 AND role_id=(SELECT id FROM tbl_role WHERE role=$2)', [false, 'Nahkoda'], (error, results1) => {
+            //bcrypt.compare(password, results.rows[0].password, function(err, res) {
+
+            if (results1) {
+                items.push({
+                    rows: results1.rows
+                })
+                res.push(items)
+                response.status(200).json({
+                    success: true,
+                    data: res
+                })
+
+            } else {
+                //console.log('Your password not mached.');
+                response.status(400).json({
+                    success: false,
+                    data: "password tidak sama"
+                });
+            }
+        });
+
+    });
+
+
+}
 
 const detail_profile = (request, response) => {
 
@@ -419,6 +450,7 @@ module.exports = {
     create,
     read,
     readall,
+    read_nahkoda,
     read_by_id,
     update,
     delete_,

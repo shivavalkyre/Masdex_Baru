@@ -199,9 +199,11 @@ const delete_ = (request, response) => {
 
 const voyage_status = (request, response) => {
 
-  const {page,rows} = request.body
+  const {page,rows,sortBy,sortDirection} = request.query
   var page_req = page || 1
   var rows_req = rows || 10
+  var sort_by_req = sortBy || null
+  var sort_direction_req = sortDirection || null
   var offset = (page_req - 1) * rows_req
   var res = []
   var items = []
@@ -215,6 +217,7 @@ const voyage_status = (request, response) => {
    res.push({total:results.rows[0].total})
 
    var sql= 'SELECT * FROM ship_status_last_status'
+   if (sort_by_req && sort_direction_req) sql += ` ORDER BY ${sort_by_req} ${sort_direction_req}`
    pool.query(sql ,(error, results) => {
      if (error) {
        throw error
@@ -228,12 +231,29 @@ const voyage_status = (request, response) => {
 
 }
 
+const voyage_status_by_id = (request, response) => {
+
+  const id = parseInt(request.params.id);
+  const res = []
+  const items = []
+
+  pool.query('SELECT * FROM ship_status_last_status WHERE voyage_id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    items.push({ rows:results.rows })
+    res.push(items)
+    response.status(200).send({ success: true, data: res })
+  })
+}
+
 
 module.exports = {
-create,
-read,
-read_by_id,
-update,
-delete_,
-voyage_status,
+  create,
+  read,
+  read_by_id,
+  update,
+  delete_,
+  voyage_status,
+  voyage_status_by_id,
 }

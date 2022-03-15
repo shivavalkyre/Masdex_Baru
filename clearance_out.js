@@ -4,29 +4,29 @@ const path = require('path')
 const base_url = process.env.base_url;
 
 const create = (request, response) => {
-  const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, created_by }
+  const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, dokumen_spb, created_by }
     = request.body
-  var name= null;
-  if (request.files!==null)
-  {
-  let sampleFile = request.files.dokumen_spb;
-  console.log(sampleFile);
-  const now = Date.now()
-  name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-  let complete_path = base_url + 'dokumens/clearance_out/' + name;
-  console.log(__dirname);
-  sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
-    if (err)
-      console.log(err);
-  });
 
-  }else{
-    name=null;
-    complete_path=null;
-  }
+    var name;
+    if (request.files) {
+      var name = '';
+      let sampleFile = request.files.dokumen_spb;
+      console.log(sampleFile);
+      const now = Date.now()
+      name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+      complete_path = base_url + 'dokumens/clearance_out/' + name;
+      console.log(__dirname);
+      sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
+          if (err)
+              console.log(err);
+      });
+    }else{
+      name=null;
+      complete_path=null;
+    }
 
-  pool.query('INSERT INTO tbl_insaf_clearance_out (voyage_id,nomor_spb,tanggal_jam_spb,pelabuhan_tujuan,eta_pelabuhan_tujuan,dokumen_spb,etd_pelabuhan_tujuan,url_dokumen_spb,created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)'
-    , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, name, etd_pelabuhan_tujuan, complete_path, created_by], (error, results) => {
+  pool.query('INSERT INTO tbl_insaf_clearance_out (voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, dokumen_spb, url_dokumen_spb, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)'
+    , [voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, name, complete_path,created_by], (error, results) => {
       if (error) {
         throw error
         //response.status(201).send(error)

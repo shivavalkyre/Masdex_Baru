@@ -30,9 +30,12 @@ const createDistress = (request, response) => {
 
 const readDistress = (request, response) => {
     //const { id } = request.body
-    const {page,rows} = request.body
+    const {page,rows,sortBy,sortByTable,sortDirection} = request.body
     var page_req = page || 1
     var rows_req = rows || 3
+    var sort_by_req = sortBy || 'id'
+    var sort_by_table_req = sortByTable || 'tbl_insaf_distress'
+    var sort_direction_req = sortDirection || 'ASC'
     var offset = (page_req - 1) * rows_req
     var res = []
     var items = []
@@ -42,7 +45,7 @@ const readDistress = (request, response) => {
       }
       res.push({total:results.rows[0].total})
       // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-      var sql=  'SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete FROM tbl_insaf_distress LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id WHERE tbl_insaf_distress.is_delete=false ORDER BY tbl_insaf_distress.id ASC'
+      var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete FROM tbl_insaf_distress LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id WHERE tbl_insaf_distress.is_delete=false ORDER BY ${sort_by_table_req}.${sort_by_req} ${ sort_direction_req }`
       pool.query(
        sql,
         (error, results) => {
@@ -73,6 +76,24 @@ const readDistressByID = (request, response) => {
 		  
             response.status(200).send(results.rows)
         })
+
+}
+
+const readDistressByVoyage = (request, response) => {
+  const id = parseInt(request.params.id)
+var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete
+       FROM tbl_insaf_distress 
+       LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id
+       LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id
+       WHERE tbl_insaf_distress.voyage_id= '`+id+`';`
+pool.query(
+      sql, (error, results) => {
+        if (error) {
+          response.status(400).send({success:false,data:error})
+        }
+    
+          response.status(200).send(results.rows)
+      })
 
 }
 
@@ -504,9 +525,11 @@ const deletePelaporDistress = (request, response) => {
       // generate link di ubah sesuai kebutuhan
       var url='';
        if (parseInt(is_osc)===0){
-         url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
+         url ='http://chat-distress.disnavpriok.id/room?username='+ username +'&roomname='+roomname+'&osc=0';
+        //  url ='http://localhost:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
        }else{
-         url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
+         url ='http://chat-distress.disnavpriok.id/room?username='+ username +'&roomname='+roomname+'&osc=1';
+        //  url ='http://localhost:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
        }
 
           // send email activation ================================================================
@@ -669,6 +692,7 @@ module.exports = {
     createDistress,
     readDistress,
     readDistressByID,
+    readDistressByVoyage,
     updateDistress,
     deleteDistress,
     createDistressDetail,

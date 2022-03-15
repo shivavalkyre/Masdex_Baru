@@ -312,10 +312,15 @@ const update_ksu = (request, response) => {
             //   complete_path=null;
             // }
 
+            var approval = false;
+            if(approval_ksu == 'ok'){
+              approval = true;
+            }
+
           console.log(name);
          const update_time = new Date;
          pool.query('UPDATE tbl_insaf_clearance_in SET approval_ksu=$1,dokumen_spm=$2,updated_at=$3,url_dokumen_spm=$4 where id=$5'
-         , [approval_ksu,name,update_time,complete_path,id], (error, results) =>{
+         , [approval,name,update_time,complete_path,id], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
