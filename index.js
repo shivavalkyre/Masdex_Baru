@@ -436,6 +436,7 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
 // ==========================================================================
 // =============================== LOGIN USER ===============================
     app.post('/api/V1/masdex/user/login',user.login_all);
+    app.post('/api/V1/masdex/check_token',user.checkToken);
 // ==========================================================================
 // =============================== USER STAKEHOLDER =====================================
     app.post('/api/V1/masdex/user_stakeholder', user_stakeholder.create);
