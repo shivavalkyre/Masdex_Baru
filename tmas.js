@@ -446,14 +446,14 @@ const storePartisipanChatroom = (request, response) =>
           ssl: false,
           tls: true,
           auth: {
-            user: 'admin.insaf@disnavpriok.id',
-            pass: 'dispriok123'
+            user: 'admin.masdex@disnavpriok.id',
+            pass: 'Masdex_2022'
           }
         });
         
         const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
         const mailOptions = {
-          from: 'admin.insaf@disnavpriok.id',
+          from: 'admin.masdex@disnavpriok.id',
           to: email,
           subject: roomname,
           html: html_content

@@ -463,6 +463,34 @@ function decrypt(text) {
 
 //================================================================================================
 
+const checkToken = (request, response) => {
+    const { token } = request.body
+    var code = 200;
+    var success_return = true;
+    var data;
+    //console.log(token);
+    jwt.verify(token, process.env.TOKEN_SECRET, function(err, decoded) {
+      if (err) {
+        /*
+          err = {
+            name: 'TokenExpiredError',
+            message: 'jwt expired',
+            expiredAt: '1800s'
+          } */
+          code=400;
+          success_return = false;
+          //data = err;
+      }
+          if (code==200){
+            response.status(code).send({success:true,data:'token is valid'})
+          }else
+          {
+            response.status(code).send({success:false,data:err})
+          }
+    });
+   
+  }
+
 
 module.exports = {
     create,
@@ -473,5 +501,6 @@ module.exports = {
     read_by_id,
     update,
     delete_,
+    checkToken,
     download
 }
