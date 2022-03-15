@@ -525,10 +525,10 @@ const deletePelaporDistress = (request, response) => {
       // generate link di ubah sesuai kebutuhan
       var url='';
        if (parseInt(is_osc)===0){
-         url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
+         url ='http://chat-distress.disnavpriok.id/room?username='+ username +'&roomname='+roomname+'&osc=0';
         //  url ='http://localhost:3001/room?username='+ username +'&roomname='+roomname+'&osc=0';
        }else{
-         url ='http://chat.disnavpriok.id:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
+         url ='http://chat-distress.disnavpriok.id/room?username='+ username +'&roomname='+roomname+'&osc=1';
         //  url ='http://localhost:3001/room?username='+ username +'&roomname='+roomname+'&osc=1';
        }
 
