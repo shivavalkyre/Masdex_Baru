@@ -440,34 +440,6 @@ const storePartisipanChatroom = (request, response) =>
         //});
 
         // send email forgot password ================================================================
-<<<<<<< HEAD
-        const transporter = nodemailer.createTransport({
-          host: 'srv115.niagahoster.com',
-          port: 465,
-          ssl: false,
-          tls: true,
-          auth: {
-            user: 'admin.masdex@disnavpriok.id',
-            pass: 'Masdex_2022'
-          }
-        });
-        
-        const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
-        const mailOptions = {
-          from: 'admin.masdex@disnavpriok.id',
-          to: email,
-          subject: roomname,
-          html: html_content
-        };
-        
-        transporter.sendMail(mailOptions, function(error, info){
-          if (error) {
-            console.log(error);
-          } else {
-            response.status(200).send({success:true,data:'Email activation was sent'})
-          }
-        });
-=======
           const transporter = nodemailer.createTransport({
             host: 'srv115.niagahoster.com',
             port: 465,
@@ -494,7 +466,6 @@ const storePartisipanChatroom = (request, response) =>
               response.status(200).send({success:true,data:'Email activation was sent'})
             }
           });
->>>>>>> 75ef150dfdcc6fe3bfbdf7ff2a58f11dad76b11e
 
         }
       }
