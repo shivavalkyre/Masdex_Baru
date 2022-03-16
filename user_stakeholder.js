@@ -16,6 +16,7 @@ const create = (request, response) => {
         photo,
         nama_lengkap,
         stakeholder_id,
+        id_spesialis,
         role_id
     } = request.body
     pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1', [username], (error, results) => {
@@ -70,7 +71,7 @@ const create = (request, response) => {
                     if (role_id==null){
                         role_id=0;
                     }
-                    pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo, stakeholder_id, role_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)', [username, password_hash, email, name, nama_lengkap, complete_path, stakeholder_id, role_id], (error, results) => {
+                    pool.query('INSERT INTO tbl_user_stakeholders (username,password,email,photo,nama_lengkap,url_photo, stakeholder_id, role_id, id_spesialis) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [username, password_hash, email, name, nama_lengkap, complete_path, stakeholder_id, role_id, id_spesialis], (error, results) => {
                         if (error) {
                             throw error
                         }
@@ -272,6 +273,7 @@ const update = (request, response) => {
         photo,
         nama_lengkap,
         stakeholder_id,
+        id_spesialis,
         role_id
     } = request.body
 
@@ -330,7 +332,7 @@ const update = (request, response) => {
                         {
                             role_id=0;
                         }
-                        pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,stakeholder_id=$8, role_id=$9 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, stakeholder_id, role_id], (error, results) => {
+                        pool.query('UPDATE tbl_user_stakeholders SET username=$1,password=$2,email=$3,photo=$4,nama_lengkap=$5,url_photo=$6,stakeholder_id=$8, role_id=$9, id_spesialis=$10 WHERE username=$7', [username, password_hash, email, name, nama_lengkap, complete_path, username, stakeholder_id, role_id, id_spesialis], (error, results) => {
                             if (error) {
                                 throw error
                             }
