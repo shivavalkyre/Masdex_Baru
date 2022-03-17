@@ -79,6 +79,7 @@ const jenis_pan = require('./jenis_pan')
 const jenis_status_navigation = require('./jenis_status_navigation')
 const jenis_manouvre = require('./jenis_manouvre')
 const jenis_berita_marine_safety_informasi = require('./jenis_berita_marine_safety_informasi')
+const histori_chat = require('./histori_chat')
 const distress = require('./distress')
 const pan = require('./pan')
 const securite = require('./securite')
@@ -548,6 +549,10 @@ app.post('/api/V1/masdex/room_distress/getdistressidfromchat',distress.getDistre
 
 //end distress chat
 app.put('/api/V1/masdex/room_distress/end_distress/:id',distress.endDistress);
+
+// histori chat
+app.get('/api/V1/masdex/histori_chat/read/:roomname', histori_chat.read_by_id);
+app.get('/api/V1/masdex/histori_chat/read', histori_chat.read);
 
 // participant
 app.get('/api/V1/masdex/participant_distress/insaf/read/:distressid', distress.getAllpartisipanBydistressid);
