@@ -21,7 +21,7 @@ const create = (request, response) => {
         pegawai_id
     } = request.body
 
-    pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1', [username], (error, results) => {
+    pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1 and is_delete=false ', [username], (error, results) => {
         if (error) {
             throw error
         }
@@ -95,9 +95,9 @@ const read = (request, response) => {
         password
     } = request.body
 
-    pool.query('SELECT count(*) as total from tbl_users WHERE username =$1', [username], (error, results) => {
+    pool.query('SELECT count(*) as total from tbl_users WHERE username =$1 and is_delete=false', [username], (error, results) => {
         if (results.rows[0].total > 0) {
-            pool.query('SELECT * from tbl_users WHERE username =$1', [username], (error, results) => {
+            pool.query('SELECT * from tbl_users WHERE username =$1 and is_delete=false', [username], (error, results) => {
                 bcrypt.compare(password, results.rows[0].password, function (err, res) {
 
                     if (res) {
@@ -139,10 +139,10 @@ const login = (request, response) => {
         password
     } = request.body
 
-    pool.query('SELECT count(*) as total from tbl_users WHERE username =$1', [username], (error, results) => {
+    pool.query('SELECT count(*) as total from tbl_users WHERE username =$1 and is_delete=false', [username], (error, results) => {
         console.log(results)
         if (results.rows[0].total > 0) {
-            pool.query('SELECT * from tbl_users WHERE username =$1', [username], (error, results) => {
+            pool.query('SELECT * from tbl_users WHERE username =$1 and is_delete=false', [username], (error, results) => {
                 bcrypt.compare(password, results.rows[0].password, function (err, res) {
 
                     if (res) {
@@ -187,10 +187,10 @@ const login_all = (request, response) => {
         password
     } = request.body
 
-    pool.query('SELECT count(*) as total from masdex_users_all WHERE username =$1', [username], (error, results) => {
+    pool.query('SELECT count(*) as total from masdex_users_all WHERE username =$1 and is_delete=false', [username], (error, results) => {
         console.log(results)
         if (results.rows[0].total > 0) {
-            pool.query('SELECT * from masdex_users_all WHERE username =$1', [username], (error, results) => {
+            pool.query('SELECT * from masdex_users_all WHERE username =$1 and is_delete=false', [username], (error, results) => {
                 bcrypt.compare(password, results.rows[0].password, function (err, res) {
 
                     if (res) {
@@ -206,6 +206,7 @@ const login_all = (request, response) => {
                             "id": results.rows[0].id,
                             "username": username,
                             role: results.rows[0].stakeholder || 'disnav',
+                            role_id: results.rows[0].role_id,
                             nama_lengkap: results.rows[0].nama_lengkap
                         })
                     } else {
