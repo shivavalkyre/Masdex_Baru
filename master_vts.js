@@ -21,7 +21,7 @@ const create = (request, response) => {
 
    // get kurs_tengah
     if (mmsi.length==0){
-    pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,no_jurnal,jenis_berita,more_information,jenis_pelayaran) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20,$21,$22,$23)'
+    pool.query('INSERT INTO tbl_insaf_master_vts (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,no_jurnal,jenis_berita,more_information,jenis_pelayaran) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20,$21,$22,$23)'
     , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable,no_jurnal,jenis_berita,more_information,jenis_pelayaran], (error, results) =>{
       if (error) {
          throw error
@@ -34,16 +34,16 @@ const create = (request, response) => {
         }
       }else
       {
-        pool.query(`SELECT id FROM tbl_insaf_master_cable ORDER BY id DESC limit 1`, (error90, results90) => {
+        pool.query(`SELECT id FROM tbl_insaf_master_vts ORDER BY id DESC limit 1`, (error90, results90) => {
             if (error90) {
                 response.status(400).send({success:false,data:error90})
             }
-            let master_cable_id = results90.rows[0].id;
+            let master_vts_id = results90.rows[0].id;
             response.status(200).send(
                 {
                     success:true,
-                    data:'data master cable berhasil dibuat',
-                    last_id: master_cable_id
+                    data:'data master vts berhasil dibuat',
+                    last_id: master_vts_id
                 }
             )
         })
@@ -52,7 +52,7 @@ const create = (request, response) => {
     })
     }else
     {
-        pool.query('INSERT INTO tbl_insaf_master_cable (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi,no_jurnal,jenis_berita,more_information,jenis_pelayaran) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20,$21,$22,$23,$24)'
+        pool.query('INSERT INTO tbl_insaf_master_vts (voyage_id,status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,kurs_tengah,preamble,berita,ck,tagihan_lsc,tagihan_llc,total_tagihan,is_payable,mmsi,no_jurnal,jenis_berita,more_information,jenis_pelayaran) VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9, $10, $11, $12, $13, $14, $15,$16,$17,$18,$19,$20,$21,$22,$23,$24)'
         , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),is_payable,mmsi,no_jurnal,jenis_berita,more_information,jenis_pelayaran], (error, results) =>{
           if (error) {
              throw error
@@ -66,16 +66,16 @@ const create = (request, response) => {
           }else
           {
               
-                pool.query(`SELECT id FROM tbl_insaf_master_cable ORDER BY id DESC limit 1`, (error90, results90) => {
+                pool.query(`SELECT id FROM tbl_insaf_master_vts ORDER BY id DESC limit 1`, (error90, results90) => {
                     if (error90) {
                         response.status(400).send({success:false,data:error90})
                     }
-                    let master_cable_id = results90.rows[0].id;
+                    let master_vts_id = results90.rows[0].id;
                     response.status(200).send(
                         {
                             success:true,
-                            data:'data master cable berhasil dibuat',
-                            last_id: master_cable_id
+                            data:'data master vts berhasil dibuat',
+                            last_id: master_vts_id
                         }
                     )
                 })
@@ -95,14 +95,14 @@ const read = (request, response) => {
     var res = []
     var items = []
   
-    pool.query('SELECT count(*) as total FROM tbl_insaf_master_cable where is_delete=false', (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_master_vts where is_delete=false', (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_master_cable where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT * FROM tbl_insaf_master_vts where is_delete=false ORDER BY id ASC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -130,14 +130,14 @@ const read_by_id = (request, response) => {
     var res = []
     var items = []
   
-    pool.query('SELECT count(*) as total FROM tbl_insaf_master_cable where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_master_vts where id=$1 and is_delete=false', [id], (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_master_cable where id=$1 and is_delete=false'
+     var sql= 'SELECT * FROM tbl_insaf_master_vts where id=$1 and is_delete=false'
      pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
@@ -163,14 +163,14 @@ const read_by_voyage_id = (request, response) => {
     var res = []
     var items = []
   
-    pool.query('SELECT count(*) as total FROM tbl_insaf_master_cable where voyage_id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_master_vts where voyage_id=$1 and is_delete=false', [id], (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_master_cable where voyage_id=$1 and is_delete=false'
+     var sql= 'SELECT * FROM tbl_insaf_master_vts where voyage_id=$1 and is_delete=false'
      pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
@@ -191,7 +191,7 @@ const update = (request, response) => {
     let doc;
     //console.log(mmsi);
 
-    pool.query('SELECT count(*) as total FROM tbl_insaf_master_cable where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_master_vts where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
           throw error
         }else{
@@ -200,7 +200,7 @@ const update = (request, response) => {
         
     })
 
-     pool.query('SELECT * FROM tbl_insaf_master_cable where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_insaf_master_vts where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }
@@ -209,7 +209,7 @@ const update = (request, response) => {
 
         if (mmsi.length==0){
 
-            pool.query('UPDATE tbl_insaf_master_cable SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20,no_jurnal=$21,jenis_berita=$22,more_information=$23,jenis_pelayaran=$25 where id=$24'
+            pool.query('UPDATE tbl_insaf_master_vts SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20,no_jurnal=$21,jenis_berita=$22,more_information=$23,jenis_pelayaran=$25 where id=$24'
          , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),update_time,is_payable,no_jurnal,jenis_berita,more_information, id, jenis_pelayaran], (error, results) =>{
            if (error) {
               throw error
@@ -223,14 +223,14 @@ const update = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data master cable berhasil diperbarui'})
+               response.status(200).send({success:true,data:'data master vts berhasil diperbarui'})
            }
      
          })
 
         }else{
 
-            pool.query('UPDATE tbl_insaf_master_cable SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20,mmsi=$21,no_jurnal=$22,jenis_berita=$23,more_information=$24,jenis_pelayaran=$26 where id=$25'
+            pool.query('UPDATE tbl_insaf_master_vts SET voyage_id=$1,status_bernavigasi=$2,degree1=$3,minute1=$4,second1=$5,direction1=$6,degree2=$7,minute2=$8,second2=$9,direction2=$10,jenis_telkompel=$11,kurs_tengah=$12,preamble=$13,berita=$14,ck=$15,tagihan_lsc=$16,tagihan_llc=$17,total_tagihan=$18,updated_at=$19,is_payable=$20,mmsi=$21,no_jurnal=$22,jenis_berita=$23,more_information=$24,jenis_pelayaran=$26 where id=$25'
             , [parseInt(voyage_id),status_bernavigasi,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,jenis_telkompel,parseFloat(kurs_tengah),preamble,berita,ck,parseFloat(tagihan_lsc),parseFloat(tagihan_llc),parseFloat(total_tagihan),update_time,is_payable,mmsi,no_jurnal,jenis_berita,more_information,id,jenis_pelayaran], (error, results) =>{
               if (error) {
                  throw error
@@ -244,7 +244,7 @@ const update = (request, response) => {
                 }
               }else
               {
-                  response.status(200).send({success:true,data:'data master cable berhasil diperbarui'})
+                  response.status(200).send({success:true,data:'data master vts berhasil diperbarui'})
               }
         
             })
@@ -270,7 +270,7 @@ const delete_ = (request, response) => {
     const id = parseInt(request.params.id);
  
 
-    pool.query('SELECT count(*) as total FROM tbl_insaf_master_cable where id=$1 and is_delete=false', [id], (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_insaf_master_vts where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
           throw error
         }else{
@@ -279,14 +279,14 @@ const delete_ = (request, response) => {
         
     })
 
-     pool.query('SELECT * FROM tbl_insaf_master_cable where id=$1 and is_delete=false',[id] ,(error, results) => {
+     pool.query('SELECT * FROM tbl_insaf_master_vts where id=$1 and is_delete=false',[id] ,(error, results) => {
           if (error) {
             throw error
           }
 
 
          const deletetime = new Date;
-         pool.query('UPDATE tbl_insaf_master_cable SET deleted_at=$1,is_delete=$2 where id=$3'
+         pool.query('UPDATE tbl_insaf_master_vts SET deleted_at=$1,is_delete=$2 where id=$3'
          , [deletetime, true,id], (error, results) =>{
            if (error) {
 
@@ -298,7 +298,7 @@ const delete_ = (request, response) => {
              }
            }else
            {
-               response.status(200).send({success:true,data:'data master cable berhasil dihapus'})
+               response.status(200).send({success:true,data:'data master vts berhasil dihapus'})
            }
      
          })

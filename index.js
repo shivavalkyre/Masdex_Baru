@@ -54,6 +54,7 @@ const noon_position = require('./noon_position');
 const voyage = require('./voyage');
 const notice_to_marine = require('./notice_to_marine');
 const master_cable = require('./master_cable');
+const master_vts = require('./master_vts');
 const alasan_manouvre = require('./alasan_manouvre');
 const clearance_in = require('./clearance_in');
 const entering_to_port = require('./entering_to_port');
@@ -335,7 +336,7 @@ app.put('/api/V1/insaf/notice_to_marine_detail/update/:id', notice_to_marine.upd
 app.delete('/api/V1/insaf/notice_to_marine_detail/delete/:id', notice_to_marine.deleteDetail);
 // ==========================================================================
 
-// ============================== 2.Master Cable ==============================
+// ============================== 2.1.Master Cable ==============================
 app.post('/api/V1/masdex/master_cable', master_cable.create);
 app.get('/api/V1/masdex/master_cable', master_cable.read);
 app.get('/api/V1/masdex/master_cable/:id', master_cable.read_by_id);
@@ -350,6 +351,23 @@ app.get('/api/V1/kurs_tengah', master_cable.kurs_tengah);
 
 // ================================ Total Tagihan ===========================
 app.post('/api/V1/total_tagihan/:location', master_cable.cek_total_tagihan);
+// ==========================================================================
+
+// ============================== 2.2.Master VTS ==============================
+app.post('/api/V1/masdex/master_vts', master_vts.create);
+app.get('/api/V1/masdex/master_vts', master_vts.read);
+app.get('/api/V1/masdex/master_vts/:id', master_vts.read_by_id);
+app.get('/api/V1/masdex/master_vts/voyage/:id', master_vts.read_by_voyage_id);
+app.put('/api/V1/masdex/master_vts/:id', master_vts.update);
+app.delete('/api/V1/masdex/master_vts/:id', master_vts.delete_);
+
+// =============================== Kurs Tengah ==============================
+app.get('/api/V1/kurs',master_vts.kurs_tengah_data);
+app.get('/api/V1/kurs_tengah', master_vts.kurs_tengah);
+// ==========================================================================
+
+// ================================ Total Tagihan ===========================
+app.post('/api/V1/total_tagihan/:location', master_vts.cek_total_tagihan);
 // ==========================================================================
 
 // ============================== 3.Clearance In ==============================
