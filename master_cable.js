@@ -394,7 +394,9 @@ const kurs_tengah = (request, response) =>
 {
                     // get kurs tengah
                     var myInt = setInterval(function () {
-                        let url ='http://localhost:3012/api/V1/kurs'
+                        // let url ='http://localhost:3012/api/V1/kurs'
+                        let url ='http://api-insafmasdex.disnavpriok.id:3012/api/V1/kurs'
+
                         req(url, function (err, res, body) {
                             //console.log(body)
                             var mykurs = JSON.parse(body)
@@ -448,7 +450,9 @@ const cek_total_tagihan= (request, response)  =>
         {
             // get kurs tengah
                  var myInt = setInterval(function () {
-                    let url ='http://localhost:3012/api/V1/kurs'
+                    // let url ='http://localhost:3012/api/V1/kurs'
+                    let url ='http://api-insafmasdex.disnavpriok.id:3012/api/V1/kurs'
+
                     req(url, function (err, res, body) {
                         var mykurs = JSON.parse(body)
                         //console.log(mykurs.data)
@@ -861,7 +865,9 @@ const cek_total_tagihan= (request, response)  =>
 
         // get kurs tengah
         var myInt = setInterval(function () {
-          let url ='http://localhost:3012/api/V1/kurs'
+        //   let url ='http://localhost:3012/api/V1/kurs'
+        let url ='http://api-insafmasdex.disnavpriok.id:3012/api/V1/kurs'
+
           req(url, function (err, res, body) {
               var mykurs = JSON.parse(body)
               //console.log(mykurs.data)
