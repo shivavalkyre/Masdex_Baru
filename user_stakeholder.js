@@ -141,7 +141,7 @@ const readall = (request, response) => {
     var items = []
     pool.query('SELECT count(*) as total from tbl_user_stakeholders', (error, results) => {
 
-        pool.query('SELECT * from tbl_user_stakeholders WHERE is_delete=$1', [false], (error, results1) => {
+        pool.query("SELECT u.id, u.nama_lengkap, u.username, u.email, u.role_id, r.role, 'eksternal' as type, u.created_at, u.updated_at, u.deleted_at, u.is_delete from tbl_user_stakeholders u left join tbl_role r on r.id = u.role_id WHERE u.is_delete=$1", [false], (error, results1) => {
             //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
             if (results1) {
@@ -164,9 +164,38 @@ const readall = (request, response) => {
         });
 
     });
-
-
 }
+
+const readeksternal = (request, response) => {
+    var res = []
+    var items = []
+    pool.query('SELECT count(*) as total from tbl_user_stakeholders', (error, results) => {
+
+        pool.query("SELECT u.id, u.nama_lengkap, u.username, u.email, u.role_id, r.role, 'eksternal' as type, u.created_at, u.updated_at, u.deleted_at, u.is_delete from tbl_user_stakeholders u left join tbl_role r on r.id = u.role_id WHERE u.role_id in (11,12,29,13,14) and u.is_delete=$1", [false], (error, results1) => {
+            //bcrypt.compare(password, results.rows[0].password, function(err, res) {
+
+            if (results1) {
+                items.push({
+                    rows: results1.rows
+                })
+                res.push(items)
+                response.status(200).json({
+                    success: true,
+                    data: res
+                })
+
+            } else {
+                //console.log('Your password not mached.');
+                response.status(400).json({
+                    success: false,
+                    data: "password tidak sama"
+                });
+            }
+        });
+
+    });
+}
+
 const read_nahkoda = (request, response) => {
     var res = []
     var items = []
@@ -288,10 +317,13 @@ const update = (request, response) => {
                 bcrypt.hash(password, salt, function (err, res) {
                     console.log(password_hash);
                     pool.query('SELECT * FROM tbl_user_stakeholders WHERE id = $1', [id], (error, results) => {
-                        password_hash = results.rows[0].password;
-                        if (password != null || password != '') {
-                            password_hash = res;
+                        password_hash = res;
+                        console.log(results.rows[0].password);
+                        if (password == null || password == '') {
+                            password_hash = results.rows[0].password;
                         }
+                        console.log(password_hash);
+                        console.log(password);
 
                         if (error) {
                             throw error
@@ -304,15 +336,15 @@ const update = (request, response) => {
                         complete_path = results.rows[0].url_photo;
                         if (request.files) {
                             console.log('ada foto')
-                            doc = results.rows[0].photo;
-                            if (doc != 'default.jpg') {
-                                var doc_path = __dirname + path.join('/dokumens/user_stakeholder/' + doc);
-                                console.log(doc_path);
-                                fs.unlinkSync(doc_path);
-                                console.log(doc_path);
-                            }
+                            // doc = results.rows[0].photo;
+                            // if (doc != 'default.jpg') {
+                            //     var doc_path = __dirname + path.join('/dokumens/user_stakeholder/' + doc);
+                            //     console.log(doc_path);
+                            //     fs.unlinkSync(doc_path);
+                            //     console.log(doc_path);
+                            // }
 
-                            console.log(doc_path);
+                            // console.log(doc_path);
                             var name = '';
                             let sampleFile = request.files.photo;
                             console.log(sampleFile);
@@ -324,9 +356,6 @@ const update = (request, response) => {
                                 if (err)
                                     console.log(err);
                             });
-                        } else {
-                            name = null;
-                            complete_path=null;
                         }
                         if (role_id==null)
                         {
@@ -358,23 +387,18 @@ const update = (request, response) => {
 
 const delete_ = (request, response) => {
     const id = parseInt(request.params.id);
-
-
     pool.query('SELECT count(*) as total FROM tbl_user_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
             throw error
         } else {
             //console.log(results.rows);
         }
-
     })
 
     pool.query('SELECT * FROM tbl_user_stakeholders where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
             throw error
         }
-
-
         const deletetime = new Date;
         pool.query('UPDATE tbl_user_stakeholders SET deleted_at=$1,is_delete=$2 where id=$3', [deletetime, true, id], (error, results) => {
             if (error) {
@@ -392,14 +416,7 @@ const delete_ = (request, response) => {
             }
 
         })
-
-
-
-
     });
-
-
-
 }
 
 const download = (request, response) => {
@@ -452,6 +469,7 @@ module.exports = {
     create,
     read,
     readall,
+    readeksternal,
     read_nahkoda,
     read_by_id,
     update,

@@ -439,6 +439,10 @@ app.put('/api/V1/masdex/departing/departing_status/:id', departing.setDepartingS
 // ==========================================================================
 
 // =============================== USER =====================================
+    app.get('/api/V1/masdex/user/read/internal', user.readinternal);
+    app.get('/api/V1/masdex/user/read/eksternal', user_stakeholder.readeksternal);
+    app.delete('/api/V1/masdex/user/delete/internal/:id', user.delete_internal);
+
     app.post('/api/V1/masdex/user', user.create);
     app.get('/api/V1/masdex/user/all', authenticateToken, (req, res) => {
         user.readall(req,res)

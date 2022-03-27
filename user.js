@@ -236,7 +236,7 @@ const readall = (request, response) => {
 
     pool.query('SELECT count(*) as total from tbl_users', (error, results) => {
 
-        pool.query('SELECT * from tbl_users WHERE is_delete=$1', [false], (error, results1) => {
+        pool.query("SELECT u.id, u.nama_lengkap, u.username, u.email, u.role_id, r.role, 'internal' as type, u.created_at, u.updated_at, u.deleted_at, u.is_delete from tbl_users u left join tbl_role r on r.id = u.role_id WHERE u.is_delete=$1", [false], (error, results1) => {
             //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
             if (results1) {
@@ -259,6 +259,36 @@ const readall = (request, response) => {
 
     });
 
+}
+
+const readinternal = (request, response) => {
+    var res = [];
+    var items = [];
+
+    pool.query('SELECT count(*) as total from tbl_users', (error, results) => {
+
+        pool.query("SELECT u.id, u.nama_lengkap, u.username, u.email, u.role_id, r.role, 'internal' as type, u.created_at, u.updated_at, u.deleted_at, u.is_delete from tbl_users u left join tbl_role r on r.id = u.role_id WHERE u.role_id in (30,31,32) and u.is_delete=$1", [false], (error, results1) => {
+            //bcrypt.compare(password, results.rows[0].password, function(err, res) {
+
+            if (results1) {
+                items.push({
+                    rows: results1.rows
+                })
+                res.push(items)
+                response.status(200).json({
+                    success: true,
+                    data: res
+                })
+            } else {
+                //console.log('Your password not mached.');
+                response.status(400).json({
+                    success: false,
+                    data: "password tidak sama"
+                });
+            }
+        });
+
+    });
 
 }
 
@@ -311,10 +341,13 @@ const update = (request, response) => {
                 bcrypt.hash(password, salt, function (err, res) {
                     console.log(password_hash);
                     pool.query('SELECT * FROM tbl_users WHERE id = $1', [id], (error, results) => {
-                        password_hash = results.rows[0].password;
-                        if (password != null || password != '') {
-                            password_hash = res;
+                        password_hash = res;
+                        if (password == null || password == '') {
+                            password_hash = results.rows[0].password;
+                            console.log(results.rows[0].password);
                         }
+                        console.log(password_hash);
+                        console.log(password);
 
                         if (error) {
                             throw error
@@ -374,8 +407,6 @@ const update = (request, response) => {
 
 const delete_ = (request, response) => {
     const id = parseInt(request.params.id);
-
-
     pool.query('SELECT count(*) as total FROM tbl_users where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
             throw error
@@ -384,13 +415,10 @@ const delete_ = (request, response) => {
         }
 
     })
-
     pool.query('SELECT * FROM tbl_users where id=$1 and is_delete=false', [id], (error, results) => {
         if (error) {
             throw error
         }
-
-
         const deletetime = new Date;
         pool.query('UPDATE tbl_users SET deleted_at=$1,is_delete=$2 where id=$3', [deletetime, true, id], (error, results) => {
             if (error) {
@@ -406,16 +434,41 @@ const delete_ = (request, response) => {
                     data: 'data user berhasil dihapus'
                 })
             }
-
         })
-
-
-
-
     });
+}
 
+const delete_internal = (request, response) => {
+    const id = parseInt(request.params.id);
+    pool.query('SELECT count(*) as total FROM tbl_users where id=$1 and is_delete=false', [id], (error, results) => {
+        if (error) {
+            throw error
+        } else {
+            //console.log(results.rows);
+        }
 
+    })
+    pool.query('SELECT * FROM tbl_users where id=$1 and is_delete=false', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        const deletetime = new Date;
+        pool.query('UPDATE tbl_users SET deleted_at=$1,is_delete=$2 where id=$3', [deletetime, true, id], (error, results) => {
+            if (error) {
 
+                if (error.code == '23505') {
+                    //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                    response.status(400).send('Duplicate data')
+                    return;
+                }
+            } else {
+                response.status(200).send({
+                    success: true,
+                    data: 'data user berhasil dihapus'
+                })
+            }
+        })
+    });
 }
 
 const download = (request, response) => {
@@ -497,11 +550,13 @@ module.exports = {
     create,
     read,
     readall,
+    readinternal,
     login,
     login_all,
     read_by_id,
     update,
     delete_,
+    delete_internal,
     checkToken,
     download
 }
