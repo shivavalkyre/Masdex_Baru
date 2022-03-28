@@ -317,6 +317,7 @@ app.get('/api/V1/masdex/pkk', pkk.read);
 app.get('/api/V1/masdex/pkk/:id', pkk.read_by_id);
 app.put('/api/V1/masdex/pkk/:id', pkk.update);
 app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
+app.get('/api/V1/masdex/voyage/pkk/:id', pkk.read_by_voyage);
 // ==========================================================================
 
 // ============================== Notice to Marine =======================================
