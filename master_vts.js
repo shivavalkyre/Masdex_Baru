@@ -219,7 +219,7 @@ const read_by_voyage_pkk = (request, response) => {
 
 const read_by_voyage_detail = (request, response) => {
 
-    // const id = parseInt(request.params.id);
+    const id = parseInt(request.params.id);
     //console.log('Here');
     //console.log(id);
     const {page,rows} = request.body
