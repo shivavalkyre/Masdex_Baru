@@ -4,13 +4,13 @@ const path = require('path')
 
 
 const create = (request, response) => {
-    const { kode,nama,alamat,jenis_telkompel } 
+    const { kode,nama,alamat,jenis_telkompel,more_information } 
     = request.body
 
     
 
-     pool.query('INSERT INTO tbl_masdex_telkompel (kode,nama,alamat,jenis_telkompel) VALUES($1,$2,$3,$4)'
-     ,[kode,nama,alamat,jenis_telkompel],(error, results) =>{
+     pool.query('INSERT INTO tbl_masdex_telkompel (kode,nama,alamat,jenis_telkompel,more_information) VALUES($1,$2,$3,$4,$5)'
+     ,[kode,nama,alamat,jenis_telkompel,more_information],(error, results) =>{
 
         if (error) {
             throw error
@@ -94,7 +94,7 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { kode,nama,alamat,jenis_telkompel } 
+    const { kode,nama,alamat,jenis_telkompel,more_information } 
     = request.body;
     let doc;
 
@@ -116,8 +116,8 @@ const update = (request, response) => {
 
         
          const update_time = new Date;
-         pool.query('UPDATE tbl_masdex_telkompel SET kode=$1,nama=$2,alamat=$3,jenis_telkompel=$4 where id=$5'
-         , [kode,nama,alamat,jenis_telkompel,id], (error, results) =>{
+         pool.query('UPDATE tbl_masdex_telkompel SET kode=$1,nama=$2,alamat=$3,jenis_telkompel=$4,more_information=$6 where id=$5'
+         , [kode,nama,alamat,jenis_telkompel,id,more_information], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)

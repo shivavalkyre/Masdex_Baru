@@ -4,13 +4,13 @@ const path = require('path')
 
 
 const create = (request, response) => {
-    const { pelabuhan_id,kode,nama_dermaga } 
+    const { pelabuhan_id,kode,nama_dermaga,more_information } 
     = request.body
 
     
 
-     pool.query('INSERT INTO tbl_masdex_dermaga (pelabuhan_id,kode,nama_dermaga) VALUES($1,$2,$3)'
-     ,[pelabuhan_id,kode,nama_dermaga],(error, results) =>{
+     pool.query('INSERT INTO tbl_masdex_dermaga (pelabuhan_id,kode,nama_dermaga,more_information) VALUES($1,$2,$3,$4)'
+     ,[pelabuhan_id,kode,nama_dermaga,more_information],(error, results) =>{
 
         if (error) {
             throw error
@@ -95,7 +95,7 @@ const read_by_id = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { pelabuhan_id,kode,nama_dermaga } 
+    const { pelabuhan_id,kode,nama_dermaga,more_information } 
     = request.body;
     let doc;
 
@@ -117,8 +117,8 @@ const update = (request, response) => {
 
         
          const update_time = new Date;
-         pool.query('UPDATE tbl_masdex_dermaga SET pelabuhan_id=$1,kode=$2,nama_dermaga=$3 where id=$4'
-         , [pelabuhan_id,kode,nama_dermaga,id], (error, results) =>{
+         pool.query('UPDATE tbl_masdex_dermaga SET pelabuhan_id=$1,kode=$2,nama_dermaga=$3,more_information=$5 where id=$4'
+         , [pelabuhan_id,kode,nama_dermaga,id,more_information], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
