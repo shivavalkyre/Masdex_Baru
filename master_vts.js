@@ -203,8 +203,41 @@ const read_by_voyage_pkk = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT c.id, c.voyage_id, v.pkk_id, c.created_at as date, p.ship_name, p.imo, p.call_sign, p.gt, p.mmsi, p.flag, c.status_bernavigasi, c.degree1 as lat_deg, c.minute1 as lat_min, c.second1 as lat_sec, c.direction1 as lat_dir, c.degree2 as long_deg, c.minute2 as long_min, c.second2 as long_sec, c.direction2 as long_dir, jb.jenis_berita, c.more_information, c.kurs_tengah, c.total_tagihan, c.is_delete, pp.nama_lengkap as perusahaan_pelayaran, pa.nama_lengkap as perusahaan_agen, c.communication_station FROM tbl_insaf_master_vts c left join tbl_insaf_jenis_berita jb on jb.id = c.jenis_berita left join tbl_insaf_voyage v on v.id = c.voyage_id left join masdex_pkk p on v.pkk_id = p.id left join tbl_stakeholders pp on p.perusahaan_pelayaran_id = pp.id left join tbl_stakeholders pa on c.company_agen = pa.id where c.is_delete=false  order by c.id asc'
+     var sql= 'SELECT c.id, c.voyage_id, v.pkk_id, c.created_at as date, p.ship_name, p.imo, p.call_sign, p.gt, p.mmsi, p.flag, c.status_bernavigasi, c.degree1 as lat_deg, c.minute1 as lat_min, c.second1 as lat_sec, c.direction1 as lat_dir, c.degree2 as long_deg, c.minute2 as long_min, c.second2 as long_sec, c.direction2 as long_dir, jb.jenis_berita, c.more_information, c.kurs_tengah, c.total_tagihan, c.is_delete, pp.nama_lengkap as perusahaan_pelayaran, pa.nama_lengkap as perusahaan_agen, c.communication_station FROM tbl_insaf_master_vts c join tbl_insaf_jenis_berita jb on jb.id = c.jenis_berita join tbl_insaf_voyage v on v.id = c.voyage_id join masdex_pkk p on v.pkk_id = p.id join tbl_stakeholders pp on p.perusahaan_pelayaran_id = pp.id join tbl_stakeholders pa on c.company_agen = pa.id where c.is_delete=false  order by c.id asc'
      pool.query(sql, (error, results) => {
+       if (error) {
+         throw error
+       }
+       items.push({rows:results.rows})
+       res.push(items)
+       response.status(200).send({success:true,data:res})
+     })
+  
+    })
+
+}
+
+const read_by_voyage_detail = (request, response) => {
+
+    // const id = parseInt(request.params.id);
+    //console.log('Here');
+    //console.log(id);
+    const {page,rows} = request.body
+    var page_req = page || 1
+    var rows_req = rows || 10
+    var offset = (page_req - 1) * rows_req
+    var res = []
+    var items = []
+  
+    pool.query('SELECT count(*) as total FROM tbl_insaf_master_vts where id=$1 and is_delete=false', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+     //console.log(results.rows[0].total)
+     res.push({total:results.rows[0].total})
+  
+     var sql= 'SELECT c.id, c.voyage_id, v.pkk_id, c.created_at as date, p.ship_name, p.imo, p.call_sign, p.gt, p.mmsi, p.flag, c.status_bernavigasi, c.degree1 as lat_deg, c.minute1 as lat_min, c.second1 as lat_sec, c.direction1 as lat_dir, c.degree2 as long_deg, c.minute2 as long_min, c.second2 as long_sec, c.direction2 as long_dir, jb.jenis_berita, c.more_information, c.kurs_tengah, c.total_tagihan, c.is_delete, pp.nama_lengkap as perusahaan_pelayaran, pa.nama_lengkap as perusahaan_agen, c.communication_station FROM tbl_insaf_master_vts c join tbl_insaf_jenis_berita jb on jb.id = c.jenis_berita join tbl_insaf_voyage v on v.id = c.voyage_id join masdex_pkk p on v.pkk_id = p.id join tbl_stakeholders pp on p.perusahaan_pelayaran_id = pp.id join tbl_stakeholders pa on c.company_agen = pa.id where c.id=$1 and c.is_delete=false  order by c.id asc'
+     pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
        }
@@ -941,6 +974,7 @@ module.exports = {
     read_by_id,
     read_by_voyage_id,
     read_by_voyage_pkk,
+    read_by_voyage_detail,
     update,
     delete_,
     kurs_tengah_data,

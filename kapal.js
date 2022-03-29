@@ -16,6 +16,7 @@ const create = (request, response) => {
     width,
     loa,
     ship_type,
+    more_information,
     foto_kapal
   } = request.body
 
@@ -34,7 +35,7 @@ const create = (request, response) => {
   } else {
     name = null;
   }
-  pool.query('INSERT INTO tbl_masdex_kapal (stakeholder_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), length, width, loa, parseInt(ship_type), name], (error, results) => {
+  pool.query('INSERT INTO tbl_masdex_kapal (stakeholder_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal,more_information) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), length, width, loa, parseInt(ship_type), name, more_information], (error, results) => {
 
     if (error) {
       throw error
@@ -196,6 +197,7 @@ const update = (request, response) => {
     width,
     loa,
     ship_type,
+    more_information,
     foto_kapal
   } = request.body;
   let doc;
@@ -248,7 +250,7 @@ const update = (request, response) => {
 
     console.log(name);
     const update_time = new Date;
-    pool.query('UPDATE tbl_masdex_kapal SET stakeholder_id=$1,ship_name=$2,gt=$3,mmsi=$4,imo=$5,call_sign=$6,flag=$7,max_draft=$8,length=$9,width=$10,loa=$11,ship_type=$12,foto_kapal=$13,updated_at=$14 where id=$15', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), parseFloat(length), parseFloat(width), loa, parseInt(ship_type), name, update_time, id], (error, results) => {
+    pool.query('UPDATE tbl_masdex_kapal SET stakeholder_id=$1,ship_name=$2,gt=$3,mmsi=$4,imo=$5,call_sign=$6,flag=$7,max_draft=$8,length=$9,width=$10,loa=$11,ship_type=$12,foto_kapal=$13,updated_at=$14,more_information=$16 where id=$15', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), parseFloat(length), parseFloat(width), loa, parseInt(ship_type), name, update_time, id, more_information], (error, results) => {
       if (error) {
         throw error
         //response.status(201).send(error)

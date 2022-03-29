@@ -17,6 +17,7 @@ const create = (request, response) => {
     npwp,
     telepon_kantor,
     unit_kantor,
+    more_information,
     email_company
   } = request.body;
 
@@ -44,7 +45,7 @@ const create = (request, response) => {
     complete_path=null;
   }
 
-  pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo,email_company) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path, email_company], (error, results) => {
+  pool.query('INSERT INTO tbl_stakeholders (jenis_stakeholder,nama_lengkap,alamat_kantor,logo,npwp,telepon_kantor,unit_kantor,url_logo,email_company,more_information) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, complete_path, email_company, more_information], (error, results) => {
     if (error) {
       throw error
     }
@@ -151,7 +152,8 @@ const update = (request, response) => {
     npwp,
     telepon_kantor,
     unit_kantor,
-    email_company
+    email_company,
+    more_information
   } = request.body;
   let doc;
   //console.log(mmsi);
@@ -200,7 +202,7 @@ const update = (request, response) => {
 
         console.log(name);
         const update_time = new Date;
-        pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,nama_lengkap=$2,alamat_kantor=$3,logo=$4,npwp=$5,telepon_kantor=$6,unit_kantor=$7,email_company=$8,updated_at=$9,url_logo=$10 where id=$11', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, update_time, complete_path, id], (error, results) => {
+        pool.query('UPDATE tbl_stakeholders SET jenis_stakeholder=$1,nama_lengkap=$2,alamat_kantor=$3,logo=$4,npwp=$5,telepon_kantor=$6,unit_kantor=$7,email_company=$8,updated_at=$9,url_logo=$10,more_information=$12 where id=$11', [jenis_stakeholder, nama_lengkap, alamat_kantor, name, npwp, telepon_kantor, unit_kantor, email_company, update_time, complete_path, id, more_information], (error, results) => {
           if (error) {
             throw error
             //response.status(201).send(error)

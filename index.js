@@ -343,6 +343,7 @@ app.get('/api/V1/masdex/master_cable', master_cable.read);
 app.get('/api/V1/masdex/master_cable/:id', master_cable.read_by_id);
 app.get('/api/V1/masdex/master_cable/voyage/:id', master_cable.read_by_voyage_id);
 app.get('/api/V1/masdex/voyage/pkk/master_cable/:id', master_cable.read_by_voyage_pkk);
+app.get('/api/V1/masdex/voyage/detail/master_cable/:id', master_cable.read_by_voyage_detail);
 app.put('/api/V1/masdex/master_cable/:id', master_cable.update);
 app.delete('/api/V1/masdex/master_cable/:id', master_cable.delete_);
 
@@ -361,6 +362,7 @@ app.get('/api/V1/masdex/master_vts', master_vts.read);
 app.get('/api/V1/masdex/master_vts/:id', master_vts.read_by_id);
 app.get('/api/V1/masdex/master_vts/voyage/:id', master_vts.read_by_voyage_id);
 app.get('/api/V1/masdex/voyage/pkk/master_vts/:id', master_vts.read_by_voyage_pkk);
+app.get('/api/V1/masdex/voyage/detail/master_vts/:id', master_vts.read_by_voyage_detail);
 app.put('/api/V1/masdex/master_vts/:id', master_vts.update);
 app.delete('/api/V1/masdex/master_vts/:id', master_vts.delete_);
 
