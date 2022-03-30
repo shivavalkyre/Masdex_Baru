@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path')
 
 const create = (request, response) => {
-    const { pkk_id } 
+    const { pkk_id, mmsi } 
     = request.body
 
     // let jenis_telkompel;
@@ -27,8 +27,7 @@ const create = (request, response) => {
 
     // });
 
-    pool.query('INSERT INTO tbl_insaf_voyage (pkk_id) VALUES ($1)'
-    , [pkk_id], (error, results) =>{
+    pool.query(`INSERT INTO tbl_insaf_voyage (pkk_id, mmsi) VALUES (${pkk_id}, ${mmsi}); SELECT currval(pg_get_serial_sequence('tbl_insaf_voyage','id'));`, (error, results) =>{
       if (error) {
          throw error
         response.status(201).send(error)
@@ -40,7 +39,7 @@ const create = (request, response) => {
         }
       }else
       {
-          response.status(200).send({success:true,data:'data voyage berhasil dibuat'})
+          response.status(200).send({success:true,data: results[1].rows[0].currval, msg: 'data voyage berhasil dibuat'})
       }
 
     })
@@ -209,14 +208,14 @@ const voyage_status = (request, response) => {
   var items = []
 
 
-  pool.query('SELECT count(*) as total FROM ship_status_last_status', (error, results) => {
+  pool.query('SELECT count(*) as total FROM ship_status_last_status_v2', (error, results) => {
     if (error) {
       throw error
     }
    //console.log(results.rows[0].total)
    res.push({total:results.rows[0].total})
 
-   var sql= 'SELECT * FROM ship_status_last_status'
+   var sql= 'SELECT * FROM ship_status_last_status_v2'
    if (sort_by_req && sort_direction_req) sql += ` ORDER BY ${sort_by_req} ${sort_direction_req}`
    pool.query(sql ,(error, results) => {
      if (error) {
@@ -237,7 +236,7 @@ const voyage_status_by_id = (request, response) => {
   const res = []
   const items = []
 
-  pool.query('SELECT * FROM ship_status_last_status WHERE voyage_id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM ship_status_last_status_v2 WHERE voyage_id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
