@@ -171,7 +171,7 @@ const readeksternal = (request, response) => {
     var items = []
     pool.query('SELECT count(*) as total from tbl_user_stakeholders', (error, results) => {
 
-        pool.query("SELECT u.id, u.nama_lengkap, u.username, u.password, u.email, u.role_id, r.role, 'eksternal' as type, u.created_at, u.updated_at, u.deleted_at, u.is_delete from tbl_user_stakeholders u left join tbl_role r on r.id = u.role_id WHERE u.role_id in (11,12,29,13,14) and u.is_delete=$1", [false], (error, results1) => {
+        pool.query("SELECT u.id, u.nama_lengkap, u.username, u.password, u.email, u.role_id, r.role, 'eksternal' as type, u.created_at, u.updated_at, u.deleted_at, u.is_delete, u.stakeholder_id as company_id, s.nama_lengkap as company_name from tbl_user_stakeholders u left join tbl_stakeholders s on s.id = u.stakeholder_id left join tbl_role r on r.id = u.role_id WHERE u.role_id in (11,12,29,13,14) and u.is_delete=$1", [false], (error, results1) => {
             //bcrypt.compare(password, results.rows[0].password, function(err, res) {
 
             if (results1) {
