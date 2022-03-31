@@ -230,16 +230,16 @@ const update_by_otoritas = (request, response) => {
           name1 = results.rows[0].dokumen_berthing;
           complete_path1 = results.rows[0].url_dokumen_berthing;
           if (request.files) {
-              doc1 = results.rows[0].dokumen_berthing;
-              console.log(results.rows[0].dokumen_berthing);
-              if(doc1 != '' || doc1 != null){
-                if(complete_path1 != '' || complete_path1 != null){
-                  var doc1_path = __dirname + path.join('/dokumens/entering_to_port/dokumen_berthing/' + doc1);
-                  console.log(doc1_path);
-                  fs.unlinkSync(doc1_path);
-                  console.log(doc1_path);
-                }
-              }
+              // doc1 = results.rows[0].dokumen_berthing;
+              // console.log(results.rows[0].dokumen_berthing);
+              // if(doc1 != '' || doc1 != null){
+              //   if(complete_path1 != '' || complete_path1 != null){
+              //     var doc1_path = __dirname + path.join('/dokumens/entering_to_port/dokumen_berthing/' + doc1);
+              //     console.log(doc1_path);
+              //     fs.unlinkSync(doc1_path);
+              //     console.log(doc1_path);
+              //   }
+              // }
 
               var name1 = '';
               let sampleFile = request.files.dokumen_berthing;
@@ -259,16 +259,16 @@ const update_by_otoritas = (request, response) => {
           name2 = results.rows[0].dokumen_ppk;
           complete_path2 = results.rows[0].url_dokumen_ppk;
           if (request.files) {
-              doc2 = results.rows[0].dokumen_ppk;
-              console.log(results.rows[0].dokumen_ppk);
-              if(doc2 != '' || doc2 != null){
-                if(complete_path2 != '' || complete_path2 != null){
-                  var doc2_path = __dirname + path.join('/dokumens/entering_to_port/dokumen_ppk/' + doc2);
-                  console.log(doc2_path);
-                  fs.unlinkSync(doc2_path);
-                  console.log(doc2_path);
-                }
-              }
+              // doc2 = results.rows[0].dokumen_ppk;
+              // console.log(results.rows[0].dokumen_ppk);
+              // if(doc2 != '' || doc2 != null){
+              //   if(complete_path2 != '' || complete_path2 != null){
+              //     var doc2_path = __dirname + path.join('/dokumens/entering_to_port/dokumen_ppk/' + doc2);
+              //     console.log(doc2_path);
+              //     fs.unlinkSync(doc2_path);
+              //     console.log(doc2_path);
+              //   }
+              // }
 
               var name2 = '';
               let sampleFile = request.files.dokumen_ppk;

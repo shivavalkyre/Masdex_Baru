@@ -166,14 +166,14 @@ const update = (request, response) => {
             throw error
           }
 
-         doc = results.rows[0].dokumen_spog;
-         var doc_path = __dirname +path.join('/dokumens/spog/'+ doc);
-         console.log(doc_path);
-         if (fs.existsSync(doc_path)){
-          fs.unlinkSync(doc_path);
-         }
+        //  doc = results.rows[0].dokumen_spog;
+        //  var doc_path = __dirname +path.join('/dokumens/spog/'+ doc);
+        //  console.log(doc_path);
+        //  if (fs.existsSync(doc_path)){
+        //   fs.unlinkSync(doc_path);
+        //  }
         
-         console.log(doc_path);
+        //  console.log(doc_path);
          var name='';
          if (request.files!==null){
          let sampleFile = request.files.dokumen_spog;

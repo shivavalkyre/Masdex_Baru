@@ -174,16 +174,16 @@ const update = (request, response) => {
         complete_path = results.rows[0].url_logo;
 
         if (request.files) {
-          doc = results.rows[0].logo;
-          if (doc != 'default.jpg') {
-            var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
-            console.log(doc_path);
-            if (fs.unlinkSync(doc_path)){
-              fs.unlink(doc_path);
-            }
-            //fs.unlinkSync();
-            console.log(doc_path);
-          }
+          // doc = results.rows[0].logo;
+          // if (doc != 'default.jpg') {
+          //   var doc_path = __dirname + path.join('/dokumens/stakeholder/logo/' + doc);
+          //   console.log(doc_path);
+          //   if (fs.unlinkSync(doc_path)){
+          //     fs.unlink(doc_path);
+          //   }
+          //   //fs.unlinkSync();
+          //   console.log(doc_path);
+          // }
 
           let sampleFile = request.files.logo;
           console.log(sampleFile);

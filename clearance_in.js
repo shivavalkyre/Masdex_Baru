@@ -263,14 +263,14 @@ const update_ksu = (request, response) => {
           name = results.rows[0].dokumen_spm;
           complete_path = results.rows[0].url_dokumen_spm;
           if (request.files) {
-              doc = results.rows[0].dokumen_spm;
-              console.log(results.rows[0].dokumen_spm);
-              if(doc != ''){
-                var doc_path = __dirname + path.join('/dokumens/clearance_in/' + doc);
-                console.log(doc_path);
-                fs.unlinkSync(doc_path);
-                console.log(doc_path);
-              }
+              // doc = results.rows[0].dokumen_spm;
+              // console.log(results.rows[0].dokumen_spm);
+              // if(doc != ''){
+              //   var doc_path = __dirname + path.join('/dokumens/clearance_in/' + doc);
+              //   console.log(doc_path);
+              //   fs.unlinkSync(doc_path);
+              //   console.log(doc_path);
+              // }
 
               var name = '';
               let sampleFile = request.files.dokumen_spm;
