@@ -63,7 +63,7 @@ const readDistress = (request, response) => {
 
 const readDistressByID = (request, response) => {
     const id = parseInt(request.params.id)
-	var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete
+	var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.voyage_id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete
 			   FROM tbl_insaf_distress 
 			   LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id
 			   LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id
@@ -85,7 +85,7 @@ var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf
        FROM tbl_insaf_distress 
        LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id
        LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id
-       WHERE tbl_insaf_distress.voyage_id= '`+id+`';`
+       WHERE tbl_insaf_distress.voyage_id= '`+id+`' and tbl_insaf_distress.is_delete=false;`
 pool.query(
       sql, (error, results) => {
         if (error) {
