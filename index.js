@@ -314,6 +314,7 @@ app.post('/api/V1/masdex/room_tmas/create/:id/chatroom', tmas.storePartisipanCha
 // ============================== 1.PKK =======================================
 app.post('/api/V1/masdex/pkk', pkk.create);
 app.post('/api/V1/masdex/pkk-insaf', pkk.createFromInsaf);
+app.get('/api/V1/masdex/pkk', pkk.read);
 app.get('/api/V1/masdex/pkk/notif', pkk.read_new_notif);
 app.get('/api/V1/masdex/pkk/:id', pkk.read_by_id);
 app.put('/api/V1/masdex/pkk/:id', pkk.update);
