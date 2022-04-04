@@ -34,7 +34,7 @@ const create = (request, response) => {
 
     if (module==='masdex'){
 
-      var sql= "SELECT count(*) as total FROM tbl_insaf_voyage where is_delete=false and journal_no like '%MAS%'";
+      var sql= "SELECT count(*) as total FROM tbl_insaf_voyage where is_delete=false and journal_no like '%MAS%' and date_part('year', created_at) = date_part('year', CURRENT_DATE)";
       pool.query(sql ,(error, results) => {
          total  = results.rows[0].total;
          console.log('totalnya:'+total);
@@ -46,7 +46,7 @@ const create = (request, response) => {
 
         console.log('here');
 
-        var sql= "SELECT journal_no FROM tbl_insaf_voyage where is_delete=false and journal_no like '%MAS%' GROUP BY id ORDER BY id DESC LIMIT 1";
+        var sql= "SELECT journal_no FROM tbl_insaf_voyage where is_delete=false and journal_no like '%MAS%' and date_part('year', created_at) = date_part('year', CURRENT_DATE) GROUP BY id ORDER BY id DESC LIMIT 1";
         pool.query(sql ,(error, results) => {
           if (error) {
             throw error
@@ -131,14 +131,14 @@ const create = (request, response) => {
      
     }else if(module==='insaf'){
 
-      var sql= "SELECT count(*) as total FROM tbl_insaf_voyage where is_delete=false and journal_no like '%INF%'";
+      var sql= "SELECT count(*) as total FROM tbl_insaf_voyage where is_delete=false and journal_no like '%INF%' and date_part('year', created_at) = date_part('year', CURRENT_DATE)";
       pool.query(sql ,(error, results) => {
          total  = results.rows[0].total;
      
 
       if (total>0){
 
-        var sql= "SELECT * FROM tbl_insaf_voyage where is_delete=false and journal_no like '%INF%' GROUP BY id ORDER BY id DESC LIMIT 1";
+        var sql= "SELECT * FROM tbl_insaf_voyage where is_delete=false and journal_no like '%INF%' and date_part('year', created_at) = date_part('year', CURRENT_DATE) GROUP BY id ORDER BY id DESC LIMIT 1";
         pool.query(sql ,(error, results) => {
           if (error) {
             throw error
