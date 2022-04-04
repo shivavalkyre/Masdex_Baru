@@ -314,9 +314,10 @@ app.post('/api/V1/masdex/room_tmas/create/:id/chatroom', tmas.storePartisipanCha
 // ============================== 1.PKK =======================================
 app.post('/api/V1/masdex/pkk', pkk.create);
 app.post('/api/V1/masdex/pkk-insaf', pkk.createFromInsaf);
-app.get('/api/V1/masdex/pkk', pkk.read);
+app.get('/api/V1/masdex/pkk/notif', pkk.read_new_notif);
 app.get('/api/V1/masdex/pkk/:id', pkk.read_by_id);
 app.put('/api/V1/masdex/pkk/:id', pkk.update);
+app.put('/api/V1/masdex/pkk/notif/:id', pkk.update_read_notif);
 app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
 app.get('/api/V1/masdex/voyage/pkk/:id', pkk.read_by_voyage);
 // ==========================================================================
@@ -341,11 +342,13 @@ app.delete('/api/V1/insaf/notice_to_marine_detail/delete/:id', notice_to_marine.
 // ============================== 2.1.Master Cable ==============================
 app.post('/api/V1/masdex/master_cable', master_cable.create);
 app.get('/api/V1/masdex/master_cable', master_cable.read);
+app.get('/api/V1/masdex/master_cable/notif', master_cable.read_new_notif);
 app.get('/api/V1/masdex/master_cable/:id', master_cable.read_by_id);
 app.get('/api/V1/masdex/master_cable/voyage/:id', master_cable.read_by_voyage_id);
 app.get('/api/V1/masdex/voyage/pkk/master_cable/:id', master_cable.read_by_voyage_pkk);
 app.get('/api/V1/masdex/voyage/detail/master_cable/:id', master_cable.read_by_voyage_detail);
 app.put('/api/V1/masdex/master_cable/:id', master_cable.update);
+app.put('/api/V1/masdex/master_cable/notif/:id', master_cable.update_read_notif);
 app.delete('/api/V1/masdex/master_cable/:id', master_cable.delete_);
 
 // =============================== Kurs Tengah ==============================
@@ -360,11 +363,13 @@ app.post('/api/V1/total_tagihan/:location', master_cable.cek_total_tagihan);
 // ============================== 2.2.Master VTS ==============================
 app.post('/api/V1/masdex/master_vts', master_vts.create);
 app.get('/api/V1/masdex/master_vts', master_vts.read);
+app.get('/api/V1/masdex/master_vts/notif', master_vts.read_new_notif);
 app.get('/api/V1/masdex/master_vts/:id', master_vts.read_by_id);
 app.get('/api/V1/masdex/master_vts/voyage/:id', master_vts.read_by_voyage_id);
 app.get('/api/V1/masdex/voyage/pkk/master_vts/:id', master_vts.read_by_voyage_pkk);
 app.get('/api/V1/masdex/voyage/detail/master_vts/:id', master_vts.read_by_voyage_detail);
 app.put('/api/V1/masdex/master_vts/:id', master_vts.update);
+app.put('/api/V1/masdex/master_vts/notif/:id', master_vts.update_read_notif);
 app.delete('/api/V1/masdex/master_vts/:id', master_vts.delete_);
 
 // =============================== Kurs Tengah ==============================
@@ -379,10 +384,12 @@ app.post('/api/V1/total_tagihan/:location', master_vts.cek_total_tagihan);
 // ============================== 3.Clearance In ==============================
 app.post('/api/V1/insaf/clearance_in', clearance_in.create);
 app.get('/api/V1/insaf/clearance_in', clearance_in.read);
+app.get('/api/V1/insaf/clearance_in/notif', clearance_in.read_new_notif);
 app.get('/api/V1/insaf/clearance_in/:id', clearance_in.read_by_id);
 app.get('/api/V1/insaf/clearance_in/voyage/:id', clearance_in.read_by_voyage_id);
 app.put('/api/V1/insaf/clearance_in/:id', clearance_in.update);
 app.put('/api/V1/masdex/clearance_in/:id', clearance_in.update_ksu);
+app.put('/api/V1/insaf/clearance_in/notif/:id', clearance_in.update_read_notif);
 app.delete('/api/V1/insaf/clearance_in/:id', clearance_in.delete_);
 // ==========================================================================
 
@@ -390,8 +397,11 @@ app.delete('/api/V1/insaf/clearance_in/:id', clearance_in.delete_);
 // ============================== 4.Entering To Port ==========================
 app.post('/api/V1/insaf/entering_to_port', entering_to_port.create);
 app.get('/api/V1/insaf/entering_to_port', entering_to_port.read);
+app.get('/api/V1/insaf/entering_to_port/notif', entering_to_port.read_new_notif);
 app.get('/api/V1/insaf/entering_to_port/:id', entering_to_port.read_by_id);
 app.get('/api/V1/insaf/entering_to_port/voyage/:id', entering_to_port.read_by_voyage_id);
+app.get('/api/V1/insaf/entering_to_port/notif', entering_to_port.read_new_notif);
+app.put('/api/V1/insaf/entering_to_port/notif/:id', entering_to_port.update_read_notif);
 app.put('/api/V1/insaf/entering_to_port/:id', entering_to_port.update);
 app.patch('/api/V1/masdex/entering_to_port/update_by_otority/:id', entering_to_port.update_by_otoritas);
 app.delete('/api/V1/insaf/entering_to_port/:id', entering_to_port.delete_);
@@ -401,9 +411,12 @@ app.delete('/api/V1/insaf/entering_to_port/:id', entering_to_port.delete_);
 // ============================== 5.Manouvre ==========================
 app.post('/api/V1/masdex/manouvre', manouvre.create);
 app.get('/api/V1/masdex/manouvre', manouvre.read);
+app.get('/api/V1/masdex/manouvre/notif', manouvre.read_new_notif);
 app.get('/api/V1/masdex/manouvre/:id', manouvre.read_by_id);
 app.get('/api/V1/masdex/manouvre/voyage/:id', manouvre.read_by_voyage_id);
+app.get('/api/V1/insaf/manouvre/notif', manouvre.read_new_notif);
 app.put('/api/V1/masdex/manouvre/:id', manouvre.update);
+app.put('/api/V1/insaf/manouvre/notif/:id', manouvre.update_read_notif);
 app.put('/api/V1/insaf/manouvre/:id', manouvre.update_operator);
 app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 
@@ -411,6 +424,7 @@ app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 app.post('/api/V1/masdex/alasan_manouvre/create', alasan_manouvre.create);
 app.get('/api/V1/masdex/alasan_manouvre/read', alasan_manouvre.read);
 app.get('/api/V1/masdex/alasan_manouvre/:id', alasan_manouvre.read_by_id);
+
 app.put('/api/V1/masdex/alasan_manouvre/update/:id', alasan_manouvre.update);
 app.delete('/api/V1/masdex/alasan_manouvre/delete/:id', alasan_manouvre.delete_);
 // ==========================================================================
@@ -418,9 +432,11 @@ app.delete('/api/V1/masdex/alasan_manouvre/delete/:id', alasan_manouvre.delete_)
 // ============================== 6.Clearance Out ==========================
 app.post('/api/V1/masdex/clearance_out', clearance_out.create);
 app.get('/api/V1/masdex/clearance_out', clearance_out.read);
+app.get('/api/V1/masdex/clearance_out/notif', clearance_out.read_new_notif);
 app.get('/api/V1/masdex/clearance_out/:id', clearance_out.read_by_id);
 app.get('/api/V1/masdex/clearance_out/voyage/:id', clearance_out.read_by_voyage_id);
 app.put('/api/V1/masdex/clearance_out/:id', clearance_out.update_ksu);
+app.put('/api/V1/insaf/clearance_out/notif/:id', clearance_out.update_read_notif);
 app.put('/api/V1/insaf/clearance_out/:id', clearance_out.update_operator);
 app.delete('/api/V1/masdex/clearance_out/:id', clearance_out.delete_);
 // ==========================================================================
@@ -435,9 +451,10 @@ app.patch('/api/V1/masdex/pre_departure/delete/:id', pre_departure.destroy);
 // ============================== 8.Departure ==========================
 app.get('/api/V1/masdex/departing/', departing.index);
 app.post('/api/V1/masdex/departing/store', departing.create);
+app.get('/api/V1/masdex/departing/notif', departing.read_new_notif);
 app.get('/api/V1/masdex/departing/:id', departing.show);
 app.get('/api/V1/masdex/departing/voyage/:id', departing.show_by_voyage);
-app.put('/api/V1/masdex/departing/update/:id', departing.update);
+app.put('/api/V1/masdex/departing/notif/:id', departing.update_read_notif);
 app.patch('/api/V1/masdex/departing/delete/:id', departing.destroy);
 app.put('/api/V1/masdex/departing/update/:id', departing.update);
 app.patch('/api/V1/masdex/departing/is_departing/:id/:statusdeparting', departing.setStatusdeparting);

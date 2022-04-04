@@ -458,6 +458,75 @@ const download = (request, response) => {
   //response.status(200).send({success:true,data:'data berhasil diunduh'})
 }
 
+
+const read_new_notif = (request,response)=>{
+  var res = []
+  var items = []
+
+
+  pool.query('SELECT count(*) as total FROM tbl_masdex_pkk where is_delete=false and new_msg=true', (error, results) => {
+    if (error) {
+      throw error
+    }
+   //console.log(results.rows[0].total)
+   res.push({total:results.rows[0].total})
+
+   var sql= 'SELECT * FROM tbl_masdex_pkk where is_delete=false and new_msg=true ORDER BY id ASC'
+   pool.query(sql ,(error, results) => {
+     if (error) {
+       throw error
+     }
+     items.push({rows:results.rows})
+     res.push(items)
+     response.status(200).send({success:true,data:res})
+   })
+
+  }) 
+}
+
+const update_read_notif = (request, response) => {
+  const id = parseInt(request.params.id);
+
+  pool.query('SELECT count(*) as total FROM tbl_masdex_pkk where id=$1 and is_delete=false', [id], (error, results) => {
+    if (error) {
+      throw error
+    }else{
+        //console.log(results.rows);
+        pool.query('SELECT * FROM tbl_masdex_pkk where id=$1 and is_delete=false',[id] ,(error, results) => {
+          if (error) {
+            throw error
+          }
+          // 
+
+          const update_time = new Date;
+          pool.query('UPDATE tbl_masdex_pkk SET new_msg=$1,updated_at=$2 where id=$3'
+          , [false,update_time,id], (error, results) =>{
+            if (error) {
+               throw error
+              //response.status(201).send(error)
+              //console.log(error);
+              if (error.code == '23505')
+              {
+                  //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                  response.status(400).send('Duplicate data')
+                  return;
+              }
+            }else
+            {
+                response.status(200).send({success:true,data:'data pkk berhasil diperbarui'})
+            }
+      
+          })
+
+
+        })
+    }
+    
+})
+
+
+}
+
 module.exports = {
 create,
 createFromInsaf,
@@ -467,4 +536,6 @@ read_by_voyage,
 update,
 delete_,
 download,
+read_new_notif,
+update_read_notif
 }
