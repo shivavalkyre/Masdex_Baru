@@ -38,96 +38,93 @@ const create = (request, response) => {
       pool.query(sql ,(error, results) => {
          total  = results.rows[0].total;
          console.log('totalnya:'+total);
-     
 
-      // console.log(total);
+        // console.log(total);
 
-      if (Number(total)>0){
+        if (Number(total)>0){
 
-        console.log('here');
+          console.log('here');
 
-        var sql= "SELECT journal_no FROM tbl_insaf_voyage where is_delete=false and journal_no like '%MAS%' and date_part('year', created_at) = date_part('year', CURRENT_DATE) GROUP BY id ORDER BY id DESC LIMIT 1";
-        pool.query(sql ,(error, results) => {
-          if (error) {
-            throw error
-          }
-              var no = results.rows[0].journal_no;
-              console.log('journal no: '+ no);
-              var no_step1 = no.substring(0,6);
-              var no_step2 = Number(no_step1);
-              var no_step3 = no_step2+1;
-              var today = new Date();
-              var dd = String(today.getDate()).padStart(2, '0');
-              var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-              var yyyy = today.getFullYear();
-              var yy = yyyy.toString().substring(2,4);
-              var back_no = '/'+mm+'/'+yy+'/MAS/DNVTGPRIOK'; 
-    
-              //var no_journal = padStart(0,no_step2+1)+'/MM/YY/MAS/DNVTGPRIOK';
-              var no_journal = no_step3.toString().padStart(6,0)+back_no;
-              console.log(no_journal);
-
-              var sql= 'INSERT INTO tbl_insaf_voyage (pkk_id, mmsi,journal_no) VALUES($1,$2,$3) RETURNING id';  
-              pool.query(sql, [pkk_id,mmsi,no_journal], (error, results) => { 
-              if (error) {
-                   throw error
-                  response.status(201).send(error)
-                  if (error.code == '23505')
-                  {
-                      //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
-                      response.status(400).send('Duplicate data')
-                      return;
-                  }
-                }else
-                {
-                    response.status(200).send({success:true,data: results.rows[0],no_journal: no_journal, msg: 'data voyage berhasil dibuat'})
-                }
-          
-              });
-
-        });
-      }else{
-          var no = '000000/MM/YY/MAS/DNVTGPRIOK';
-          var no_step1 = no.substring(0,6);
-          var no_step2 = Number(no_step1);
-          var no_step3 = no_step2+1;
-          console.log(no_step3);
-
-          var today = new Date();
-          var dd = String(today.getDate()).padStart(2, '0');
-          var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-          var yyyy = today.getFullYear();
-          var yy = yyyy.toString().substring(2,4);
-          var back_no = '/'+mm+'/'+yy+'/MAS/DNVTGPRIOK'; 
-
-          //var no_journal = padStart(0,no_step2+1)+'/MM/YY/MAS/DNVTGPRIOK';
-          var no_journal = no_step3.toString().padStart(6,0)+back_no;
-          console.log(no_journal);
-
-          var sql= 'INSERT INTO tbl_insaf_voyage (pkk_id, mmsi,journal_no) VALUES($1,$2,$3) RETURNING id';  
-          pool.query(sql, [pkk_id,mmsi,no_journal], (error, results) => { 
-          if (error) {
-               throw error
-              response.status(201).send(error)
-              if (error.code == '23505')
-              {
-                  //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
-                  response.status(400).send('Duplicate data')
-                  return;
-              }
-            }else
-            {
-                response.status(200).send({success:true,data: results.rows[0],no_journal: no_journal, msg: 'data voyage berhasil dibuat'})
+          var sql= "SELECT journal_no FROM tbl_insaf_voyage where is_delete=false and journal_no like '%MAS%' and date_part('year', created_at) = date_part('year', CURRENT_DATE) GROUP BY id ORDER BY id DESC LIMIT 1";
+          pool.query(sql ,(error, results) => {
+            if (error) {
+              throw error
             }
+                var no = results.rows[0].journal_no;
+                console.log('journal no: '+ no);
+                var no_step1 = no.substring(0,6);
+                var no_step2 = Number(no_step1);
+                var no_step3 = no_step2+1;
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                var yy = yyyy.toString().substring(2,4);
+                var back_no = '/'+mm+'/'+yy+'/MAS/DNVTGPRIOK'; 
       
+                //var no_journal = padStart(0,no_step2+1)+'/MM/YY/MAS/DNVTGPRIOK';
+                var no_journal = no_step3.toString().padStart(6,0)+back_no;
+                console.log(no_journal);
+
+                var sql= 'INSERT INTO tbl_insaf_voyage (pkk_id, mmsi,journal_no) VALUES($1,$2,$3) RETURNING id';  
+                pool.query(sql, [pkk_id,mmsi,no_journal], (error, results) => { 
+                if (error) {
+                    throw error
+                    response.status(201).send(error)
+                    if (error.code == '23505')
+                    {
+                        //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                        response.status(400).send('Duplicate data')
+                        return;
+                    }
+                  }else
+                  {
+                      response.status(200).send({success:true,data: results.rows[0],no_journal: no_journal, msg: 'data voyage berhasil dibuat'})
+                  }
+            
+                });
+
           });
-      }
+        }else{
+            var no = '000000/MM/YY/MAS/DNVTGPRIOK';
+            var no_step1 = no.substring(0,6);
+            var no_step2 = Number(no_step1);
+            var no_step3 = no_step2+1;
+            console.log(no_step3);
 
-      
-    //pool.query(`INSERT INTO tbl_insaf_voyage (pkk_id, mmsi,journal_no) VALUES (${pkk_id}, ${mmsi}); SELECT currval(pg_get_serial_sequence('tbl_insaf_voyage','id'));`, (error, results) =>{
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            var yy = yyyy.toString().substring(2,4);
+            var back_no = '/'+mm+'/'+yy+'/MAS/DNVTGPRIOK'; 
 
+            //var no_journal = padStart(0,no_step2+1)+'/MM/YY/MAS/DNVTGPRIOK';
+            var no_journal = no_step3.toString().padStart(6,0)+back_no;
+            console.log(no_journal);
 
-    });
+            var sql= 'INSERT INTO tbl_insaf_voyage (pkk_id, mmsi,journal_no) VALUES($1,$2,$3) RETURNING id';  
+            pool.query(sql, [pkk_id,mmsi,no_journal], (error, results) => { 
+            if (error) {
+                throw error
+                response.status(201).send(error)
+                if (error.code == '23505')
+                {
+                    //console.log("\n ERROR! \n Individual with name: " + body.fname + " " + body.lname + " and phone #: " + body.phone + " is a duplicate member. \n");
+                    response.status(400).send('Duplicate data')
+                    return;
+                }
+              }else
+              {
+                  response.status(200).send({success:true,data: results.rows[0],no_journal: no_journal, msg: 'data voyage berhasil dibuat'})
+              }
+        
+            });
+        }
+        
+        //pool.query(`INSERT INTO tbl_insaf_voyage (pkk_id, mmsi,journal_no) VALUES (${pkk_id}, ${mmsi}); SELECT currval(pg_get_serial_sequence('tbl_insaf_voyage','id'));`, (error, results) =>{
+
+      });
      
     }else if(module==='insaf'){
 
