@@ -56,6 +56,7 @@ const notice_to_marine = require('./notice_to_marine');
 const master_cable = require('./master_cable');
 const master_vts = require('./master_vts');
 const alasan_manouvre = require('./alasan_manouvre');
+const passing = require('./passing');
 const clearance_in = require('./clearance_in');
 const entering_to_port = require('./entering_to_port');
 const manouvre = require('./manouvre');
@@ -425,9 +426,17 @@ app.delete('/api/V1/insaf/manouvre/:id', manouvre.delete_);
 app.post('/api/V1/masdex/alasan_manouvre/create', alasan_manouvre.create);
 app.get('/api/V1/masdex/alasan_manouvre/read', alasan_manouvre.read);
 app.get('/api/V1/masdex/alasan_manouvre/:id', alasan_manouvre.read_by_id);
-
 app.put('/api/V1/masdex/alasan_manouvre/update/:id', alasan_manouvre.update);
 app.delete('/api/V1/masdex/alasan_manouvre/delete/:id', alasan_manouvre.delete_);
+// ==========================================================================
+
+// ============================== Passing ==============================
+app.post('/api/V1/masdex/passing/create', passing.create);
+app.get('/api/V1/masdex/passing/read', passing.read);
+app.get('/api/V1/masdex/passing/:id', passing.read_by_id);
+app.get('/api/V1/masdex/passing/voyage/:id', passing.read_by_voyage);
+app.put('/api/V1/masdex/passing/update/:id', passing.update);
+app.delete('/api/V1/masdex/passing/delete/:id', passing.delete_);
 // ==========================================================================
 
 // ============================== 6.Clearance Out ==========================

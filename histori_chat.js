@@ -19,7 +19,7 @@ const read = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_chats  ORDER BY create_at DESC'
+     var sql= 'SELECT * FROM tbl_masdex_chats  ORDER BY create_at ASC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -52,7 +52,7 @@ const read_by_id = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_chats where roomname=$1 ORDER BY create_at DESC '
+     var sql= 'SELECT * FROM tbl_masdex_chats where roomname=$1 ORDER BY create_at ASC '
      pool.query(sql,[roomname] ,(error, results) => {
        if (error) {
          throw error
