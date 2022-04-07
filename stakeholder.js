@@ -80,7 +80,7 @@ const read = (request, response) => {
       total: results.rows[0].total
     })
 
-    var sql = 'SELECT tbl_stakeholders.id, tbl_stakeholders.nama_lengkap, tbl_stakeholders.alamat_kantor, tbl_stakeholders.telepon_kantor, tbl_jenis_stakeholder.stakeholder, tbl_stakeholders.jenis_stakeholder FROM tbl_stakeholders JOIN tbl_jenis_stakeholder ON tbl_stakeholders.jenis_stakeholder = tbl_jenis_stakeholder.id WHERE tbl_stakeholders.is_delete=false ORDER BY tbl_stakeholders.id ASC'
+    var sql = 'SELECT tbl_stakeholders.id, tbl_stakeholders.nama_lengkap, tbl_stakeholders.alamat_kantor, tbl_stakeholders.telepon_kantor, tbl_jenis_stakeholder.stakeholder, tbl_stakeholders.jenis_stakeholder FROM tbl_stakeholders JOIN tbl_jenis_stakeholder ON tbl_stakeholders.jenis_stakeholder = tbl_jenis_stakeholder.id WHERE tbl_stakeholders.is_delete=false ORDER BY tbl_stakeholders.id DESC'
     pool.query(sql, (error, results) => {
       if (error) {
         throw error
@@ -122,7 +122,7 @@ const read_by_id = (request, response) => {
       total: results.rows[0].total
     })
 
-    var sql = 'SELECT * FROM tbl_stakeholders where is_delete=false and id=$1 ORDER BY id ASC'
+    var sql = 'SELECT * FROM tbl_stakeholders where is_delete=false and id=$1 ORDER BY id DESC'
     pool.query(sql, [id], (error, results) => {
       if (error) {
         throw error

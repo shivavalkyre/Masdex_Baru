@@ -19,7 +19,7 @@ const read = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT id, sumber_informasi_awal as nama FROM tbl_insaf_sumber_informasi_Awal where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT id, sumber_informasi_awal as nama FROM tbl_insaf_sumber_informasi_Awal where is_delete=false ORDER BY id DESC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error

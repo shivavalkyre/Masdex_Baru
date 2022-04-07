@@ -53,7 +53,7 @@ const createMSI = (request, response) => {
   }
   
   // const getMSI = (request, response) => {
-  //   pool.query('SELECT * FROM tbl_insaf_msi_detail ORDER BY id ASC', (error, results) => {
+  //   pool.query('SELECT * FROM tbl_insaf_msi_detail ORDER BY id DESC', (error, results) => {
   //     if (error) {
   //       throw error
   //     }
@@ -76,11 +76,11 @@ const createMSI = (request, response) => {
     //  console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-    //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-     var sql= 'SELECT * FROM tbl_insaf_msi WHERE is_delete = false ORDER BY id ASC'
+    //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
+     var sql= 'SELECT * FROM tbl_insaf_msi WHERE is_delete = false ORDER BY id DESC'
   
   
-    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
+    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
   
     //  response.status(200).send(sql)
      pool.query(sql ,(error, results) => {
@@ -112,11 +112,11 @@ const createMSI = (request, response) => {
     //  console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-    //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+    //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
      var sql= 'SELECT * FROM tbl_insaf_msi WHERE is_delete = false ORDER BY id DESC limit 1'
   
   
-    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
+    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
   
     //  response.status(200).send(sql)
      pool.query(sql ,(error, results) => {
@@ -150,9 +150,9 @@ const createMSI = (request, response) => {
     //  console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-    //  var sql= 'SELECT * FROM insaf_msixmsidetail WHERE created_at >='+ " '"+range1 +"'"+ ' AND created_at <= '+ "'"+range2+"'" +' ORDER BY id ASC'
-     var sql= 'SELECT * FROM tbl_insaf_msi WHERE created_at >='+ " '"+range1 +"'"+ ' AND created_at <= '+ "'"+range2+"'" +' ORDER BY id ASC'
+    //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
+    //  var sql= 'SELECT * FROM insaf_msixmsidetail WHERE created_at >='+ " '"+range1 +"'"+ ' AND created_at <= '+ "'"+range2+"'" +' ORDER BY id DESC'
+     var sql= 'SELECT * FROM tbl_insaf_msi WHERE created_at >='+ " '"+range1 +"'"+ ' AND created_at <= '+ "'"+range2+"'" +' ORDER BY id DESC'
     //  response.status(200).send(sql)
      pool.query(sql ,(error, results) => {
        if (error) {
@@ -292,11 +292,11 @@ const createMSI = (request, response) => {
         //  console.log(results.rows[0].total)
         res.push({total:results.rows[0].total})
     
-        //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-        var sql= 'SELECT * FROM tbl_insaf_jenis_berita_marine_safety_informasi WHERE is_delete = false ORDER BY id ASC'
+        //  var sql= 'SELECT * FROM tbl_insaf_msi ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
+        var sql= 'SELECT * FROM tbl_insaf_jenis_berita_marine_safety_informasi WHERE is_delete = false ORDER BY id DESC'
     
     
-        //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
+        //  var sql= 'SELECT * FROM insaf_msixmsidetail ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset (INFORMASI KAPAL)
     
         //  response.status(200).send(sql)
         pool.query(sql ,(error, results) => {

@@ -42,7 +42,7 @@ const read = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT * FROM tbl_masdex_jenis_kapal where is_delete=false ORDER BY id ASC'
+        var sql = 'SELECT * FROM tbl_masdex_jenis_kapal where is_delete=false ORDER BY id DESC'
         pool.query(sql, (error, results) => {
             if (error) {
                 throw error
@@ -106,7 +106,7 @@ const readShipTypeChild = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM marlens_ship_type_child ORDER BY id ASC '
+     var sql= 'SELECT * FROM marlens_ship_type_child ORDER BY id DESC '
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error

@@ -22,7 +22,7 @@ const getPAN = (request, response) => {
 			throw error
 		}
 		res.push({ total: results.rows[0].total })
-		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal ORDER BY id ASC;";
+		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal ORDER BY id DESC;";
 		pool.query(sql, (error, results2) => {
 			if (error) {
 				response.status(400).send({ success: false, data: error })
@@ -54,7 +54,7 @@ const getPANorderBY = (request, response) => {
 			filter = 'DESC'
 		}
 		else {
-			filter = 'ASC'
+			filter = 'DESC'
 		}
 		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal ORDER BY created_at " + filter + ";";
 		pool.query(sql, (error, results2) => {
@@ -168,7 +168,7 @@ const getPANByRange = (request, response) => {
 			throw error
 		}
 		res.push({ total: results.rows[0].total })
-		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal WHERE waktu_kejadian >= '" + range1 + "' AND waktu_kejadian <= '" + range2 + "'" + " ORDER BY id ASC";
+		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal WHERE waktu_kejadian >= '" + range1 + "' AND waktu_kejadian <= '" + range2 + "'" + " ORDER BY id DESC";
 		pool.query(sql, (error, results2) => {
 			if (error) {
 				response.status(400).send({ success: false, data: error })
@@ -308,7 +308,7 @@ const searchPANdata = (request, response) => {
 			throw error
 		}
 		res.push({ total: results.rows[0].total })
-		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal WHERE no_jurnal ILIKE '" + queryfilter + "' ORDER BY id ASC;";
+		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal WHERE no_jurnal ILIKE '" + queryfilter + "' ORDER BY id DESC;";
 		pool.query(sql, (error, results2) => {
 			if (error) {
 				response.status(400).send({ success: false, data: error })
@@ -526,7 +526,7 @@ const getSumberInformasiAwal = (request, response) => {
 	pool.query(`SELECT id, sumber_informasi_awal
 				 FROM tbl_insaf_sumber_informasi_awal 
 				 WHERE is_delete = '0'
-				 ORDER BY sumber_informasi_awal ASC;`, (error, result) => {
+				 ORDER BY sumber_informasi_awal DESC;`, (error, result) => {
 		if (error) {
 			throw error;
 		}
@@ -538,7 +538,7 @@ const getJenisPan = (request, response) => {
 	pool.query(`SELECT id, jenis_pan
 				 FROM tbl_insaf_jenis_pan
 				 WHERE is_delete = '0'
-				 ORDER BY jenis_pan ASC;`, (error, result) => {
+				 ORDER BY jenis_pan DESC;`, (error, result) => {
 		if (error) {
 			throw error;
 		}

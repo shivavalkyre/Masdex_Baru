@@ -35,7 +35,7 @@ const readDistress = (request, response) => {
     var rows_req = rows || 3
     var sort_by_req = sortBy || 'id'
     var sort_by_table_req = sortByTable || 'tbl_insaf_distress'
-    var sort_direction_req = sortDirection || 'ASC'
+    var sort_direction_req = sortDirection || 'DESC'
     var offset = (page_req - 1) * rows_req
     var res = []
     var items = []
@@ -44,7 +44,7 @@ const readDistress = (request, response) => {
         throw error
       }
       res.push({total:results.rows[0].total})
-      // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+      // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
       var sql = `SELECT tbl_insaf_distress.id, tbl_insaf_distress.no_jurnal, tbl_insaf_distress.tanggal, tbl_insaf_jenis_distress.id as id_jenis_distress, tbl_insaf_jenis_distress.jenis_distress, tbl_insaf_distress.sumber_informasi, tbl_insaf_sumber_informasi_awal.sumber_informasi_awal, tbl_insaf_distress.judul_distress, tbl_insaf_distress.lokasi_kejadian, tbl_insaf_distress.foto_kejadian_distress, tbl_insaf_distress.deskripsi_assesment, tbl_insaf_distress.waktu_kejadian, tbl_insaf_distress.waktu_selesai, tbl_insaf_distress.degree1, tbl_insaf_distress.minute1, tbl_insaf_distress.second1, tbl_insaf_distress.direction1, tbl_insaf_distress.degree2, tbl_insaf_distress.minute2, tbl_insaf_distress.second2, tbl_insaf_distress.direction2, tbl_insaf_distress.is_delete FROM tbl_insaf_distress LEFT JOIN tbl_insaf_jenis_distress ON tbl_insaf_distress.jenis_distress = tbl_insaf_jenis_distress.id LEFT JOIN tbl_insaf_sumber_informasi_awal ON tbl_insaf_distress.sumber_informasi = tbl_insaf_sumber_informasi_awal.id WHERE tbl_insaf_distress.is_delete=false ORDER BY ${sort_by_table_req}.${sort_by_req} ${ sort_direction_req }`
       pool.query(
        sql,
@@ -212,8 +212,8 @@ const readDistressDetailAll = (request, response) => {
       throw error
     }
     res.push({total:results.rows[0].total})
-    // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-    var sql=  'SELECT i.distress_id, k.ship_name FROM tbl_insaf_distress_detail i left join tbl_masdex_kapal k on k.mmsi = i.mmsi  WHERE i.is_delete=false ORDER BY i.id ASC'
+    // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
+    var sql=  'SELECT i.distress_id, k.ship_name FROM tbl_insaf_distress_detail i left join tbl_masdex_kapal k on k.mmsi = i.mmsi  WHERE i.is_delete=false ORDER BY i.id DESC'
     pool.query(
      sql,
       (error, results) => {
@@ -243,8 +243,8 @@ const readDistressDetail = (request, response) => {
         throw error
       }
       res.push({total:results.rows[0].total})
-      // var sql=  'SELECT * FROM tbl_insaf_distress_detail WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, *, tbl_masdex_jenis_kapal.ship_type FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi join tbl_masdex_jenis_kapal on tbl_masdex_jenis_kapal.id = tbl_masdex_kapal.ship_type WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id ASC"
+      // var sql=  'SELECT * FROM tbl_insaf_distress_detail WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
+      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, *, tbl_masdex_jenis_kapal.ship_type FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi join tbl_masdex_jenis_kapal on tbl_masdex_jenis_kapal.id = tbl_masdex_kapal.ship_type WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id DESC"
 	  pool.query(
        sql,
         (error, results) => {
@@ -378,8 +378,8 @@ const readPelaporDistress = (request, response) => {
         throw error;
       }
       res.push({total:results.rows[0].total})
-      // var sql=  'SELECT * FROM tbl_insaf_pelapor_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
-      var sql=  `SELECT * FROM tbl_insaf_pelapor_distress WHERE distress_id = '`+distress_id+`' AND is_delete=false ORDER BY id ASC`
+      // var sql=  'SELECT * FROM tbl_insaf_pelapor_distress WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
+      var sql=  `SELECT * FROM tbl_insaf_pelapor_distress WHERE distress_id = '`+distress_id+`' AND is_delete=false ORDER BY id DESC`
       pool.query(
        sql,
         (error, results) => {
@@ -462,7 +462,7 @@ const deletePelaporDistress = (request, response) => {
 	  pool.query(`SELECT id, jenis_distress
 				 FROM tbl_insaf_jenis_distress
 				 WHERE is_delete = '0'
-				 ORDER BY jenis_distress ASC;`, (error, result) => 
+				 ORDER BY jenis_distress DESC;`, (error, result) => 
 				 {
 					if (error) 
 					{
@@ -485,7 +485,7 @@ const deletePelaporDistress = (request, response) => {
         throw error
       }
       res.push({total:results.rows[0].total})
-      // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+      // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
       pool.query(`SELECT * 
 				FROM tbl_insaf_distress_chat_participant
 				WHERE tbl_insaf_distress_chat_participant.distress_id = $1;`, [distressid], (error, result) => 

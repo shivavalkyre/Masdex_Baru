@@ -71,7 +71,7 @@ const read = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_entering_to_port where is_delete=false ORDER BY id ASC'
+     var sql= 'SELECT * FROM tbl_insaf_entering_to_port where is_delete=false ORDER BY id DESC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
@@ -438,7 +438,7 @@ const read_new_notif = (request,response)=>{
    //console.log(results.rows[0].total)
    res.push({total:results.rows[0].total})
 
-   var sql= 'SELECT * FROM tbl_insaf_entering_to_port where is_delete=false and new_msg=true ORDER BY id ASC'
+   var sql= 'SELECT * FROM tbl_insaf_entering_to_port where is_delete=false and new_msg=true ORDER BY id DESC'
    pool.query(sql ,(error, results) => {
      if (error) {
        throw error

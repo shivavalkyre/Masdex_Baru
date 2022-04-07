@@ -42,7 +42,7 @@ const read = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT n.*,k.flag,t.ship_type as jenis_kapal,p.ais_status_navigation,k.ship_name,k.gt,k.mmsi,k.call_sign FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi left join tbl_insaf_ais_status_navigation p on p.id = n.status_navigasi left join tbl_masdex_jenis_kapal t on k.ship_type = t.id where n.is_delete=false ORDER BY n.id ASC'
+        var sql = 'SELECT n.*,k.flag,t.ship_type as jenis_kapal,p.ais_status_navigation,k.ship_name,k.gt,k.mmsi,k.call_sign FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi left join tbl_insaf_ais_status_navigation p on p.id = n.status_navigasi left join tbl_masdex_jenis_kapal t on k.ship_type = t.id where n.is_delete=false ORDER BY n.id DESC'
         pool.query(sql, (error, results) => {
             if (error) {
                 throw error
@@ -75,7 +75,7 @@ const read_by_id = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT n.*,i.nama_pelabuhan as pelabuhan_akhir, l.nama_pelabuhan as pelabuhan_awal,k.imo,k.flag,t.ship_type as jenis_kapal,p.ais_status_navigation,k.ship_name,k.gt,k.mmsi,k.call_sign FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi left join tbl_insaf_ais_status_navigation p on p.id = n.status_navigasi left join tbl_masdex_jenis_kapal t on k.ship_type = t.id left join tbl_masdex_pelabuhan l on l.id = n.pelabuhan_asal left join tbl_masdex_pelabuhan i on i.id = n.pelabuhan_tujuan where n.id=$1 and n.is_delete=false ORDER BY n.id ASC'
+        var sql = 'SELECT n.*,i.nama_pelabuhan as pelabuhan_akhir, l.nama_pelabuhan as pelabuhan_awal,k.imo,k.flag,t.ship_type as jenis_kapal,p.ais_status_navigation,k.ship_name,k.gt,k.mmsi,k.call_sign FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi left join tbl_insaf_ais_status_navigation p on p.id = n.status_navigasi left join tbl_masdex_jenis_kapal t on k.ship_type = t.id left join tbl_masdex_pelabuhan l on l.id = n.pelabuhan_asal left join tbl_masdex_pelabuhan i on i.id = n.pelabuhan_tujuan where n.id=$1 and n.is_delete=false ORDER BY n.id DESC'
         pool.query(sql, [id], (error, results) => {
             if (error) {
                 throw error
@@ -139,7 +139,7 @@ const read_by_voyage = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT n.*,i.nama_pelabuhan as pelabuhan_akhir, l.nama_pelabuhan as pelabuhan_awal,k.imo,k.flag,t.ship_type as jenis_kapal,p.ais_status_navigation,k.ship_name,k.gt,k.mmsi,k.call_sign FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi left join tbl_insaf_ais_status_navigation p on p.id = n.status_navigasi left join tbl_masdex_jenis_kapal t on k.ship_type = t.id left join tbl_masdex_pelabuhan l on l.id = n.pelabuhan_asal left join tbl_masdex_pelabuhan i on i.id = n.pelabuhan_tujuan where n.voyage_id=$1 and n.is_delete=false ORDER BY n.id ASC'
+        var sql = 'SELECT n.*,i.nama_pelabuhan as pelabuhan_akhir, l.nama_pelabuhan as pelabuhan_awal,k.imo,k.flag,t.ship_type as jenis_kapal,p.ais_status_navigation,k.ship_name,k.gt,k.mmsi,k.call_sign FROM tbl_insaf_noon_position n left join tbl_masdex_kapal k on k.mmsi = n.mmsi left join tbl_insaf_ais_status_navigation p on p.id = n.status_navigasi left join tbl_masdex_jenis_kapal t on k.ship_type = t.id left join tbl_masdex_pelabuhan l on l.id = n.pelabuhan_asal left join tbl_masdex_pelabuhan i on i.id = n.pelabuhan_tujuan where n.voyage_id=$1 and n.is_delete=false ORDER BY n.id DESC'
         pool.query(sql, [id], (error, results) => {
             if (error) {
                 throw error

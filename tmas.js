@@ -49,7 +49,7 @@ const read = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT t.*,k.ship_name,k.call_sign,k.imo,k.gt,k.loa,k.width FROM tbl_masdex_tmas t left join tbl_masdex_kapal k on t.mmsi = k.mmsi where t.is_delete=false ORDER BY t.id ASC'
+        var sql = 'SELECT t.*,k.ship_name,k.call_sign,k.imo,k.gt,k.loa,k.width FROM tbl_masdex_tmas t left join tbl_masdex_kapal k on t.mmsi = k.mmsi where t.is_delete=false ORDER BY t.id DESC'
         pool.query(sql, (error, results) => {
             if (error) {
                 throw error
@@ -80,7 +80,7 @@ const readAll = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT t.*,p.nama_pasien,k.ship_name FROM tbl_masdex_tmas t left join tbl_masdex_tmas_pasien p on t.id = p.tmas_id left join tbl_masdex_kapal k on t.mmsi = k.mmsi where t.is_delete=false ORDER BY t.id ASC'
+        var sql = 'SELECT t.*,p.nama_pasien,k.ship_name FROM tbl_masdex_tmas t left join tbl_masdex_tmas_pasien p on t.id = p.tmas_id left join tbl_masdex_kapal k on t.mmsi = k.mmsi where t.is_delete=false ORDER BY t.id DESC'
         pool.query(sql, (error, results) => {
             if (error) {
                 throw error
@@ -380,7 +380,7 @@ const getAllpartisipanByTMASid = (request, response) =>
       throw error
     }
     res.push({total:results.rows[0].total})
-    // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id ASC LIMIT '  + rows_req + ' OFFSET ' + offset
+    // var sql=  'SELECT * FROM tbl_insaf_distress WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
     pool.query(`SELECT * 
               FROM tbl_masdex_tmas_chat_participant
               WHERE tbl_masdex_tmas_chat_participant.tmas_id = $1;`, [tmasid], (error, result) => 
