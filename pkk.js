@@ -212,16 +212,16 @@ const createFromInsaf = (request, response) => {
   var name='';
   console.log(request.files);
   if (request.files!==null){
-  let sampleFile = request.files.dokumen;
-  console.log(sampleFile);
-   const now = Date.now()
-   name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-   complete_path = base_url+'dokumens/pkk/'+name;
-   console.log(__dirname);
-   sampleFile.mv(path.join(__dirname + '/dokumens/pkk/') + name, function (err) {
-       if (err)
-           console.log(err);
-   });
+    let sampleFile = request.files.dokumen;
+    console.log(sampleFile);
+    const now = Date.now()
+    name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+    complete_path = base_url+'dokumens/pkk/'+name;
+    console.log(__dirname);
+    sampleFile.mv(path.join(__dirname + '/dokumens/pkk/') + name, function (err) {
+        if (err)
+            console.log(err);
+    });
   }else{
     name= null;
     complete_path=null;
@@ -427,24 +427,24 @@ const update = (request, response) => {
          }
          var name='';
           if(request.files!==null){
-          let sampleFile = request.files.dokumen;
-        //  console.log(sampleFile);
-           const now = Date.now();
-           let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-           complete_path = base_url+'dokumens/pkk/'+name;
-           console.log(complete_path);
+            let sampleFile = request.files.dokumen;
+            //  console.log(sampleFile);
+            const now = Date.now();
+            let name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+            complete_path = base_url+'dokumens/pkk/'+name;
+            console.log(complete_path);
 
-        //   //console.log(__dirname);
-           sampleFile.mv(path.join(__dirname + '/dokumens/pkk/') + name, function (err) {
-               if (err){
-                 console.log(err);
-               }
-                  
-          });
-        }else{
-          name=null;
-          complete_path=null;
-        }
+            //   //console.log(__dirname);
+            sampleFile.mv(path.join(__dirname + '/dokumens/pkk/') + name, function (err) {
+                if (err){
+                  console.log(err);
+                }
+                    
+            });
+          }else{
+            name=null;
+            complete_path=null;
+          }
         //  console.log(name);
             const update_time = new Date;
             pool.query('UPDATE tbl_masdex_pkk SET mmsi=$1, agen_kapal=$2, pelabuhan_asal=$3, pelabuhan_tujuan=$4, pelabuhan_selanjutnya=$5, dermaga_tujuan=$6, area_tambat_tujuan=$7,zona_labuh_tujuan=$8,jenis_muatan=$9,maksimal_draft=$10,eta=$11,etd=$12,jenis_pelayaran=$13,nama_nahkoda=$14,telepon_nahkoda=$15,dokumen_pkk=$16,updated_at=$17,url_pkk=$18,no_dokumen=$19,user_agen=$21,company_agen=$22 where id=$20'
