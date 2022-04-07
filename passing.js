@@ -4,11 +4,11 @@ const path = require('path')
 const base_url = process.env.base_url;
 
 const create = (request, response) => {
-    const { voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information, created_by } 
+    const { voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,estimated_time_arrival, created_by } 
     = request.body
 
-     pool.query('INSERT INTO tbl_insaf_passing (voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,created_by) VALUES($1,$2,$3,$4,$5,$6,$7)'
-     ,[voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,created_by],(error, results) =>{
+     pool.query('INSERT INTO tbl_insaf_passing (voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,estimated_time_arrival,created_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8)'
+     ,[voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,estimated_time_arrival,created_by],(error, results) =>{
 
         if (error) {
             throw error
@@ -111,7 +111,7 @@ const read_by_voyage = (request, response) => {
    //console.log(results.rows[0].total)
    res.push({total:results.rows[0].total})
 
-   var sql= 'SELECT * FROM tbl_insaf_passing where voyage_id=$1 and is_delete=false'
+   var sql= 'SELECT p.*,lp.nama_pelabuhan as nama_last_port,tp.nama_pelabuhan as nama_pelabuhan_tujuan FROM tbl_insaf_passing p left join tbl_masdex_pelabuhan lp on lp.id = p.last_port left join tbl_masdex_pelabuhan tp on tp.id = p.pelabuhan_tujuan where p.voyage_id=$1 and p.is_delete=false'
    pool.query(sql,[id] ,(error, results) => {
      if (error) {
        throw error
@@ -128,7 +128,7 @@ const read_by_voyage = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-    const { voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information } 
+    const { voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,estimated_time_arrival } 
     = request.body;
     let doc;
 
@@ -149,8 +149,8 @@ const update = (request, response) => {
           }
 
          const update_time = new Date;
-         pool.query('UPDATE tbl_insaf_passing SET voyage_id=$1,trouble=$2,last_port=$3,pelabuhan_tujuan=$4,jenis_pelayaran=$5,more_information=$6 where id=$7'
-         , [voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,id], (error, results) =>{
+         pool.query('UPDATE tbl_insaf_passing SET voyage_id=$1,trouble=$2,last_port=$3,pelabuhan_tujuan=$4,jenis_pelayaran=$5,more_information=$6,estimated_time_arrival=$8 where id=$7'
+         , [voyage_id,trouble,last_port,pelabuhan_tujuan,jenis_pelayaran,more_information,id,estimated_time_arrival], (error, results) =>{
            if (error) {
               throw error
              //response.status(201).send(error)
