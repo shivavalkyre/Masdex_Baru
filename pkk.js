@@ -240,7 +240,11 @@ const createFromInsaf = (request, response) => {
     if (error) {
       throw error
     }
-      jenis_telkompel = results.rows[0].jenis_telkompel;
+      if(results.rows[0]){
+        jenis_telkompel = results.rows[0].jenis_telkompel;
+      }else{
+        jenis_telkompel = "SROP";
+      }
       //console.log(jenis_telkompel);
 
 
