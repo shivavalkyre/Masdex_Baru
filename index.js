@@ -78,6 +78,7 @@ const jenis_pelanggaran = require('./jenis_pelanggaran')
 const jenis_pelayaran = require('./jenis_pelayaran')
 const terminal = require('./terminal')
 const jenis_pan = require('./jenis_pan')
+const jenis_asuransi = require('./jenis_asuransi')
 const jenis_status_navigation = require('./jenis_status_navigation')
 const jenis_manouvre = require('./jenis_manouvre')
 const jenis_berita_marine_safety_informasi = require('./jenis_berita_marine_safety_informasi')
@@ -229,6 +230,15 @@ app.get('/api/V1/insaf/jenis_pan/:id', jenis_pan.read_by_id);
 app.put('/api/V1/insaf/jenis_pan/update/:id', jenis_pan.update);
 app.delete('/api/V1/insaf/jenis_pan/delete/:id', jenis_pan.delete_);
 // ==========================================================================
+
+// ============================== Jenis Asuransi ===============================
+app.post('/api/V1/masdex/jenis_asuransi/create', jenis_asuransi.create);
+app.get('/api/V1/masdex/jenis_asuransi/read', jenis_asuransi.read);
+app.get('/api/V1/masdex/jenis_asuransi/:id', jenis_asuransi.read_by_id);
+app.put('/api/V1/masdex/jenis_asuransi/update/:id', jenis_asuransi.update);
+app.delete('/api/V1/masdex/jenis_asuransi/delete/:id', jenis_asuransi.delete_);
+// ==========================================================================
+
 
 // ============================== Jenis Status Bernavigasi ===============================
 app.post('/api/V1/insaf/jenis_status_navigation/create', jenis_status_navigation.create);

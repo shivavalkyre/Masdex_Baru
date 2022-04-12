@@ -4,12 +4,12 @@ const path = require('path')
 const base_url = process.env.base_url
 
 const create = (request, response) => {
-    const { tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by }
+    const { tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by, jenis_asuransi, nomor_asuransi }
         = request.body
 
     const created_time = new Date;
-    pool.query('INSERT INTO tbl_masdex_tmas_pasien (tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)'
-        , [tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by, created_time], (error, results) => {
+    pool.query('INSERT INTO tbl_masdex_tmas_pasien (tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by, created_at, jenis_asuransi, nomor_asuransi) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)'
+        , [tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by, created_time, jenis_asuransi, nomor_asuransi], (error, results) => {
 
             if (error) {
                 throw error
@@ -126,7 +126,7 @@ const read_by_tmas = (request, response) => {
 
 const update = (request, response) => {
     const id = parseInt(request.params.id);
-        const { tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, updated_by }
+        const { tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, updated_by, jenis_asuransi, nomor_asuransi }
         = request.body
 
     pool.query('SELECT count(*) as total FROM tbl_masdex_tmas_pasien where id=$1 and is_delete=false', [id], (error, results) => {
@@ -148,8 +148,8 @@ const update = (request, response) => {
         let complete_path = results.rows[0].url_logo
 
         const update_time = new Date;
-        pool.query('UPDATE tbl_masdex_tmas_pasien SET tmas_id=$1, nama_pasien=$2, jenis_kelamin=$3, umur=$4, no_telepon=$5, penyakit=$6, keluhan=$7, spesialis_kesehatan_id=$8, updated_by=$9, updated_at=$10 where id=$11'
-            , [tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, updated_by, update_time, id ], (error, results) => {
+        pool.query('UPDATE tbl_masdex_tmas_pasien SET tmas_id=$1, nama_pasien=$2, jenis_kelamin=$3, umur=$4, no_telepon=$5, penyakit=$6, keluhan=$7, spesialis_kesehatan_id=$8, updated_by=$9, updated_at=$10, jenis_asuransi=$12, nomor_asuransi=$13 where id=$11'
+            , [tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, updated_by, update_time, id, jenis_asuransi, nomor_asuransi ], (error, results) => {
                 if (error) {
                     throw error
                     //response.status(201).send(error)
