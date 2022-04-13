@@ -71,7 +71,7 @@ const getSecurite = (request, response) => {
 
   //  var sql= 'SELECT s.*, d.id id_detail, d.securite_id securite_id, d.nama_pelapor nama_pelapor, d.tgl_lapor tgl_lapor, d.info_tambahan info_tambahan FROM tbl_insaf_securite s INNER JOIN tbl_insaf_securite_detail d ON s.id = d.securite_id ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
   //  var sql= 'SELECT * from insaf_securitexsecuritedetail ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
-    var sql= 'SELECT s.*, m.ship_name, js.jenis_securite, ji.jenis_informasi_securite from tbl_insaf_securite s left join tbl_insaf_jenis_securite js on js.id = s.jenis_securite left join tbl_insaf_jenis_informasi_securite ji on ji.id = s.sumber_informasi_awal left join tbl_masdex_kapal m on s.mmsi = m.mmsi WHERE s.is_delete = false'
+    var sql= 'SELECT s.*, m.ship_name, js.jenis_securite, ji.jenis_informasi_securite from tbl_insaf_securite s left join tbl_insaf_jenis_securite js on js.id = s.jenis_securite left join tbl_insaf_jenis_informasi_securite ji on ji.id = s.sumber_informasi_awal left join tbl_masdex_kapal m on s.mmsi = m.mmsi WHERE s.is_delete = false  and s.voyage_id>0 '
     // var sql= 'SELECT * from insaf_securitexsecuritedetails'
     pool.query(sql ,(error, results) => {
       if (error) {

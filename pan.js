@@ -22,7 +22,7 @@ const getPAN = (request, response) => {
 			throw error
 		}
 		res.push({ total: results.rows[0].total })
-		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal ORDER BY id DESC;";
+		var sql = "SELECT * FROM insaf_panxjenispanxsumberinformasiawal where voyage_id>0 ORDER BY id DESC;";
 		pool.query(sql, (error, results2) => {
 			if (error) {
 				response.status(400).send({ success: false, data: error })
