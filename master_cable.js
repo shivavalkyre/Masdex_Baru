@@ -170,7 +170,7 @@ const read_by_voyage_id = (request, response) => {
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_insaf_master_cable where voyage_id=$1 and is_delete=false'
+     var sql= 'SELECT c.*, pa.nama_lengkap as perusahaan_agen FROM tbl_insaf_master_cable c left join tbl_stakeholders pa on c.company_agen = pa.id where c.voyage_id=$1 and c.is_delete=false'
      pool.query(sql,[id] ,(error, results) => {
        if (error) {
          throw error
