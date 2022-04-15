@@ -332,6 +332,7 @@ app.put('/api/V1/masdex/pkk/:id', pkk.update);
 app.put('/api/V1/masdex/pkk/notif/:id', pkk.update_read_notif);
 app.delete('/api/V1/masdex/pkk/:id', pkk.delete_);
 app.get('/api/V1/masdex/voyage/pkk/:id', pkk.read_by_voyage);
+app.get('/api/V1/masdex/check_voyage/pkk/:id', pkk.check_voyage);
 // ==========================================================================
 
 // ============================== Notice to Marine =======================================
@@ -362,6 +363,7 @@ app.get('/api/V1/masdex/voyage/detail/master_cable/:id', master_cable.read_by_vo
 app.put('/api/V1/masdex/master_cable/:id', master_cable.update);
 app.put('/api/V1/masdex/master_cable/notif/:id', master_cable.update_read_notif);
 app.delete('/api/V1/masdex/master_cable/:id', master_cable.delete_);
+app.get('/api/V1/masdex/check_voyage/master_cable/:id', master_cable.check_voyage);
 
 // =============================== Kurs Tengah ==============================
 app.get('/api/V1/kurs',master_cable.kurs_tengah_data);
@@ -383,6 +385,7 @@ app.get('/api/V1/masdex/voyage/detail/master_vts/:id', master_vts.read_by_voyage
 app.put('/api/V1/masdex/master_vts/:id', master_vts.update);
 app.put('/api/V1/masdex/master_vts/notif/:id', master_vts.update_read_notif);
 app.delete('/api/V1/masdex/master_vts/:id', master_vts.delete_);
+app.get('/api/V1/masdex/check_voyage/master_vts/:id', master_vts.check_voyage);
 
 // =============================== Kurs Tengah ==============================
 app.get('/api/V1/kurs',master_vts.kurs_tengah_data);
