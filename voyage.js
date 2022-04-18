@@ -403,8 +403,8 @@ const voyage_status = (request, response) => {
    //console.log(results.rows[0].total)
    res.push({total:results.rows[0].total})
 
-   var sql= 'SELECT * FROM ship_status_last_status_v2'
-   if (sort_by_req && sort_direction_req) sql += ` ORDER BY ${sort_by_req} ${sort_direction_req}`
+   var sql= 'SELECT * FROM ship_status_last_status_v2 ORDER BY voyage_id DESC'
+  //  if (sort_by_req && sort_direction_req) sql += ` ORDER BY ${sort_by_req} ${sort_direction_req}`
    pool.query(sql ,(error, results) => {
      if (error) {
        throw error
