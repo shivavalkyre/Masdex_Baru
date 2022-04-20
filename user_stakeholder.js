@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url;
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 var complete_path = '';
@@ -45,13 +44,13 @@ const create = (request, response) => {
         } else {
             // user not exist
             let name = 'default.jpg'
-            let complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+            let complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/user_stakeholder/' + name;
             if (request.files) {
                 let sampleFile = request.files.photo;
                 console.log(sampleFile);
                 const now = Date.now()
                 name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+                complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/user_stakeholder/' + name;
                 console.log(__dirname);
                 sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
                     if (err)
@@ -350,7 +349,7 @@ const update = (request, response) => {
                             console.log(sampleFile);
                             const now = Date.now()
                             name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                            complete_path = base_url + 'dokumens/user_stakeholder/' + name;
+                            complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/user_stakeholder/' + name;
                             console.log(__dirname);
                             sampleFile.mv(path.join(__dirname + '/dokumens/user_stakeholder/') + name, function (err) {
                                 if (err)

@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url;
 
 
 const create = (request, response) => {
@@ -246,7 +245,7 @@ const update_by_otoritas = (request, response) => {
               console.log(sampleFile);
               const now = Date.now()
               name1 = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-              complete_path1 = base_url + 'dokumens/entering_to_port/dokumen_berthing/' + name1;
+              complete_path1 = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/entering_to_port/dokumen_berthing/' + name1;
               console.log(__dirname);
               sampleFile.mv(path.join(__dirname + '/dokumens/entering_to_port/dokumen_berthing/') + name1, function (err) {
                   if (err)
@@ -275,7 +274,7 @@ const update_by_otoritas = (request, response) => {
               console.log(sampleFile);
               const now = Date.now()
               name2 = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-              complete_path2 = base_url + 'dokumens/entering_to_port/dokumen_ppk/' + name2;
+              complete_path2 = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/entering_to_port/dokumen_ppk/' + name2;
               console.log(__dirname);
               sampleFile.mv(path.join(__dirname + '/dokumens/entering_to_port/dokumen_ppk/') + name2, function (err) {
                   if (err)

@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url
 
 const create = (request, response) => {
     const { tmas_id, nama_pasien, jenis_kelamin, umur, no_telepon, penyakit, keluhan, spesialis_kesehatan_id, created_by, jenis_asuransi, nomor_asuransi }

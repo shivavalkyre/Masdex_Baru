@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url
 
 const create = (request, response) => {
     const { stakeholder, alias, logo, created_by }
@@ -15,7 +14,7 @@ const create = (request, response) => {
         const now = Date.now()
         name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
         console.log(__dirname);
-        complete_path = base_url+'dokumens/jenis_stakeholder/logo/'+name;
+        complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/jenis_stakeholder/logo/'+name;
         sampleFile.mv(path.join(__dirname + '/dokumens/jenis_stakeholder/logo/') + name, function (err) {
             if (err)
                 console.log(err);
@@ -141,7 +140,7 @@ const update = (request, response) => {
             const now = Date.now()
             name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
             console.log(__dirname);
-            complete_path = base_url+'dokumens/jenis_stakeholder/logo/'+name;
+            complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/jenis_stakeholder/logo/'+name;
             sampleFile.mv(path.join(__dirname + '/dokumens/jenis_stakeholder/logo/') + name, function (err) {
                 if (err)
                     console.log(err);

@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url;
 
 const create = (request, response) => {
   const { voyage_id, nomor_spb, tanggal_jam_spb, pelabuhan_tujuan, eta_pelabuhan_tujuan, etd_pelabuhan_tujuan, dokumen_spb, created_by }
@@ -14,7 +13,7 @@ const create = (request, response) => {
       console.log(sampleFile);
       const now = Date.now()
       name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-      complete_path = base_url + 'dokumens/clearance_out/' + name;
+      complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/clearance_out/' + name;
       console.log(__dirname);
       sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
           if (err)
@@ -233,7 +232,7 @@ const update_ksu = (request, response) => {
           console.log(sampleFile);
           const now = Date.now()
           name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-          complete_path = base_url + 'dokumens/clearance_out/' + name;
+          complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/clearance_out/' + name;
           console.log(__dirname);
           sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
               if (err)
@@ -299,7 +298,7 @@ const update = (request, response) => {
       //console.log(sampleFile);
       const now = Date.now()
       name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-      var complete_path = base_url + 'dokumens/clearance_out/' + name;
+      var complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/clearance_out/' + name;
       //console.log(__dirname);
       sampleFile.mv(path.join(__dirname + '/dokumens/clearance_out/') + name, function (err) {
         if (err) {

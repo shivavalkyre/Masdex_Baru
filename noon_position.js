@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url
 
 const create = (request, response) => {
     const { mmsi, status_navigasi, degree1, minute1, second1, direction1, degree2, minute2, second2, direction2, haluan, kecepatan, nama_lokasi_kejadian, pelabuhan_asal, pelabuhan_tujuan, jumlah_awak, jumlah_penumpang, jenis_muatan, kondisi_awak_kapal, kondisi_kapal, posisi_bbm, kecepatan_angin, temperature, arus, kelembaban, curah_hujan, arah_angin, tinggi_gelombang, jarak_pandang, pasang_surut, tekanan_udara, remarks, voyage_id, created_by }

@@ -1,7 +1,6 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
-const base_url = process.env.base_url;
 
 const create = (request, response) => {
     const { voyage_id,degree1,minute1,second1,direction1,degree2,minute2,second2,direction2,weather_valid_from,weather_valid_to,weather_data_feed,wind_speed_min,wind_speed_max,wind_from,wind_to,humidity_min,humidity_max,air_pressure,temperature_min,temperature_max,low_tide,high_tide,low_tide_time,high_tide_time,weather,informasi_cuaca_lainnya,speed_kapal,draught_saat_ini,informasi_lainnya,heading_kapal,approval_ksu,dokumen_spm } 
@@ -277,7 +276,7 @@ const update_ksu = (request, response) => {
               console.log(sampleFile);
               const now = Date.now()
               name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-              complete_path = base_url + 'dokumens/clearance_in/' + name;
+              complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/clearance_in/' + name;
               console.log(__dirname);
               sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
                   if (err)
@@ -299,7 +298,7 @@ const update_ksu = (request, response) => {
             //  console.log(sampleFile);
             //   const now = Date.now()
             //   name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-            //   var complete_path = base_url+'dokumens/clearance_in/'+name;
+            //   var complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/clearance_in/'+name;
             //   console.log(__dirname);
             //   sampleFile.mv(path.join(__dirname + '/dokumens/clearance_in/') + name, function (err) {
             //       if (err){

@@ -2,7 +2,6 @@ const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
 const http = require('http')
-const base_url = process.env.base_url;
 var complete_path='';
 
 const create = (request, response) => {
@@ -15,7 +14,7 @@ const create = (request, response) => {
         console.log(sampleFile);
         const now = Date.now()
         name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-        complete_path = base_url + 'dokumens/ntm/' + name;
+        complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/ntm/' + name;
         console.log(__dirname+' ini dirname');
         sampleFile.mv(path.join(__dirname + '/dokumens/ntm/') + name, function (err) {
             if (err)
@@ -178,7 +177,7 @@ const update = (request, response) => {
                   console.log(sampleFile);
                   const now = Date.now()
                   name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-                  complete_path = base_url + 'dokumens/ntm/' + name;
+                  complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/ntm/' + name;
                   console.log(__dirname);
                   sampleFile.mv(path.join(__dirname + '/dokumens/ntm/') + name, function (err) {
                       if (err)
