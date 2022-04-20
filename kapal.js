@@ -32,7 +32,7 @@ const create = (request, response) => {
       console.log(sampleFile);
       const now = Date.now()
       name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-      complete_path = base_url + 'dokumens/kapal/foto/' + name;
+      complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/kapal/foto/' + name;
       console.log(__dirname+' ini dirname');
       sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
           if (err)
@@ -46,7 +46,7 @@ const create = (request, response) => {
       console.log(sampleFile);
       const now = Date.now()
       name_v2 = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-      complete_path_v2 = base_url + 'dokumens/kapal/foto/' + name_v2;
+      complete_path_v2 = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/kapal/foto/' + name_v2;
       console.log(__dirname+' ini dirname');
       sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name_v2, function (err) {
           if (err)
@@ -253,7 +253,7 @@ const update = (request, response) => {
         console.log(sampleFile);
         const now = Date.now()
         name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-        complete_path = base_url + 'dokumens/kapal/foto/' + name;
+        complete_path = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/kapal/foto/' + name;
         console.log(__dirname);
         sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
             if (err)
@@ -273,7 +273,7 @@ const update = (request, response) => {
         console.log(sampleFile);
         const now = Date.now()
         name_v2 = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-        complete_path_v2 = base_url + 'dokumens/kapal/foto/' + name_v2;
+        complete_path_v2 = 'https://api-insafmasdex.disnavpriok.id/api/V1/dokumens/kapal/foto/' + name_v2;
         console.log(__dirname);
         sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name_v2, function (err) {
             if (err)
