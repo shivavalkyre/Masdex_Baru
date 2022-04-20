@@ -1,6 +1,9 @@
 const pool = require('./dbCon');
 const fs = require('fs');
 const path = require('path')
+const base_url = process.env.base_url;
+var complete_path='';
+var complete_path_v2='';
 
 const create = (request, response) => {
   const {
@@ -17,25 +20,42 @@ const create = (request, response) => {
     loa,
     ship_type,
     more_information,
-    foto_kapal
+    foto_kapal,
+    url_foto_kapal,
+    dokumen_kapal,
+    url_dokumen_kapal
   } = request.body
 
-  
-  let name = 'default.jpg'
-  if (request.files) {
-    let sampleFile = request.files.foto_kapal;
-    console.log(sampleFile);
-    const now = Date.now()
-    name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-    console.log(__dirname);
-    sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
-      if (err)
-        console.log(err);
-    });
-  } else {
-    name = null;
+  var name = '';
+  if (request.files.foto_kapal) {
+      let sampleFile = request.files.foto_kapal;
+      console.log(sampleFile);
+      const now = Date.now()
+      name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+      complete_path = base_url + 'dokumens/kapal/foto/' + name;
+      console.log(__dirname+' ini dirname');
+      sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
+          if (err)
+              console.log(err);
+      });
   }
-  pool.query('INSERT INTO tbl_masdex_kapal (stakeholder_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal,more_information) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), length, width, loa, parseInt(ship_type), name, more_information], (error, results) => {
+  
+  var name_v2 = '';
+  if (request.files.dokumen_kapal) {
+      let sampleFile = request.files.dokumen_kapal;
+      console.log(sampleFile);
+      const now = Date.now()
+      name_v2 = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+      complete_path_v2 = base_url + 'dokumens/kapal/foto/' + name_v2;
+      console.log(__dirname+' ini dirname');
+      sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name_v2, function (err) {
+          if (err)
+              console.log(err);
+      });
+  }
+
+
+  pool.query('INSERT INTO tbl_masdex_kapal (stakeholder_id,ship_name,gt,mmsi,imo,call_sign,flag,max_draft,length,width,loa,ship_type,foto_kapal,url_foto_kapal,dokumen_kapal,url_dokumen_kapal,more_information) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), length, width, loa, parseInt(ship_type), name, complete_path, name_v2, complete_path_v2, more_information], (error, results) => {
 
     if (error) {
       throw error
@@ -198,7 +218,10 @@ const update = (request, response) => {
     loa,
     ship_type,
     more_information,
-    foto_kapal
+    foto_kapal,
+    url_foto_kapal,
+    dokumen_kapal,
+    url_dokumen_kapal
   } = request.body;
   let doc;
 
@@ -217,40 +240,50 @@ const update = (request, response) => {
     if (error) {
       throw error
     }
-
+    
     var name;
     var complete_path;
 
     name = results.rows[0].foto_kapal;
+    complete_path = results.rows[0].url_foto_kapal;
 
-    if (request.files) {
-      doc = results.rows[0].foto_kapal;
-      var doc_path = __dirname + path.join('/dokumens/kapal/foto/' + doc);
-      console.log(doc_path);
-      if(doc != 'default.jpg') {
-        fs.unlinkSync(doc_path);
-      }
-      console.log(doc_path);
+    if (request.files.foto_kapal) {
+        var name = '';
+        let sampleFile = request.files.foto_kapal;
+        console.log(sampleFile);
+        const now = Date.now()
+        name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+        complete_path = base_url + 'dokumens/kapal/foto/' + name;
+        console.log(__dirname);
+        sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
+            if (err)
+                console.log(err);
+        });
+    }
+    
+    var name_v2;
+    var complete_path_v2;
 
-      let sampleFile = request.files.foto_kapal;
-      console.log(sampleFile);
-      const now = Date.now()
-      name = now + '_' + sampleFile['name'].replace(/\s+/g, '')
-      console.log(__dirname);
-      sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name, function (err) {
-        if (err) {
-          console.log(err);
-        }
+    name_v2 = results.rows[0].dokumen_kapal;
+    complete_path_v2 = results.rows[0].url_dokumen_kapal;
 
-      });
-    }else{
-      name=null;
-      complete_path=null;
+    if (request.files.dokumen_kapal) {
+        var name_v2 = '';
+        let sampleFile = request.files.dokumen_kapal;
+        console.log(sampleFile);
+        const now = Date.now()
+        name_v2 = now + '_' + sampleFile['name'].replace(/\s+/g, '')
+        complete_path_v2 = base_url + 'dokumens/kapal/foto/' + name_v2;
+        console.log(__dirname);
+        sampleFile.mv(path.join(__dirname + '/dokumens/kapal/foto/') + name_v2, function (err) {
+            if (err)
+                console.log(err);
+        });
     }
 
     console.log(name);
     const update_time = new Date;
-    pool.query('UPDATE tbl_masdex_kapal SET stakeholder_id=$1,ship_name=$2,gt=$3,mmsi=$4,imo=$5,call_sign=$6,flag=$7,max_draft=$8,length=$9,width=$10,loa=$11,ship_type=$12,foto_kapal=$13,updated_at=$14,more_information=$16 where id=$15', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), parseFloat(length), parseFloat(width), loa, parseInt(ship_type), name, update_time, id, more_information], (error, results) => {
+    pool.query('UPDATE tbl_masdex_kapal SET stakeholder_id=$1,ship_name=$2,gt=$3,mmsi=$4,imo=$5,call_sign=$6,flag=$7,max_draft=$8,length=$9,width=$10,loa=$11,ship_type=$12,foto_kapal=$13,updated_at=$14,more_information=$16,url_foto_kapal=$17, dokumen_kapal=$18, url_dokumen_kapal=$19 where id=$15', [stakeholder_id, ship_name, gt, mmsi, imo, callsign, flag, parseFloat(max_draft), parseFloat(length), parseFloat(width), loa, parseInt(ship_type), name, update_time, id, more_information, complete_path, name_v2, complete_path_v2], (error, results) => {
       if (error) {
         throw error
         //response.status(201).send(error)
