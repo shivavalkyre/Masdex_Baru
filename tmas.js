@@ -450,7 +450,8 @@ const storePartisipanChatroom = (request, response) =>
             }
           });
           
-          const html_content = '<a href="'+ url +'"><input type="button" value="TMAS Chat" /></a>'
+          const html_content = 'Sekarang anda dapat bergabung dalam chat'
+          // const html_content = '<a href="'+ url +'"><input type="button" value="TMAS Chat" /></a>'
           const mailOptions = {
             from: 'admin.insaf@disnavpriok.id',
             to: email,

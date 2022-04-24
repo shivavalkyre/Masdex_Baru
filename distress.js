@@ -556,7 +556,8 @@ const deletePelaporDistress = (request, response) => {
             }
           });
           
-          const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
+          const html_content = 'Sekarang anda dapat bergabung dalam chat'
+          // const html_content = '<a href="'+ url +'"><input type="button" value="Distress Chat" /></a>'
           const mailOptions = {
             from: 'admin.insaf@disnavpriok.id',
             to: email,
