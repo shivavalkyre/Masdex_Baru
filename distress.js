@@ -244,7 +244,7 @@ const readDistressDetail = (request, response) => {
       }
       res.push({total:results.rows[0].total})
       // var sql=  'SELECT * FROM tbl_insaf_distress_detail WHERE is_delete=false ORDER BY id DESC LIMIT '  + rows_req + ' OFFSET ' + offset
-      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, *, tbl_masdex_jenis_kapal.ship_type FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi join tbl_masdex_jenis_kapal on tbl_masdex_jenis_kapal.id = tbl_masdex_kapal.ship_type WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false ORDER BY tbl_insaf_distress_detail.id DESC"
+      var sql=  "SELECT tbl_insaf_distress_detail.id as detail_id, *, tbl_masdex_jenis_kapal.ship_type FROM tbl_insaf_distress_detail LEFT JOIN tbl_masdex_kapal ON tbl_insaf_distress_detail.mmsi = tbl_masdex_kapal.mmsi LEFT JOIN tbl_masdex_jenis_kapal on tbl_masdex_jenis_kapal.id = tbl_masdex_kapal.ship_type WHERE tbl_insaf_distress_detail.distress_id = '"+ distress_id +"' AND tbl_insaf_distress_detail.is_delete = false AND tbl_masdex_kapal.is_delete = false AND tbl_masdex_jenis_kapal.is_delete = false ORDER BY tbl_insaf_distress_detail.id DESC"
 	  pool.query(
        sql,
         (error, results) => {
