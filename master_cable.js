@@ -892,9 +892,9 @@ const cek_total_tagihan= (request, response)  =>
         jumlah_ck_berbayar = all_word_counter;
 
 
-        if (jumlah_ck_berbayar <=7)
+        if (jumlah_ck_berbayar <=10)
         {
-            jumlah_ck_berbayar = 7;
+            jumlah_ck_berbayar = 10;
         }
 
         paid_ck = jumlah_ck_berbayar;
