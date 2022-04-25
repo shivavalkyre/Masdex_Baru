@@ -38,14 +38,14 @@ const read = (request, response) => {
     var items = []
 
   
-    pool.query('SELECT count(*) as total FROM tbl_masdex_telkompel where is_delete=false', (error, results) => {
+    pool.query('SELECT count(*) as total FROM tbl_masdex_telkompel where is_delete=false and id!=16', (error, results) => {
       if (error) {
         throw error
       }
      //console.log(results.rows[0].total)
      res.push({total:results.rows[0].total})
   
-     var sql= 'SELECT * FROM tbl_masdex_telkompel where is_delete=false ORDER BY id DESC'
+     var sql= 'SELECT * FROM tbl_masdex_telkompel where is_delete=false and id!=16 ORDER BY id DESC'
      pool.query(sql ,(error, results) => {
        if (error) {
          throw error
