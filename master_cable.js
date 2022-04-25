@@ -859,18 +859,23 @@ const cek_total_tagihan= (request, response)  =>
         var word_counter = 0;
         var all_word_counter =0;
 
-        //console.log(words1.length);
+        console.log(words1.length);
 
         for (i=0;i<=words1.length;i++)
         {
-            //console.log(words1[i]);
+            console.log(words1[i]);
             if (words1[i] ==='|')
             {
                 //console.log('space');
-                //console.log('wc:' + word_counter);
+                console.log('wc:' + word_counter);
                 
-                all_word_counter = all_word_counter +1;
-                //console.log ('awc:'+ all_word_counter);
+                if(word_counter > 0){
+                    all_word_counter = all_word_counter +1;
+                    console.log ('awc:'+ all_word_counter);
+                }else{
+                    all_word_counter = all_word_counter +0;
+                    console.log ('awc:'+ all_word_counter);
+                }
 
                 if (word_counter>10)
                 {
@@ -890,11 +895,12 @@ const cek_total_tagihan= (request, response)  =>
         }
 
         jumlah_ck_berbayar = all_word_counter;
+        console.log('all_word_counter: ' + all_word_counter);
 
 
-        if (jumlah_ck_berbayar <=10)
+        if (jumlah_ck_berbayar <=7)
         {
-            jumlah_ck_berbayar = 10;
+            jumlah_ck_berbayar = 7;
         }
 
         paid_ck = jumlah_ck_berbayar;
