@@ -509,7 +509,7 @@ const cek_total_tagihan= (request, response)  =>
             GT =results.rows[0].gt
 
             
-        if (jenis_pelayaran=='VDN' || bendera != 'INDONESIA')
+        if (jenis_pelayaran=='VLN' || bendera != 'INDONESIA')
         {
             // get kurs tengah
                  var myInt = setInterval(function () {
