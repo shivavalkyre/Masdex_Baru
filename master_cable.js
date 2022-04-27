@@ -547,9 +547,6 @@ const cek_total_tagihan= (request, response)  =>
                     })
                 }, 500);
 
-
-
-
         }
         else
         {
@@ -953,7 +950,9 @@ const cek_total_tagihan= (request, response)  =>
                 //var jumlah_karakter = jumlah_ck_berbayar +'/' +jumlah_ck
                 //var total_tagihan_lsc = tagihan_lsc
                 //var total_tagihan_llc = tagihan_llc
-                response.status(200).json({success:true,data:{preamble:preamble,ck:jumlah_ck_berbayar,kurs_tengah:kurstengah,tagihanLsc:tagihan_lsc,tagihan_llc:tagihan_llc,total_tagihan:total_tagihan}})
+                var gf_total = (llc*paid_ck) + (lsc*paid_ck);
+                response.status(200).json({success:true,data:{preamble:preamble,ck:jumlah_ck_berbayar,kurs_tengah:kurstengah,tagihanLsc:tagihan_lsc,tagihan_llc:tagihan_llc,total_tagihan:total_tagihan,
+                gf_llc:(llc*paid_ck),gf_lsc:(lsc*paid_ck),gf_total:gf_total}})
                 //console.log(total_tagihan)
                 clearInterval(myInt);
               }
