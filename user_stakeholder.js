@@ -18,7 +18,7 @@ const create = (request, response) => {
         id_spesialis,
         role_id
     } = request.body
-    pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1', [username], (error, results) => {
+    pool.query('SELECT Count(*) as total FROM masdex_users_all WHERE username = $1 and is_delete = false ', [username], (error, results) => {
         if (error) {
             throw error
         }
@@ -36,9 +36,9 @@ const create = (request, response) => {
             //     });
 
             // })
-            response.status(400).json({
-                success: false,
-                data: "user sudah ada"
+            response.status(200).json({
+                success: true,
+                data: "User sudah ada"
             });
 
         } else {
