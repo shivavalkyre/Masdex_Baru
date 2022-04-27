@@ -127,7 +127,7 @@ const read_by_voyage_id = (request, response) => {
     //console.log(results.rows[0].total)
     res.push({ total: results.rows[0].total })
 
-    var sql = 'SELECT c.*,u.nama_lengkap FROM tbl_insaf_clearance_out c join tbl_user_stakeholders u on u.id = c.created_by where c.voyage_id=$1 and c.is_delete=false'
+    var sql = 'SELECT c.*,u.nama_lengkap FROM tbl_insaf_clearance_out c join masdex_users_all u on u.id = c.created_by where c.voyage_id=$1 and c.is_delete=false'
     pool.query(sql, [id], (error, results) => {
       if (error) {
         throw error
