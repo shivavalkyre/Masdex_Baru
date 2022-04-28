@@ -41,7 +41,7 @@ const read = (request, response) => {
         //console.log(results.rows[0].total)
         res.push({ total: results.rows[0].total })
 
-        var sql = 'SELECT * FROM tbl_masdex_jenis_kapal where is_delete=false ORDER BY id DESC'
+        var sql = 'SELECT * FROM tbl_masdex_jenis_kapal where is_delete=false ORDER BY id ASC'
         pool.query(sql, (error, results) => {
             if (error) {
                 throw error
